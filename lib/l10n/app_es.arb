@@ -1,0 +1,22 @@
+{
+  "appName": "Commun",
+  "welcometo": "Welcome \nto",
+  "allInOne": "All-in-One",
+  "socialNetwork": "Social Network",
+  "owned" : "Owned",
+  "byUsers": "by users",
+  "onboardWelcomeOne": "Social network where you get rewards for posts, comments and likes",
+  "@onboardWelcomeOne": {
+    "description": "A first message of onboarding screen"
+  },
+  "onboardWelcomeTwo": "Choose communities of interest and be rewarded for your actions",
+  "@onboardWelcomeTwo": {
+    "description": "A second message of onboarding screen"
+  },
+  "onboardWelcomeThree": "Communities has no single owner and fully belongs to its members",
+  "@onboardWelcomeThree": {
+    "description": "A third message of onboarding screen"
+  },
+  "next": "Next",
+  "signIn": "Sign in"
+}
