@@ -33,6 +33,9 @@ class AppTheme {
                 color: KColors.bodyTextColor,
               ),
             ),
+        primaryTextTheme: ThemeData.light().textTheme.copyWith(
+              subtitle1: TextStyle(color: KColors.dark_gray),
+            ),
       );
 
   static ThemeData getThemeFromKey(ThemeType themeKey) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/continue_with_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/k_button.dart';
 import 'package:flutter_commun_app/ui/widget/page_indicator.dart';
@@ -49,7 +50,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
 
       case 2:
         print("Navigate to Sign");
-        // Navigator.push(context, LoginWithOtpPage.getRoute());
+        Navigator.push(context, ContinueWithPage.getRoute());
         break;
 
       default:

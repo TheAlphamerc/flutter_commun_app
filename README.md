@@ -1,16 +1,25 @@
-# flutter_commun_app
+# Commun App
 
-A new Flutter project.
+A social media platform where you can build your own community.
 
-## Getting Started
+## Contributing
 
-This project is a starting point for a Flutter application.
+If you wish to contribute a change to any of the existing feature or add new in this repo,
+please review our [contribution guide](https://github.com/TheAlphamerc/flutter_twitter_clone/blob/master/CONTRIBUTING.md),
+and send a [pull request](https://github.com/TheAlphamerc/flutter_twitter_clone/pulls). I welcome and encourage all pull requests. It usually will take me within 24-48 hours to respond to any issue or request.
 
-A few resources to get you started if this is your first Flutter project:
+## Created & Maintained By
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+[Sonu Sharma](https://github.com/TheAlphamerc) ([Twitter](https://www.twitter.com/TheAlphamerc)) ([Youtube](https://www.youtube.com/user/sonusharma045sonu/)) ([Insta](https://www.instagram.com/_sonu_sharma__)) ([Dev.to](https://dev.to/thealphamerc))
+  ![Twitter Follow](https://img.shields.io/twitter/follow/thealphamerc?style=social) 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:
+>
+> * [PayPal](https://paypal.me/TheAlphamerc/)
+
+> You can also nominate me for Github Star developer program
+> https://stars.github.com/nominate
+
+## Visitors Count
+
+<img align="left" src = "https://profile-counter.glitch.me/flutter_commun_app/count.svg" alt ="Loading">

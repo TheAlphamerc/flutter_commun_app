@@ -1,22 +1,52 @@
 {
-    "appName": "Commun",
-    "welcometo": "Welcome \nto",
-    "allInOne": "All-in-One",
-    "socialNetwork": "Social Network",
-    "owned" : "Owned",
-    "byUsers": "by users",
-    "onboardWelcomeOne": "Social network where you get rewards for posts, comments and likes",
-    "@onboardWelcomeOne": {
-      "description": "A first message of onboarding screen"
-    },
-    "onboardWelcomeTwo": "Choose communities of interest and be rewarded for your actions",
-    "@onboardWelcomeTwo": {
-      "description": "A second message of onboarding screen"
-    },
-    "onboardWelcomeThree": "Communities has no single owner and fully belongs to its members",
-    "@onboardWelcomeThree": {
-      "description": "A third message of onboarding screen"
-    },
-    "next": "Next",
-    "signIn": "Sign in"
+  "appName": "Commun",
+  "welcometo": "Welcome \nto",
+  "allInOne": "All-in-One",
+  "socialNetwork": "Social Network",
+  "owned" : "Owned",
+  "byUsers": "by users",
+  "onboardWelcomeOne": "Social network where you get rewards for posts, comments and likes",
+  "@onboardWelcomeOne": {
+    "description": "A first message of onboarding screen"
+  },
+  "onboardWelcomeTwo": "Choose communities of interest and be rewarded for your actions",
+  "@onboardWelcomeTwo": {
+    "description": "A second message of onboarding screen"
+  },
+  "onboardWelcomeThree": "Communities has no single owner and fully belongs to its members",
+  "@onboardWelcomeThree": {
+    "description": "A third message of onboarding screen"
+  },
+  "next": "Next",
+  "signIn": "Sign in",
+  "signUp": "Sign up",
+  "continuwWithPhone": "Continue with Phone",
+  "continuwWithEmail": "Continue with Email",
+  "continuwWithGoogle": "Continue with Google",
+  "continuwWithFacebook": "Continue with Facebook",
+  "continuwWithInstagram": "Continue with Instagram",
+  "continuwWithApple": "Continue with Apple",
+  "continuwWithTwitter": "Continue with Twitter",
+  "sign_up_description": "By continuing, you agree to Commun's",
+  "sign_up_description_1": "Terms of use, Privacy Policy",
+  "already_have_account" : "Already have an account?",
+  "phone_no": "Phone number",
+  "close": "Close",
+  "verfication": "Verification",
+  "enter_sms_code": "Enter Sms-Code",
+  "resend_verfication_code": "Re-enter your password",
+  "create_your_username": "Create your username",
+  "username": "Username",
+  "done": "Done",
+  "create_password": "Create password",
+  "confirm_password": "Confirm password",
+  "re_enter_password": "Confirm password",
+  "password": "Password",
+  "lower_case": "Lower case",
+  "uppar_Case": "Uppar case",
+  "min_length": "Min length",
+  "a": "A",
+  "create_your_passcode": "Create your passcode",
+  "passcode": "Passcode",
+  "select_country": "Select country"
   }
