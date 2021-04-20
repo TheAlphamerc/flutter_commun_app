@@ -34,7 +34,7 @@
   "close": "Close",
   "verfication": "Verification",
   "enter_sms_code": "Enter Sms-Code",
-  "resend_verfication_code": "Re-enter your password",
+  "resend_verfication_code": "Resend verification code",
   "create_your_username": "Create your username",
   "username": "Username",
   "done": "Done",

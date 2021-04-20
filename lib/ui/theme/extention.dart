@@ -44,7 +44,7 @@ extension PaddingHelper on Widget {
 
   ///Horrizontal Padding for Title
   Padding get hP30 =>
-      Padding(padding: EdgeInsets.only(left: 30.0), child: this);
+      Padding(padding: EdgeInsets.symmetric(horizontal: 30.0), child: this);
 
   ///Facebook/Google logo text Padding Helper
   Padding get vP5 =>

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_mobile_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class ContinueWithPage extends StatelessWidget {
@@ -12,9 +13,11 @@ class ContinueWithPage extends StatelessWidget {
   }
 
   Widget _button(BuildContext context,
-      {String image, String title, Color backgroundColor}) {
+      {String image, String title, Color backgroundColor, Function onPressed}) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: () {
+        onPressed();
+      },
       style: ButtonStyle(
           backgroundColor:
               MaterialStateProperty.all(backgroundColor ?? Colors.transparent),
@@ -76,7 +79,9 @@ class ContinueWithPage extends StatelessWidget {
               SizedBox(height: 40),
               _button(context,
                   image: Images.phoneIcon,
-                  title: context.locale.continuwWithPhone),
+                  title: context.locale.continuwWithPhone, onPressed: () {
+                Navigator.push(context, SignupWithMobilePage.getRoute());
+              }),
               _button(context,
                   image: Images.googleLogo,
                   title: context.locale.continuwWithGoogle),

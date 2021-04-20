@@ -8,6 +8,16 @@
 .buildlog/
 .history
 .svn/
+*.g.dart
+*.freezed.dart
+*.gr.dart
+*.config.dart
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
 
 # IntelliJ related
 *.iml
@@ -44,3 +54,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+android/app/google-services.json
