@@ -1,21 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_commun_app/cubit/signup/signup_cubit.dart';
-import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 
 class OTPVerificationPAge extends StatefulWidget {
-  const OTPVerificationPAge({Key key}) : super(key: key);
-  static MaterialPageRoute getRoute(SignupCubit cubit) {
+  final Function(String otp) onSubmit;
+  const OTPVerificationPAge({Key key, this.onSubmit}) : super(key: key);
+  static MaterialPageRoute getRoute(Function(String otp) onSubmit) {
     return MaterialPageRoute(
-      builder: (BuildContext context) => BlocProvider.value(
-        value: cubit,
-        child: OTPVerificationPAge(),
-      ),
-    );
+        builder: (BuildContext context) =>
+            OTPVerificationPAge(onSubmit: onSubmit));
   }
 
   @override
@@ -27,10 +20,15 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
   FocusNode node2;
   FocusNode node3;
   FocusNode node4;
+  FocusNode node5;
+  FocusNode node6;
   TextEditingController otp1;
   TextEditingController otp2;
   TextEditingController otp3;
   TextEditingController otp4;
+  TextEditingController otp5;
+  TextEditingController otp6;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -38,11 +36,15 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
     node2 = FocusNode();
     node3 = FocusNode();
     node4 = FocusNode();
+    node5 = FocusNode();
+    node6 = FocusNode();
 
     otp1 = TextEditingController();
     otp2 = TextEditingController();
     otp3 = TextEditingController();
     otp4 = TextEditingController();
+    otp5 = TextEditingController();
+    otp6 = TextEditingController();
   }
 
   @override
@@ -51,11 +53,15 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
     node2.dispose();
     node3.dispose();
     node4.dispose();
+    node5.dispose();
+    node6.dispose();
 
     otp1.dispose();
     otp2.dispose();
     otp3.dispose();
     otp4.dispose();
+    otp5.dispose();
+    otp6.dispose();
     super.dispose();
   }
 
@@ -63,7 +69,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
     return IntrinsicWidth(
       stepWidth: context.width - 32,
       child: TextButton(
-        onPressed: () {},
+        onPressed: submitOTP,
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
                 backgroundColor ?? context.disabledColor),
@@ -87,7 +93,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
       FocusNode node,
       Function(String) onChanged}) {
     return SizedBox(
-      width: 50,
+      width: 40,
       child: CustomOTPTextField(
         controller: controller,
         onChanged: onChanged,
@@ -104,6 +110,17 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
     if (value.length == 0) {
       FocusScope.of(context).previousFocus();
     }
+  }
+
+  void submitOTP() {
+    var otp =
+        otp1.text + otp2.text + otp3.text + otp4.text + otp5.text + otp6.text;
+    if (otp.isEmpty || otp.length < 6) {
+      print("Invalid OTP");
+      return;
+    }
+    FocusManager.instance.primaryFocus.unfocus();
+    widget.onSubmit(otp);
   }
 
   @override
@@ -129,6 +146,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Form(
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -160,6 +178,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           node: node2,
                           onChanged: (value) {
                             if (value.length == 0) {
+                              FocusScope.of(context).previousFocus();
                               return;
                             }
                             changeFocus(value, node3);
@@ -169,6 +188,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           node: node3,
                           onChanged: (value) {
                             if (value.length == 0) {
+                              FocusScope.of(context).previousFocus();
                               return;
                             }
                             changeFocus(value, node4);
@@ -176,6 +196,26 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                       _otp(
                           controller: otp4,
                           node: node4,
+                          onChanged: (value) {
+                            if (value.length == 0) {
+                              FocusScope.of(context).previousFocus();
+                              return;
+                            }
+                            changeFocus(value, node5);
+                          }),
+                      _otp(
+                          controller: otp5,
+                          node: node5,
+                          onChanged: (value) {
+                            if (value.length == 0) {
+                              FocusScope.of(context).previousFocus();
+                              return;
+                            }
+                            changeFocus(value, node6);
+                          }),
+                      _otp(
+                          controller: otp6,
+                          node: node6,
                           onChanged: (value) {
                             if (value.length == 1) {
                               node4.unfocus();
@@ -223,29 +263,30 @@ class CustomOTPTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 70.0,
-      height: 60,
+      width: 40.0,
+      height: 40,
       alignment: Alignment.center,
       child: TextFormField(
         controller: controller ?? TextEditingController(),
         textAlignVertical: TextAlignVertical.center,
         textAlign: TextAlign.center,
-        cursorHeight: 20,
+        // cursorHeight: 20,
         keyboardType: TextInputType.phone,
         textInputAction: textInputAction ?? TextInputAction.next,
         decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-            borderSide: BorderSide(
-              color: Colors.transparent,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(
+                color: Colors.transparent,
+              ),
             ),
-          ),
-          filled: true,
-          fillColor: KColors.middle_gray_2,
-        ),
+            filled: true,
+            fillColor: KColors.middle_gray_2,
+            contentPadding: EdgeInsets.only(bottom: 10)),
+
         showCursor: true,
         cursorRadius: Radius.circular(5),
-        style: TextStyles.headline26(context),
+        style: TextStyles.headline20(context),
         inputFormatters: [
           LengthLimitingTextInputFormatter(1),
         ],

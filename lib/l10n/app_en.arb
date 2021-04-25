@@ -48,5 +48,10 @@
   "a": "A",
   "create_your_passcode": "Create your passcode",
   "passcode": "Passcode",
-  "select_country": "Select country"
+  "select_country": "Select country",
+  "verifying": "Verifying",
+  "otpVerified": "Otp-Verified",
+  "otp_sent_to_phone": "Otp Sent to Phone",
+  "varification_failed": "Verification Failed!!",
+  "verification_completed": "Verification Completed"
   }

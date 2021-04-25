@@ -4,6 +4,8 @@ import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_mobile_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
+import '../../../../locator.dart';
+
 class ContinueWithPage extends StatelessWidget {
   const ContinueWithPage({Key key}) : super(key: key);
   static MaterialPageRoute getRoute() {
@@ -16,6 +18,10 @@ class ContinueWithPage extends StatelessWidget {
       {String image, String title, Color backgroundColor, Function onPressed}) {
     return OutlinedButton(
       onPressed: () {
+        if (onPressed == null) {
+          logger.w("$title feature is in development");
+          return;
+        }
         onPressed();
       },
       style: ButtonStyle(
