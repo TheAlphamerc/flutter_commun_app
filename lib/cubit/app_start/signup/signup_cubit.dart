@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/service/firebase_auth_service.dart';
@@ -13,7 +14,8 @@ part 'signup_state.dart';
 part 'signup_cubit.freezed.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit() : super(SignupState.initial()) {
+  final AuthRepo authRepo;
+  SignupCubit(this.authRepo) : super(SignupState.initial()) {
     phone = TextEditingController();
     loader = CustomLoader();
   }
@@ -29,11 +31,11 @@ class SignupCubit extends Cubit<SignupState> {
     }
     assert(phone != null);
 
-    /// Make sure to replace `+91` with your country code
-    final no = "+91${phone.text}";
+    /// Make sure to replace `+1` with your country code
+    final no = "+1${phone.text}";
 
     /// Starts a phone number verification process for the given phone number
-    await getIt<FirebaseAuthService>().verifyPhoneNumber(no,
+    await authRepo.verifyPhoneNumber(no,
         onResponse: (response) => verifyPhoneNumberListener(context, response));
   }
 
@@ -81,8 +83,8 @@ class SignupCubit extends Cubit<SignupState> {
   Future<void> verifyOTP(BuildContext context, String smsCode) async {
     /// Display loader on screeen while verifying Otp
     loader.showLoader(context, message: context.locale.verifying);
-    var user = await getIt<FirebaseAuthService>()
-        .verifyOTP(smsCode: smsCode, verificationId: verificationId);
+    var user = await authRepo.verifyOTP(
+        smsCode: smsCode, verificationId: verificationId);
 
     /// Hide loader
     loader.hideLoader();

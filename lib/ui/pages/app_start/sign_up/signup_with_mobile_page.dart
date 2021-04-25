@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_commun_app/cubit/signup/signup_cubit.dart';
+import 'package:flutter_commun_app/cubit/app_start/signup/signup_cubit.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/otp_Verification_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
+
+import '../../../../locator.dart';
 
 class SignupWithMobilePage extends StatelessWidget {
   const SignupWithMobilePage({Key key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
-              create: (context) => SignupCubit(),
+              create: (context) => SignupCubit(getIt<AuthRepo>()),
               child: SignupWithMobilePage(),
             ));
   }
@@ -59,6 +63,7 @@ class SignupWithMobilePage extends StatelessWidget {
           case VerifyMobileState.OtpVerified:
             {
               Navigator.pop(context);
+              Navigator.push(context, CreateUserNamePage.getRoute());
               print("Navigate to Home page");
               break;
             }
