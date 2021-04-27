@@ -31,6 +31,7 @@
   "sign_up_description_1": "Terms of use, Privacy Policy",
   "already_have_account" : "Already have an account?",
   "phone_no": "Phone number",
+  "your_email_address": "Your email address",
   "close": "Close",
   "verfication": "Verification",
   "enter_sms_code": "Enter Sms-Code",

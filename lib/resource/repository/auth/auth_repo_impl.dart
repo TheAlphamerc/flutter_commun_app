@@ -26,4 +26,15 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<String, bool>> createUserName(String userName) {
     return authService.createUserName(userName);
   }
+
+  @override
+  Future<Either<String, UserCredential>> signupWithEmail(
+      {String email, String password}) {
+    return authService.createAcountWithEmailAndPassword(email, password);
+  }
+
+  @override
+  Future<Either<String, bool>> checkEmailAvailability(String email) {
+    return authService.checkEmailAvailability(email);
+  }
 }

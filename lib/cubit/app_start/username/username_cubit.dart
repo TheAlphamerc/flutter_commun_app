@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 import '../../../ui/widget/overlay_loader.dart';
 part 'e_usename_state.dart';
 part 'username_state.dart';
@@ -25,7 +26,7 @@ class UsernameCubit extends Cubit<UsernameState> {
     loader.hideLoader();
     response.fold((l) {
       emit(UsernameState.respose(EUsernameState.AlreadyExists,
-          "Username already exists ${DateTime.now().microsecond}"));
+          Utility.encodeStateMessage("Username already exists!!")));
     }, (r) {
       emit(UsernameState.respose(
           EUsernameState.Available, "Username available"));

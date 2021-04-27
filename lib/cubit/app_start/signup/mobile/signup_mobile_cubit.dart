@@ -4,18 +4,16 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/locator.dart';
-import 'package:flutter_commun_app/resource/service/firebase_auth_service.dart';
 import 'package:flutter_commun_app/resource/service/verify_phone_response.dart';
 import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'signup_state.dart';
-part 'signup_cubit.freezed.dart';
+part 'signup_mobile_state.dart';
+part 'signup_mobile_cubit.freezed.dart';
 
-class SignupCubit extends Cubit<SignupState> {
+class SignupMobileCubit extends Cubit<SignupMobileState> {
   final AuthRepo authRepo;
-  SignupCubit(this.authRepo) : super(SignupState.initial()) {
+  SignupMobileCubit(this.authRepo) : super(SignupMobileState.initial()) {
     phone = TextEditingController();
     loader = CustomLoader();
   }
@@ -51,7 +49,7 @@ class SignupCubit extends Cubit<SignupState> {
         /// that can be passed to [signInWithCredential] or [linkWithCredential].
         verificationCompleted: (state) {
       print("[verifyPhoneNumberListener] verification completed");
-      emit(SignupState.response(VerifyMobileState.OtpVerified,
+      emit(SignupMobileState.response(EVerifyMobileState.OtpVerified,
           context.locale.verification_completed));
     },
 
@@ -59,7 +57,7 @@ class SignupCubit extends Cubit<SignupState> {
         /// A [FirebaseAuthException] is provided when this is triggered.
         verificationFailed: (state) {
       print("[verifyPhoneNumberListener] Failed");
-      emit(SignupState.response(VerifyMobileState.VerficationFailed,
+      emit(SignupMobileState.response(EVerifyMobileState.VerficationFailed,
           context.locale.varification_failed));
     },
 
@@ -68,14 +66,14 @@ class SignupCubit extends Cubit<SignupState> {
         codeSent: (state) {
       verificationId = state.verificationId;
       print("[verifyPhoneNumberListener] Code sent");
-      emit(SignupState.response(
-          VerifyMobileState.OtpSent, context.locale.otp_sent_to_phone));
+      emit(SignupMobileState.response(
+          EVerifyMobileState.OtpSent, context.locale.otp_sent_to_phone));
     },
 
         /// Triggered when SMS auto-retrieval times out and provide a [verificationId].
         codeAutoRetrievalTimeout: (state) {
       print("[verifyPhoneNumberListener] Timeout");
-      emit(SignupState.response(VerifyMobileState.Timeout, "Timeout"));
+      emit(SignupMobileState.response(EVerifyMobileState.Timeout, "Timeout"));
     });
   }
 
@@ -90,11 +88,11 @@ class SignupCubit extends Cubit<SignupState> {
     loader.hideLoader();
     user.fold((l) {
       /// If otp verifacation failed
-      emit(SignupState.response(VerifyMobileState.VerficationFailed, l));
+      emit(SignupMobileState.response(EVerifyMobileState.VerficationFailed, l));
     }, (r) {
       /// If otp verifacation success‰
-      emit(SignupState.response(
-          VerifyMobileState.OtpVerified, context.locale.otpVerified));
+      emit(SignupMobileState.response(
+          EVerifyMobileState.OtpVerified, context.locale.otpVerified));
     });
   }
 

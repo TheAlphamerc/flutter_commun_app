@@ -55,11 +55,14 @@ class FirebaseAuthService {
     return userCredential == null ? Left(errorMessage) : Right(userCredential);
   }
 
+  /// Check if username is already exists or not.
+  /// Return [True] if username is available to acquire.
+  /// Return [False] if username is not available to acquire
   Future<Either<String, bool>> checkUserNameAvailability(
       String userName) async {
     // await Future.delayed(Duration(seconds: 1));
     var query = await FirebaseFirestore.instance
-        .collection(CollectionsConstants.username)
+        .collection(CollectionsConstants.profile)
         .where("username", isEqualTo: userName)
         .get();
     var data = query.docs;
@@ -73,8 +76,48 @@ class FirebaseAuthService {
   Future<Either<String, bool>> createUserName(String userName) async {
     await Future.delayed(Duration(seconds: 1));
     await FirebaseFirestore.instance
-        .collection(CollectionsConstants.username)
+        .collection(CollectionsConstants.profile)
         .add({"username": userName});
     return Future.value(Right(true));
+  }
+
+  /// Create user account in firebase
+  Future<Either<String, UserCredential>> createAcountWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      return Right(userCredential);
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = e.message;
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password provided is too weak.';
+        print(errorMessage);
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = "The account already exists for that email.";
+        print(errorMessage);
+      }
+      return Left(errorMessage);
+    } catch (e) {
+      print(e);
+      return Left(e.toString());
+    }
+  }
+
+  /// Check if email is already exists or not.
+  /// Return [True] if email is available to acquire.
+  /// Return [False] if email is not available to acquire
+  Future<Either<String, bool>> checkEmailAvailability(String email) async {
+    var query = await FirebaseFirestore.instance
+        .collection(CollectionsConstants.email)
+        .where("email", isEqualTo: email)
+        .get();
+    var data = query.docs;
+    if (data != null && data.isNotEmpty) {
+      return Future.value(Left("Email already Taken"));
+    } else {
+      return Future.value(Right(true));
+    }
   }
 }

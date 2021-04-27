@@ -18,4 +18,18 @@ class Utility {
       ScaffoldMessenger.maybeOf(context).showSnackBar(snackBar);
     }
   }
+
+  static String encodeStateMessage(String message) {
+    if (message != null) {
+      return message + " ##" + DateTime.now().millisecond.toString();
+    }
+    return "";
+  }
+
+  static String decodeStateMessage(String message) {
+    if (message != null && message.contains("##")) {
+      return message.split("##")[0];
+    }
+    return "";
+  }
 }

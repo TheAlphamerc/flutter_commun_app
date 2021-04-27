@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_commun_app/cubit/app_start/signup/signup_cubit.dart';
+import 'package:flutter_commun_app/cubit/app_start/signup/mobile/signup_mobile_cubit.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/otp_Verification_page.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/already_have_account_widget.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_terms_of_service_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 
@@ -15,7 +17,7 @@ class SignupWithMobilePage extends StatelessWidget {
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
-              create: (context) => SignupCubit(getIt<AuthRepo>()),
+              create: (context) => SignupMobileCubit(getIt<AuthRepo>()),
               child: SignupWithMobilePage(),
             ));
   }
@@ -26,7 +28,7 @@ class SignupWithMobilePage extends StatelessWidget {
       child: TextButton(
         onPressed: () async {
           FocusManager.instance.primaryFocus.unfocus();
-          await context.read<SignupCubit>().continueWithPhone(context);
+          await context.read<SignupMobileCubit>().continueWithPhone(context);
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
@@ -46,12 +48,12 @@ class SignupWithMobilePage extends StatelessWidget {
     );
   }
 
-  void listener(BuildContext context, SignupState state) {
+  void listener(BuildContext context, SignupMobileState state) {
     state.maybeWhen(
       orElse: () {},
       response: (state, message) {
         switch (state) {
-          case VerifyMobileState.OtpSent:
+          case EVerifyMobileState.OtpSent:
             {
               Navigator.push(
                   context,
@@ -60,14 +62,14 @@ class SignupWithMobilePage extends StatelessWidget {
               break;
             }
 
-          case VerifyMobileState.OtpVerified:
+          case EVerifyMobileState.OtpVerified:
             {
               Navigator.pop(context);
               Navigator.push(context, CreateUserNamePage.getRoute());
               print("Navigate to Home page");
               break;
             }
-          case VerifyMobileState.VerficationFailed:
+          case EVerifyMobileState.VerficationFailed:
             {
               Utility.displaySnackbar(context, msg: message);
               print(message);
@@ -81,7 +83,7 @@ class SignupWithMobilePage extends StatelessWidget {
   }
 
   void submitOTP(BuildContext context, String otp) {
-    context.read<SignupCubit>().verifyOTP(context, otp);
+    context.read<SignupMobileCubit>().verifyOTP(context, otp);
   }
 
   @override
@@ -105,37 +107,50 @@ class SignupWithMobilePage extends StatelessWidget {
             ),
           ).circular,
         ),
-        body: BlocListener<SignupCubit, SignupState>(
+        body: BlocListener<SignupMobileCubit, SignupMobileState>(
           listener: listener,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Form(
-              key: context.watch<SignupCubit>().formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    context.locale.signUp,
-                    style: TextStyles.headline36(context),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Container(
+                    height: context.height,
+                    child: Form(
+                      key: context.watch<SignupMobileCubit>().formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            context.locale.signUp,
+                            style: TextStyles.headline36(context),
+                          ),
+                          SizedBox(height: 72),
+                          KTextField(
+                            controller:
+                                context.watch<SignupMobileCubit>().phone,
+                            type: FieldType.phone,
+                            hintText: context.locale.phone_no,
+                            backgroundColor: KColors.middle_gray_2,
+                          ).pH(24),
+                        ],
+                      ),
+                    ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      KTextField(
-                        controller: context.watch<SignupCubit>().phone,
-                        type: FieldType.phone,
-                        hintText: context.locale.phone_no,
-                        backgroundColor: KColors.middle_gray_2,
-                      ).pH(24),
-                      SizedBox(height: 40),
-                      _button(context,
-                              title: context.locale.next,
-                              backgroundColor: context.primaryColor)
-                          .pB(40),
-                    ],
-                  ).extended
-                ],
-              ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SignupTermsOfServiceWidget().pB(16),
+                    _button(context,
+                            title: context.locale.next,
+                            backgroundColor: context.primaryColor)
+                        .pB(10),
+                    AlreadyHaveAccountWidget()
+                  ],
+                )
+              ],
             ),
           ),
         ));

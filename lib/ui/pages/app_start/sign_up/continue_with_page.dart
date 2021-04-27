@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_email_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_mobile_page.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/already_have_account_widget.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_terms_of_service_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 import '../../../../locator.dart';
@@ -89,6 +92,11 @@ class ContinueWithPage extends StatelessWidget {
                 Navigator.push(context, SignupWithMobilePage.getRoute());
               }),
               _button(context,
+                  image: Images.emailIconBlack,
+                  title: context.locale.continuwWithEmail, onPressed: () {
+                Navigator.push(context, SignupWithEmailPage.getRoute());
+              }),
+              _button(context,
                   image: Images.googleLogo,
                   title: context.locale.continuwWithGoogle),
               _button(context,
@@ -109,41 +117,10 @@ class ContinueWithPage extends StatelessWidget {
                   .pB(20),
 
               /// Already have an account
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyles.bodyText14(context).copyWith(
-                      color: context.theme.primaryTextTheme.subtitle1.color),
-                  children: [
-                    TextSpan(text: context.locale.sign_up_description),
-                    TextSpan(
-                      text: " ${context.locale.sign_up_description_1}",
-                      style: TextStyles.bodyText14(context)
-                          .copyWith(color: context.primaryColor),
-                    ),
-                  ],
-                ),
-              ).hP16,
+              SignupTermsOfServiceWidget(),
 
               /// Sign in Text
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyles.headline16(context).copyWith(
-                      color: context.theme.primaryTextTheme.subtitle1.color),
-                  children: [
-                    TextSpan(text: context.locale.already_have_account),
-                    TextSpan(
-                        text: " ${context.locale.signIn}",
-                        style: TextStyles.headline16(context)
-                            .copyWith(color: context.primaryColor),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            print("Navigate to Signin");
-                          }),
-                  ],
-                ),
-              ).pV(20)
+              AlreadyHaveAccountWidget()
             ],
           ),
         ),

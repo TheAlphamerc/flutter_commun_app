@@ -51,7 +51,8 @@ class CreateUserNamePage extends StatelessWidget {
         state.when(
             elseMaybe: () {},
             alreadyExists: () {
-              Utility.displaySnackbar(context, msg: "User already exists!");
+              Utility.displaySnackbar(context,
+                  msg: Utility.decodeStateMessage(message));
             },
             available: () {
               context.read<UsernameCubit>().createUserName(context);
@@ -88,37 +89,49 @@ class CreateUserNamePage extends StatelessWidget {
         listener: listener,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Form(
-            key: context.watch<UsernameCubit>().formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  context.locale.signUp,
-                  style: TextStyles.headline36(context),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Container(
+                  height: context.height,
+                  child: Form(
+                    key: context.watch<UsernameCubit>().formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          context.locale.signUp,
+                          style: TextStyles.headline36(context),
+                        ),
+                        Text(
+                          context.locale.create_your_username,
+                          style: TextStyles.bodyText15(context)
+                              .copyWith(fontSize: 17),
+                        ).pT(19),
+                        Column(
+                          children: [
+                            SizedBox(height: 72),
+                            KTextField(
+                              controller:
+                                  context.watch<UsernameCubit>().username,
+                              type: FieldType.name,
+                              hintText: context.locale.username,
+                              backgroundColor: KColors.middle_gray_2,
+                            ).pH(24),
+                            SizedBox(height: 40),
+                          ],
+                        ).extended
+                      ],
+                    ),
+                  ),
                 ),
-                Text(
-                  context.locale.create_your_username,
-                  style: TextStyles.bodyText15(context).copyWith(fontSize: 17),
-                ).pT(16),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    KTextField(
-                      controller: context.watch<UsernameCubit>().username,
-                      type: FieldType.name,
-                      hintText: context.locale.username,
-                      backgroundColor: KColors.middle_gray_2,
-                    ).pH(24),
-                    SizedBox(height: 40),
-                    _button(context,
-                            title: context.locale.next,
-                            backgroundColor: context.primaryColor)
-                        .pB(40),
-                  ],
-                ).extended
-              ],
-            ),
+              ),
+              _button(context,
+                      title: context.locale.next,
+                      backgroundColor: context.primaryColor)
+                  .alignBottomCenter
+                  .pB(40),
+            ],
           ),
         ),
       ),
