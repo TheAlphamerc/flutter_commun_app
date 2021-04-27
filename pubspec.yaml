@@ -46,7 +46,7 @@ dependencies:
   
   # Firebase packages
   firebase_core: ^1.0.4
-  google_sign_in: ^5.0.2
+  google_sign_in: ^5.0.0
   firebase_auth: ^1.1.1
   cloud_firestore: ^1.0.6
   firebase_storage: ^8.0.4

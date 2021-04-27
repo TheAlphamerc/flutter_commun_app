@@ -1,6 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_commun_app/cubit/app_start/signup/social/social_signup_cubit.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_email_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_mobile_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/already_have_account_widget.dart';
@@ -13,8 +18,10 @@ class ContinueWithPage extends StatelessWidget {
   const ContinueWithPage({Key key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (BuildContext context) => ContinueWithPage(),
-    );
+        builder: (BuildContext context) => BlocProvider(
+              create: (context) => SocialSignupCubit(getIt<AuthRepo>()),
+              child: ContinueWithPage(),
+            ));
   }
 
   Widget _button(BuildContext context,
@@ -54,6 +61,25 @@ class ContinueWithPage extends StatelessWidget {
     ).pB(16);
   }
 
+  void listener(BuildContext context, SocialSignupState state) {
+    state.maybeWhen(
+        orElse: () {},
+        response: (state, message) {
+          switch (state) {
+            case ESocialSignupState.Error:
+              {
+                Utility.displaySnackbar(context,
+                    msg: Utility.decodeStateMessage(message));
+              }
+              break;
+            case ESocialSignupState.AccountCreated:
+              Navigator.push(context, CreateUserNamePage.getRoute());
+              break;
+            default:
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,49 +105,54 @@ class ContinueWithPage extends StatelessWidget {
           style: TextStyles.headline36(context),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 40),
-              _button(context,
-                  image: Images.phoneIcon,
-                  title: context.locale.continuwWithPhone, onPressed: () {
-                Navigator.push(context, SignupWithMobilePage.getRoute());
-              }),
-              _button(context,
-                  image: Images.emailIconBlack,
-                  title: context.locale.continuwWithEmail, onPressed: () {
-                Navigator.push(context, SignupWithEmailPage.getRoute());
-              }),
-              _button(context,
-                  image: Images.googleLogo,
-                  title: context.locale.continuwWithGoogle),
-              _button(context,
-                  image: Images.instagramLogo,
-                  title: context.locale.continuwWithInstagram),
-              _button(context,
-                  image: Images.twitterLogo,
-                  title: context.locale.continuwWithTwitter,
-                  backgroundColor: KColors.twitter),
-              _button(context,
-                  image: Images.facebookLogo,
-                  title: context.locale.continuwWithFacebook,
-                  backgroundColor: KColors.facebook),
-              _button(context,
-                      image: Images.appleLogo,
-                      title: context.locale.continuwWithApple,
-                      backgroundColor: KColors.black)
-                  .pB(20),
+      body: BlocListener<SocialSignupCubit, SocialSignupState>(
+        listener: listener,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 40),
+                _button(context,
+                    image: Images.phoneIcon,
+                    title: context.locale.continuwWithPhone, onPressed: () {
+                  Navigator.push(context, SignupWithMobilePage.getRoute());
+                }),
+                _button(context,
+                    image: Images.emailIconBlack,
+                    title: context.locale.continuwWithEmail, onPressed: () {
+                  Navigator.push(context, SignupWithEmailPage.getRoute());
+                }),
+                _button(context,
+                    image: Images.googleLogo,
+                    title: context.locale.continuwWithGoogle, onPressed: () {
+                  context.read<SocialSignupCubit>().signupWithGoogle(context);
+                }),
+                _button(context,
+                    image: Images.instagramLogo,
+                    title: context.locale.continuwWithInstagram),
+                _button(context,
+                    image: Images.twitterLogo,
+                    title: context.locale.continuwWithTwitter,
+                    backgroundColor: KColors.twitter),
+                _button(context,
+                    image: Images.facebookLogo,
+                    title: context.locale.continuwWithFacebook,
+                    backgroundColor: KColors.facebook),
+                _button(context,
+                        image: Images.appleLogo,
+                        title: context.locale.continuwWithApple,
+                        backgroundColor: KColors.black)
+                    .pB(20),
 
-              /// Already have an account
-              SignupTermsOfServiceWidget(),
+                /// Already have an account
+                SignupTermsOfServiceWidget(),
 
-              /// Sign in Text
-              AlreadyHaveAccountWidget()
-            ],
+                /// Sign in Text
+                AlreadyHaveAccountWidget()
+              ],
+            ),
           ),
         ),
       ),

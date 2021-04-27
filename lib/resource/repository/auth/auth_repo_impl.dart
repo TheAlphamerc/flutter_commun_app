@@ -37,4 +37,9 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<String, bool>> checkEmailAvailability(String email) {
     return authService.checkEmailAvailability(email);
   }
+
+  @override
+  Future<Either<String, UserCredential>> signupWithGoogle() {
+    return authService.signInWithGoogle();
+  }
 }

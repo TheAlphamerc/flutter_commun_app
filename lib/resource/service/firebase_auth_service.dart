@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_commun_app/helper/collections_constants.dart';
 import 'package:flutter_commun_app/resource/service/verify_phone_response.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth auth;
@@ -118,6 +119,42 @@ class FirebaseAuthService {
       return Future.value(Left("Email already Taken"));
     } else {
       return Future.value(Right(true));
+    }
+  }
+
+  Future<Either<String, UserCredential>> signInWithGoogle() async {
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      scopes: [
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      final userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential)
+          .onError((error, stackTrace) => null);
+      if (userCredential != null) {
+        return Right(userCredential);
+      } else {
+        return Left("Something went wrong");
+      }
+    } catch (error) {
+      print(error);
+      return Left("Something went wrong");
     }
   }
 }
