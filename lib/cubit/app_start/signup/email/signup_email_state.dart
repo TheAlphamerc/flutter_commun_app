@@ -5,6 +5,7 @@ abstract class SignupEmailState with _$SignupEmailState {
   const factory SignupEmailState.initial() = _Initial;
   const factory SignupEmailState.response(
       EVerifyEmaileState response, String message) = _Response;
+  const factory SignupEmailState.created(UserCredential credential) = _Created;
 }
 
-enum EVerifyEmaileState { Error, AccountCreated }
+enum EVerifyEmaileState { Error }

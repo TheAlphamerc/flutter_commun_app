@@ -23,6 +23,11 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<Either<String, bool>> checkMobileAvailability(String mobile) {
+    return authService.checkMobileAvailability(mobile);
+  }
+
+  @override
   Future<Either<String, bool>> createUserName(String userName) {
     return authService.createUserName(userName);
   }
@@ -41,5 +46,14 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<String, UserCredential>> signupWithGoogle() {
     return authService.signInWithGoogle();
+  }
+
+  @override
+  Future<Either<String, bool>> createUserAccount(ProfileModel model) async {
+    var response = await authService.createUserAccount(model);
+    return response.fold((l) => Left(l), (r) async {
+      await getIt<SharedPreferenceHelper>().saveUserProfile(model);
+      return Right(r);
+    });
   }
 }

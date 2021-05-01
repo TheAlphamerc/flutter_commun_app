@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 part 'signup_email_state.dart';
 part 'signup_email_cubit.freezed.dart';
 
@@ -33,9 +34,15 @@ class SignupEmailCubit extends Cubit<SignupEmailState> {
     var isValid = formKey.currentState.validate();
     if (!isValid) {
       return;
+    } else if (password.text != confirmPassword.text) {
+      emit(SignupEmailState.response(
+          EVerifyEmaileState.Error,
+          Utility.encodeStateMessage(
+              context.locale.password_confirm_password_not_mathched)));
+      return;
     }
 
-    loader.showLoader(context);
+    loader.showLoader(context, message: context.locale.verifying);
 
     /// Tries to create a new user account with the given email address and password.
     final response = await authRepo.signupWithEmail(
@@ -43,9 +50,9 @@ class SignupEmailCubit extends Cubit<SignupEmailState> {
     loader.hideLoader();
     response.fold(
         (l) => emit(SignupEmailState.response(
-            EVerifyEmaileState.Error, Utility.encodeStateMessage(l))), (r) {
-      emit(SignupEmailState.response(
-          EVerifyEmaileState.AccountCreated, "AccountCreated"));
+            EVerifyEmaileState.Error, Utility.encodeStateMessage(l))),
+        (credential) {
+      emit(SignupEmailState.created(credential));
     });
   }
 

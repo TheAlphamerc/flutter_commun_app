@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app_start/signup/mobile/signup_mobile_cubit.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/otp_Verification_page.dart';
@@ -9,8 +10,6 @@ import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/already_hav
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_terms_of_service_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
-
-import '../../../../locator.dart';
 
 class SignupWithMobilePage extends StatelessWidget {
   const SignupWithMobilePage({Key key}) : super(key: key);
@@ -51,6 +50,11 @@ class SignupWithMobilePage extends StatelessWidget {
   void listener(BuildContext context, SignupMobileState state) {
     state.maybeWhen(
       orElse: () {},
+      created: (credentails) {
+        Navigator.pop(context);
+        print("Navigate to Home page");
+        Navigator.push(context, CreateUserNamePage.getRoute(credentails));
+      },
       response: (state, message) {
         switch (state) {
           case EVerifyMobileState.OtpSent:
@@ -61,17 +65,24 @@ class SignupWithMobilePage extends StatelessWidget {
                       (otp) => submitOTP(context, otp)));
               break;
             }
-
           case EVerifyMobileState.OtpVerified:
             {
-              Navigator.pop(context);
-              Navigator.push(context, CreateUserNamePage.getRoute());
-              print("Navigate to Home page");
+              context
+                  .read<SignupMobileCubit>()
+                  .checkMobileAvailability(context);
+              break;
+            }
+          case EVerifyMobileState.MobileAlreadyInUse:
+            {
+              Utility.displaySnackbar(context,
+                  msg: Utility.decodeStateMessage(message));
+              print(message);
               break;
             }
           case EVerifyMobileState.VerficationFailed:
             {
-              Utility.displaySnackbar(context, msg: message);
+              Utility.displaySnackbar(context,
+                  msg: Utility.decodeStateMessage(message));
               print(message);
               break;
             }

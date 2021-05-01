@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/resource/service/verify_phone_response.dart';
@@ -21,6 +23,7 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
   TextEditingController phone;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   CustomLoader loader;
+  UserCredential credential;
 
   Future continueWithPhone(BuildContext context) async {
     var isValid = formKey.currentState.validate();
@@ -28,6 +31,7 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
       return;
     }
     assert(phone != null);
+    loader.showLoader(context, message: "Sending OTP");
 
     /// Make sure to replace `+1` with your country code
     final no = "+1${phone.text}";
@@ -88,12 +92,25 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
     loader.hideLoader();
     user.fold((l) {
       /// If otp verifacation failed
-      emit(SignupMobileState.response(EVerifyMobileState.VerficationFailed, l));
+      emit(SignupMobileState.response(
+          EVerifyMobileState.VerficationFailed, Utility.encodeStateMessage(l)));
     }, (r) {
-      /// If otp verifacation success‰
+      /// If otp verifacation success
+      credential = r;
       emit(SignupMobileState.response(
           EVerifyMobileState.OtpVerified, context.locale.otpVerified));
     });
+  }
+
+  Future checkMobileAvailability(BuildContext context) async {
+    var response =
+        await authRepo.checkMobileAvailability(credential.user.phoneNumber);
+    response.fold(
+        (l) => emit(SignupMobileState.response(
+            EVerifyMobileState.MobileAlreadyInUse,
+            Utility.encodeStateMessage(
+                context.locale.account_already_existed_with_mobile))),
+        (r) => emit(SignupMobileState.created(credential)));
   }
 
   @override

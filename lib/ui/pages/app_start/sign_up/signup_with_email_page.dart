@@ -53,14 +53,12 @@ class SignupWithEmailPage extends StatelessWidget {
   void listener(BuildContext context, SignupEmailState state) {
     state.maybeWhen(
       orElse: () {},
+      created: (credentials) {
+        print("Account created");
+        Navigator.push(context, CreateUserNamePage.getRoute(credentials));
+      },
       response: (state, message) {
         switch (state) {
-          case EVerifyEmaileState.AccountCreated:
-            {
-              print("Account created");
-              Navigator.push(context, CreateUserNamePage.getRoute());
-              break;
-            }
           case EVerifyEmaileState.Error:
             {
               Utility.displaySnackbar(context,

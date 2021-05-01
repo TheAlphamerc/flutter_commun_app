@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app_start/username/username_cubit.dart';
@@ -10,10 +11,11 @@ import '../../../../locator.dart';
 
 class CreateUserNamePage extends StatelessWidget {
   const CreateUserNamePage({Key key}) : super(key: key);
-  static MaterialPageRoute getRoute() {
+  static MaterialPageRoute getRoute(UserCredential userCredential) {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
-              create: (context) => UsernameCubit(getIt<AuthRepo>()),
+              create: (context) => UsernameCubit(
+                  authRepo: getIt<AuthRepo>(), userCredential: userCredential),
               child: CreateUserNamePage(),
             ));
   }
@@ -55,10 +57,10 @@ class CreateUserNamePage extends StatelessWidget {
                   msg: Utility.decodeStateMessage(message));
             },
             available: () {
-              context.read<UsernameCubit>().createUserName(context);
+              context.read<UsernameCubit>().createUserAccount(context);
             },
-            usernameCreated: () {
-              print("Navigate to Home page");
+            accountCreated: () {
+              logger.i("Account created:successfully!!. Navigate to Home page");
             });
       },
     );

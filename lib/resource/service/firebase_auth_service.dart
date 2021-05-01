@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_commun_app/helper/collections_constants.dart';
+import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/service/verify_phone_response.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -61,8 +62,7 @@ class FirebaseAuthService {
   /// Return [False] if username is not available to acquire
   Future<Either<String, bool>> checkUserNameAvailability(
       String userName) async {
-    // await Future.delayed(Duration(seconds: 1));
-    var query = await FirebaseFirestore.instance
+    var query = await firestore
         .collection(CollectionsConstants.profile)
         .where("username", isEqualTo: userName)
         .get();
@@ -74,9 +74,22 @@ class FirebaseAuthService {
     }
   }
 
+  Future<Either<String, bool>> checkMobileAvailability(
+      String phoneNumber) async {
+    var query = await firestore
+        .collection(CollectionsConstants.profile)
+        .where("phoneNumber", isEqualTo: phoneNumber)
+        .get();
+    var data = query.docs;
+    if (data != null && data.isNotEmpty) {
+      return Future.value(Left("Mobile name already in use"));
+    } else {
+      return Future.value(Right(true));
+    }
+  }
+
   Future<Either<String, bool>> createUserName(String userName) async {
-    await Future.delayed(Duration(seconds: 1));
-    await FirebaseFirestore.instance
+    await firestore
         .collection(CollectionsConstants.profile)
         .add({"username": userName});
     return Future.value(Right(true));
@@ -110,8 +123,8 @@ class FirebaseAuthService {
   /// Return [True] if email is available to acquire.
   /// Return [False] if email is not available to acquire
   Future<Either<String, bool>> checkEmailAvailability(String email) async {
-    var query = await FirebaseFirestore.instance
-        .collection(CollectionsConstants.email)
+    var query = await firestore
+        .collection(CollectionsConstants.profile)
         .where("email", isEqualTo: email)
         .get();
     var data = query.docs;
@@ -124,10 +137,7 @@ class FirebaseAuthService {
 
   Future<Either<String, UserCredential>> signInWithGoogle() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: [
-        'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-      ],
+      scopes: ['email'],
     );
     try {
       // Trigger the authentication flow
@@ -156,5 +166,14 @@ class FirebaseAuthService {
       print(error);
       return Left("Something went wrong");
     }
+  }
+
+  /// Save user profile in firebase firestore database
+  /// Saving a profile means creating a new user
+  Future<Either<String, bool>> createUserAccount(ProfileModel model) async {
+    await firestore
+        .collection(CollectionsConstants.profile)
+        .add(model.toJson());
+    return Future.value(Right(true));
   }
 }

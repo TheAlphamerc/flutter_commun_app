@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/splash.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      home: GetStartedPage(),
+      home: SplashPage(),
     );
   }
 }

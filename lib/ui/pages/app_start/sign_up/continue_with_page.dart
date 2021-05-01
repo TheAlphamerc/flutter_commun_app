@@ -63,21 +63,33 @@ class ContinueWithPage extends StatelessWidget {
 
   void listener(BuildContext context, SocialSignupState state) {
     state.maybeWhen(
-        orElse: () {},
-        response: (state, message) {
-          switch (state) {
-            case ESocialSignupState.Error:
-              {
-                Utility.displaySnackbar(context,
-                    msg: Utility.decodeStateMessage(message));
-              }
-              break;
-            case ESocialSignupState.AccountCreated:
-              Navigator.push(context, CreateUserNamePage.getRoute());
-              break;
-            default:
-          }
-        });
+      orElse: () {},
+      created: (credentails) {
+        Navigator.push(context, CreateUserNamePage.getRoute(credentails));
+      },
+      response: (state, message) {
+        switch (state) {
+          case ESocialSignupState.Error:
+            {
+              Utility.displaySnackbar(context,
+                  msg: Utility.decodeStateMessage(message));
+            }
+            break;
+          case ESocialSignupState.CheckingEmail:
+            {
+              context.read<SocialSignupCubit>().checkEmailAvailability(context);
+            }
+            break;
+          case ESocialSignupState.EmailAlreadyInUse:
+            {
+              Utility.displaySnackbar(context,
+                  msg: Utility.decodeStateMessage(message));
+            }
+            break;
+          default:
+        }
+      },
+    );
   }
 
   @override

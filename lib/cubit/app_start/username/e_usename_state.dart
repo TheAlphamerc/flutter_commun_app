@@ -1,13 +1,13 @@
 part of 'username_cubit.dart';
 
-enum EUsernameState { AlreadyExists, Available, UsernameCreated, Error }
+enum EUsernameState { AlreadyExists, Available, Error, AccountCreated }
 
 extension EUsernameStateHelpers on EUsernameState {
   T when<T>({
     T Function() alreadyExists,
     @required T Function() elseMaybe,
     T Function() available,
-    T Function() usernameCreated,
+    T Function() accountCreated,
   }) {
     switch (this) {
       case EUsernameState.AlreadyExists:
@@ -24,9 +24,9 @@ extension EUsernameStateHelpers on EUsernameState {
           if (elseMaybe != null) return elseMaybe.call();
         }
         break;
-      case EUsernameState.UsernameCreated:
-        if (usernameCreated != null) {
-          return usernameCreated.call();
+      case EUsernameState.AccountCreated:
+        if (accountCreated != null) {
+          return accountCreated.call();
         } else {
           if (elseMaybe != null) return elseMaybe.call();
         }

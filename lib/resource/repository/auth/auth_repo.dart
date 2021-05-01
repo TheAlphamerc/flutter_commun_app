@@ -1,5 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/model/profile/profile_model.dart';
+import 'package:flutter_commun_app/resource/session/shared_prefrence_helper.dart';
 
 import '../../service/firebase_auth_service.dart';
 import '../../service/verify_phone_response.dart';
@@ -17,8 +20,10 @@ abstract class AuthRepo {
       {String email, String password});
 
   Future<Either<String, bool>> checkUserNameAvailability(String userName);
+  Future<Either<String, bool>> checkMobileAvailability(String mobile);
   Future<Either<String, bool>> checkEmailAvailability(String email);
   Future<Either<String, bool>> createUserName(String userName);
 
   Future<Either<String, UserCredential>> signupWithGoogle();
+  Future<Either<String, bool>> createUserAccount(ProfileModel model);
 }
