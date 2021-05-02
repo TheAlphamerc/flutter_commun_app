@@ -56,8 +56,7 @@ class UsernameCubit extends Cubit<UsernameState> {
       emit(UsernameState.respose(
           EUsernameState.Error, context.locale.username_creation_failed));
     }, (r) {
-      emit(UsernameState.respose(EUsernameState.AccountCreated,
-          Utility.encodeStateMessage("Account created Succesfully")));
+      emit(UsernameState.created(model));
     });
   }
 }

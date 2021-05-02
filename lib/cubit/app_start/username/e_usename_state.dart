@@ -1,6 +1,6 @@
 part of 'username_cubit.dart';
 
-enum EUsernameState { AlreadyExists, Available, Error, AccountCreated }
+enum EUsernameState { AlreadyExists, Available, Error }
 
 extension EUsernameStateHelpers on EUsernameState {
   T when<T>({
@@ -20,13 +20,6 @@ extension EUsernameStateHelpers on EUsernameState {
       case EUsernameState.Available:
         if (available != null) {
           return available.call();
-        } else {
-          if (elseMaybe != null) return elseMaybe.call();
-        }
-        break;
-      case EUsernameState.AccountCreated:
-        if (accountCreated != null) {
-          return accountCreated.call();
         } else {
           if (elseMaybe != null) return elseMaybe.call();
         }

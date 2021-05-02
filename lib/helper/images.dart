@@ -14,4 +14,6 @@ class Images {
   static const String googleLogo = 'assets/icon/signup/google_logo.png';
   static const String instagramLogo = 'assets/icon/signup/instagram_logo.png';
   static const String phoneIcon = 'assets/icon/signup/phone_icon.png';
+
+  static String defaultUser = 'assets/image/onboard/default_profile_img.png';
 }

@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'profile_model.g.dart';
 part 'profile_model.freezed.dart';
+part 'e_profile_provider_id.dart';
 
 @freezed
 abstract class ProfileModel with _$ProfileModel {
@@ -20,4 +20,8 @@ abstract class ProfileModel with _$ProfileModel {
       _$ProfileModelFromJson(json);
 }
 
-extension ProfileModelHelper on ProfileModel {}
+extension ProfileModelHelper on ProfileModel {
+  /// Returns enum value of  `EProfileProviderId` on the basis of `providerId`
+  EProfileProviderId get eProviderId =>
+      EProfileProviderId.Google.key(this.providerId);
+}

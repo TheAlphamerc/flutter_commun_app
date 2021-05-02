@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 part 'color/light_colors.dart';
 part 'text_styles.dart';
 part 'extention.dart';
+part 'decoration/box_decorations.dart';
 
 enum ThemeType { LIGHT, DARK }
 
