@@ -8,6 +8,8 @@ abstract class OnboardProfileState with _$OnboardProfileState {
 }
 
 enum EOnboardProfileState {
+  // ignore: constant_identifier_names
   Updating,
+  // ignore: constant_identifier_names
   Updated,
 }

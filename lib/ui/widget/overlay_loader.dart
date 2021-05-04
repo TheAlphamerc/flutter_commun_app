@@ -3,30 +3,31 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class CustomLoader {
   static CustomLoader _customLoader;
 
-  CustomLoader._createObject();
+  static CustomLoader get instance => _customLoader;
 
   factory CustomLoader() {
     if (_customLoader != null) {
       return _customLoader;
     } else {
-      _customLoader = CustomLoader._createObject();
-      return _customLoader;
+      return _customLoader = CustomLoader._createObject();
     }
   }
+  CustomLoader._createObject();
 
   //static OverlayEntry _overlayEntry;
   OverlayState _overlayState; //= new OverlayState();
   OverlayEntry _overlayEntry;
 
-  _buildLoader({String message}) {
+  void _buildLoader({String message}) {
     _overlayEntry = OverlayEntry(
       builder: (context) {
-        return Container(
+        return SizedBox(
             height: context.width,
             width: context.height,
             child: buildLoader(context, message: message));
@@ -34,26 +35,25 @@ class CustomLoader {
     );
   }
 
-  showLoader(context, {String message}) {
+  void showLoader(BuildContext context, {String message}) {
     _overlayState = Overlay.of(context);
     _buildLoader(message: message);
     _overlayState.insert(_overlayEntry);
   }
 
-  hideLoader() {
+  void hideLoader() {
     try {
       _overlayEntry?.remove();
       _overlayEntry = null;
     } catch (e) {
-      print("Exception:: $e");
+      Utility.cprint("Exception:: $e");
     }
   }
 
-  buildLoader(BuildContext context, {Color backgroundColor, String message}) {
-    if (backgroundColor == null) {
-      backgroundColor = const Color(0xffa8a8a8).withOpacity(.5);
-    }
-    var height = 140.0;
+  Widget buildLoader(BuildContext context,
+      {Color backgroundColor, String message}) {
+    backgroundColor ??= const Color(0xffa8a8a8).withOpacity(.5);
+    const height = 140.0;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: CustomScreenLoader(
@@ -72,7 +72,7 @@ class CustomScreenLoader extends StatelessWidget {
   final Color backgroundColor;
   final double height;
   final double width;
-  final Function onTap;
+  final GestureTapCallback onTap;
   final String message;
   const CustomScreenLoader(
       {Key key,
@@ -98,26 +98,23 @@ class CustomScreenLoader extends StatelessWidget {
             height: height,
             width: height,
             // padding: EdgeInsets.all(30),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: height - 50,
                   width: height - 50,
                   child: Stack(
                     fit: StackFit.expand,
                     alignment: Alignment.center,
                     children: <Widget>[
-                      Platform.isIOS
-                          ? CupertinoActivityIndicator(
-                              radius: 45,
-                            )
-                          : CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
+                      if (Platform.isIOS)
+                        const CupertinoActivityIndicator(radius: 45)
+                      else
+                        const CircularProgressIndicator(strokeWidth: 2),
                       Center(
                         child: Image.asset(
                           Images.twitterLogo,

@@ -1,4 +1,4 @@
-class Images {
+mixin Images {
   static const String onBoardPicOne =
       'assets/image/onboard/img_welcome_one.png';
   static const String onBoardPicTwo =

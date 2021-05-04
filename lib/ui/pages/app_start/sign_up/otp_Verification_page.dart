@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class OTPVerificationPAge extends StatefulWidget {
@@ -73,11 +74,11 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
                 backgroundColor ?? context.disabledColor),
-            padding:
-                MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 20)),
+            padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(vertical: 20)),
             shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-            side: MaterialStateProperty.all(BorderSide(width: .3))),
+            side: MaterialStateProperty.all(const BorderSide(width: .3))),
         child: Text(
           title,
           style: TextStyles.headline16(context).copyWith(
@@ -107,16 +108,16 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
     if (value.length == 1) {
       focusNode.requestFocus();
     }
-    if (value.length == 0) {
+    if (value.isEmpty) {
       FocusScope.of(context).previousFocus();
     }
   }
 
   void submitOTP() {
-    var otp =
+    final otp =
         otp1.text + otp2.text + otp3.text + otp4.text + otp5.text + otp6.text;
     if (otp.isEmpty || otp.length < 6) {
-      print("Invalid OTP");
+      Utility.cprint("Invalid OTP");
       return;
     }
     FocusManager.instance.primaryFocus.unfocus();
@@ -144,7 +145,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
         ).circular,
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Form(
           key: formKey,
           child: Column(
@@ -159,7 +160,6 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                 style: TextStyles.headline20(context),
               ).pB(90),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +168,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           controller: otp1,
                           node: node1,
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               return;
                             }
                             changeFocus(value, node2);
@@ -177,7 +177,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           controller: otp2,
                           node: node2,
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               FocusScope.of(context).previousFocus();
                               return;
                             }
@@ -187,7 +187,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           controller: otp3,
                           node: node3,
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               FocusScope.of(context).previousFocus();
                               return;
                             }
@@ -197,7 +197,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           controller: otp4,
                           node: node4,
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               FocusScope.of(context).previousFocus();
                               return;
                             }
@@ -207,7 +207,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           controller: otp5,
                           node: node5,
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               FocusScope.of(context).previousFocus();
                               return;
                             }
@@ -220,18 +220,18 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                             if (value.length == 1) {
                               node4.unfocus();
                             }
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               FocusScope.of(context).previousFocus();
                             }
                           }),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     context.locale.resend_verfication_code,
                     style: TextStyles.headline14(context).primary(context),
                   ),
-                  SizedBox(height: 100),
+                  const SizedBox(height: 100),
                   _button(context,
                           title: context.locale.next,
                           backgroundColor: context.primaryColor)
@@ -276,16 +276,16 @@ class CustomOTPTextField extends StatelessWidget {
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Colors.transparent,
               ),
             ),
             filled: true,
             fillColor: KColors.middle_gray_2,
-            contentPadding: EdgeInsets.only(bottom: 10)),
+            contentPadding: const EdgeInsets.only(bottom: 10)),
 
         showCursor: true,
-        cursorRadius: Radius.circular(5),
+        cursorRadius: const Radius.circular(5),
         style: TextStyles.headline20(context),
         inputFormatters: [
           LengthLimitingTextInputFormatter(1),

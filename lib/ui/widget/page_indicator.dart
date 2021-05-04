@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 /// An indicator showing the currently selected page of a PageController
 class DotsIndicator extends AnimatedWidget {
-  DotsIndicator({
+  const DotsIndicator({
     this.controller,
     this.itemCount,
     this.onPageSelected,
-    this.color: Colors.white,
+    this.color = Colors.white,
   }) : super(listenable: controller);
 
   /// The PageController that this DotsIndicator is representing.
@@ -35,33 +35,33 @@ class DotsIndicator extends AnimatedWidget {
   static const double _kDotSpacing = 8.0;
 
   Widget _buildDot(BuildContext context, int index) {
-    double selectedness = Curves.easeOut.transform(
+    final double selectedness = Curves.easeOut.transform(
       max(
         0.0,
         1.0 - ((controller.page ?? controller.initialPage) - index).abs(),
       ),
     );
-    double zoom = 1.5 + (_kMaxZoom - 1.0) * selectedness;
-    double width = 35.0;
+    final double zoom = 1.5 + (_kMaxZoom - 1.0) * selectedness;
+    const double width = 35.0;
 
-    return new AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       width: _kDotSize * zoom + (width * selectedness),
       height: _kDotSize * zoom,
-      margin: EdgeInsets.symmetric(horizontal: _kDotSpacing),
+      margin: const EdgeInsets.symmetric(horizontal: _kDotSpacing),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).disabledColor),
-      child: new Center(
-        child: new Material(
+      child: Center(
+        child: Material(
           color: color.withAlpha(10 + (255 - selectedness * 15).toInt()),
           type: MaterialType.card,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: new Container(
+          child: SizedBox(
             width: _kDotSize * zoom + (width * selectedness),
             height: _kDotSize * zoom,
-            child: new InkWell(
+            child: InkWell(
               onTap: () => onPageSelected(index),
             ),
           ),
@@ -70,10 +70,11 @@ class DotsIndicator extends AnimatedWidget {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
-    return new Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: new List<Widget>.generate(
+      children: List<Widget>.generate(
           itemCount, (index) => _buildDot(context, index)),
     );
   }

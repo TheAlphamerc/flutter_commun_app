@@ -8,4 +8,5 @@ abstract class SocialSignupState with _$SocialSignupState {
   const factory SocialSignupState.created(UserCredential credential) = _Created;
 }
 
+// ignore: constant_identifier_names
 enum ESocialSignupState { Error, EmailAlreadyInUse, CheckingEmail }

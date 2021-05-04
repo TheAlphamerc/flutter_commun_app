@@ -1,5 +1,6 @@
 part of 'username_cubit.dart';
 
+// ignore: constant_identifier_names
 enum EUsernameState { AlreadyExists, Available, Error }
 
 extension EUsernameStateHelpers on EUsernameState {
@@ -27,5 +28,6 @@ extension EUsernameStateHelpers on EUsernameState {
       default:
         return elseMaybe();
     }
+    return null;
   }
 }

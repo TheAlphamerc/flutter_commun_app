@@ -13,7 +13,7 @@ class KFlatButton extends StatelessWidget {
     this.isColored = true,
     this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
-  final Function onPressed;
+  final VoidCallback onPressed;
   final String label;
   final TextStyle labelStyle;
   final ValueNotifier<bool> isLoading;
@@ -24,19 +24,24 @@ class KFlatButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: isWraped ? null : double.infinity,
       child: ValueListenableBuilder<bool>(
         valueListenable: isLoading ?? ValueNotifier(false),
         builder: (context, loading, child) {
-          return FlatButton(
-            disabledColor: Theme.of(context).disabledColor,
-            padding: padding,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(borderRadius ?? 6)),
-            color: !isColored ? null : color ?? Theme.of(context).primaryColor,
-            splashColor: Theme.of(context).colorScheme.background,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+          return TextButton(
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(padding),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(borderRadius ?? 6)),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                  !isColored ? null : color ?? Theme.of(context).primaryColor,
+                ),
+                foregroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.onPrimary,
+                )),
             onPressed: loading ? null : onPressed,
             child: loading
                 ? SizedBox(

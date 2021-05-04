@@ -9,12 +9,20 @@ abstract class SignupMobileState with _$SignupMobileState {
 }
 
 enum EVerifyMobileState {
+  // ignore: constant_identifier_names
   OtpSent,
+  // ignore: constant_identifier_names
   OtpVerifying,
+  // ignore: constant_identifier_names
   OtpVerified,
+  // ignore: constant_identifier_names
   Loading,
+  // ignore: constant_identifier_names
   VerficationFailed,
+  // ignore: constant_identifier_names
   MobileAlreadyInUse,
+  // ignore: constant_identifier_names
   Other,
+  // ignore: constant_identifier_names
   Timeout
 }

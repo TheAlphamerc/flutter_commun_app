@@ -14,6 +14,6 @@ class FirebaseProfileService {
     await firestore
         .collection(CollectionsConstants.profile)
         .add(model.toJson());
-    return Future.value(Right(true));
+    return Future.value(const Right(true));
   }
 }

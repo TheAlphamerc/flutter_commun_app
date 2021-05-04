@@ -3,15 +3,16 @@ part of 'theme.dart';
 extension TextStyleHelpers on TextStyle {
   TextStyle get bold => copyWith(fontWeight: FontWeight.bold);
   TextStyle get white => copyWith(color: Colors.white);
-  TextStyle primary(context) => copyWith(color: Theme.of(context).primaryColor);
-  TextStyle onPrimary(context) =>
+  TextStyle primary(BuildContext context) =>
+      copyWith(color: Theme.of(context).primaryColor);
+  TextStyle onPrimary(BuildContext context) =>
       copyWith(color: Theme.of(context).colorScheme.onPrimary);
   TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
   TextStyle size(double value) => copyWith(fontSize: value);
 }
 
 extension PaddingHelper on Widget {
-  Padding get p16 => Padding(padding: EdgeInsets.all(16), child: this);
+  Padding get p16 => Padding(padding: const EdgeInsets.all(16), child: this);
 
   /// Set all side padding according to `value`
   Padding p(double value) =>
@@ -26,29 +27,29 @@ extension PaddingHelper on Widget {
 
   /// Horizontal Padding 16
   Padding get hP4 =>
-      Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: this);
+      Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: this);
   Padding get hP8 =>
-      Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: this);
+      Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: this);
   Padding get hP16 =>
-      Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: this);
+      Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: this);
 
   /// Vertical Padding 16
   Padding get vP16 =>
-      Padding(padding: EdgeInsets.symmetric(vertical: 16), child: this);
+      Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: this);
   Padding get vP8 =>
-      Padding(padding: EdgeInsets.symmetric(vertical: 8), child: this);
+      Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: this);
   Padding get vP12 =>
-      Padding(padding: EdgeInsets.symmetric(vertical: 8), child: this);
+      Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: this);
   Padding get vP4 =>
-      Padding(padding: EdgeInsets.symmetric(vertical: 4), child: this);
+      Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: this);
 
   ///Horrizontal Padding for Title
-  Padding get hP30 =>
-      Padding(padding: EdgeInsets.symmetric(horizontal: 30.0), child: this);
+  Padding get hP30 => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0), child: this);
 
   ///Facebook/Google logo text Padding Helper
   Padding get vP5 =>
-      Padding(padding: EdgeInsets.only(bottom: 5.5), child: this);
+      Padding(padding: const EdgeInsets.only(bottom: 5.5), child: this);
 
   /// Set right side padding according to `value`
   Padding pR(double value) =>
@@ -75,7 +76,7 @@ extension Extended on Widget {
 
 extension CornerRadius on Widget {
   ClipRRect get circular => ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(1000)),
+        borderRadius: const BorderRadius.all(Radius.circular(1000)),
         child: this,
       );
   ClipRRect cornerRadius(double value) => ClipRRect(
@@ -96,8 +97,12 @@ extension OnPressed on Widget {
             right: 0,
             top: 0,
             bottom: 0,
-            child: FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            child: TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(borderRadius: borderRadius),
+                  ),
+                ),
                 onPressed: () {
                   if (onPressed != null) {
                     onPressed();
@@ -111,44 +116,41 @@ extension OnPressed on Widget {
 
 extension ExAlignment on Widget {
   Widget get alignTopCenter => Align(
-        child: this,
         alignment: Alignment.topCenter,
+        child: this,
       );
   Widget get alignTopLeft => Align(
-        child: this,
         alignment: Alignment.topLeft,
+        child: this,
       );
   Widget get alignTopRight => Align(
-        child: this,
         alignment: Alignment.topRight,
-      );
-  Widget get alignCenter => Align(
         child: this,
-        alignment: Alignment.center,
       );
+  Widget get alignCenter => Align(child: this);
 
   Widget get alignCenterRight => Align(
-        child: this,
         alignment: Alignment.centerRight,
+        child: this,
       );
   Widget get alignBottomCenter => Align(
-        child: this,
         alignment: Alignment.bottomCenter,
+        child: this,
       );
   Widget get alignBottomLeft => Align(
-        child: this,
         alignment: Alignment.bottomLeft,
+        child: this,
       );
   Widget get alignBottomRight => Align(
-        child: this,
         alignment: Alignment.bottomRight,
+        child: this,
       );
 }
 
 extension StringHelper on String {
   String takeOnly(int value) {
-    if (this != null && this.length >= value) {
-      return this.substring(0, value);
+    if (this != null && length >= value) {
+      return substring(0, value);
     } else {
       return this;
     }
@@ -179,14 +181,14 @@ extension SizeHelper on BuildContext {
 
 extension ListHelper<T> on List<T> {
   Option<List<T>> get value {
-    if (this != null && this.isNotEmpty) {
+    if (this != null && isNotEmpty) {
       return some(this);
     } else {
       return none();
     }
   }
 
-  bool get notNullAndEmpty => this != null && this.isNotEmpty;
+  bool get notNullAndEmpty => this != null && isNotEmpty;
 }
 
 extension ApplocalisationHelper on BuildContext {

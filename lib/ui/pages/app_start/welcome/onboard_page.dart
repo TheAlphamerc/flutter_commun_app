@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/continue_with_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/k_button.dart';
@@ -7,11 +8,11 @@ import 'package:flutter_commun_app/ui/widget/page_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GetStartedPage extends StatefulWidget {
-  GetStartedPage({Key key}) : super(key: key);
+  const GetStartedPage({Key key}) : super(key: key);
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => GetStartedPage(),
+      builder: (_) => const GetStartedPage(),
     );
   }
 
@@ -37,19 +38,21 @@ class _GetStartedPageState extends State<GetStartedPage> {
     super.dispose();
   }
 
-  void _submit(BuildContext context) async {
+  void _submit(BuildContext context) {
     switch (controller.page.toInt()) {
       case 0:
         controller.nextPage(
-            duration: Duration(milliseconds: 500), curve: Curves.easeInSine);
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInSine);
         break;
       case 1:
         controller.nextPage(
-            duration: Duration(milliseconds: 500), curve: Curves.easeInSine);
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInSine);
         break;
 
       case 2:
-        print("Navigate to Sign");
+        Utility.cprint("Navigate to Sign");
         Navigator.push(context, ContinueWithPage.getRoute());
         break;
 
@@ -60,17 +63,18 @@ class _GetStartedPageState extends State<GetStartedPage> {
   Widget _form(BuildContext context) {
     return Container(
       width: context.width - 16,
-      margin: EdgeInsets.symmetric(vertical: 16) + EdgeInsets.only(top: 32),
+      margin: const EdgeInsets.symmetric(vertical: 16) +
+          const EdgeInsets.only(top: 32),
       child: Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
-            Container(
+            const SizedBox(height: 30),
+            SizedBox(
               height: context.height * .7,
               child: PageView.builder(
                 controller: controller,
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: 3,
                 onPageChanged: (page) {
                   setState(() {
@@ -81,14 +85,14 @@ class _GetStartedPageState extends State<GetStartedPage> {
                 itemBuilder: (context, index) {
                   switch (index) {
                     case 0:
-                      return Slider1();
+                      return const Slider1();
                     case 1:
-                      return Slider2();
+                      return const Slider2();
                     case 2:
-                      return Slider3();
+                      return const Slider3();
                       break;
                     default:
-                      return Slider1();
+                      return const Slider1();
                   }
                 },
               ),
@@ -98,7 +102,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
               itemCount: 3,
               color: context.primaryColor,
             ).pV(24),
-            // SizedBox(height: 14),
+            // const SizedBox(height: 14),
             Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -121,7 +125,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: context.height,
         child: SafeArea(
           top: false,
@@ -134,7 +138,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   child: Column(
                     children: <Widget>[
                       _form(context),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -152,8 +156,8 @@ class Slider1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = context.height;
-    return Container(
+    final height = context.height;
+    return SizedBox(
       height: height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -192,8 +196,8 @@ class Slider2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = context.height;
-    return Container(
+    final height = context.height;
+    return SizedBox(
       height: height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -231,8 +235,8 @@ class Slider3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = context.height;
-    return Container(
+    final height = context.height;
+    return SizedBox(
       height: height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

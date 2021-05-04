@@ -42,22 +42,23 @@ class KTextField extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final TextCapitalization textCapitalization;
   final Function(String) onChange;
-  final Function(String) validator;
+  final String Function(String) validator;
   final Color backgroundColor;
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         if (label != null) ...[
           Text(label ?? "", style: TextStyles.headline16(context)),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
         ],
-        Container(
+        SizedBox(
           height: height,
           child: TextFormField(
             autocorrect: false,
             onSaved: (val) {
-              print(val);
+              // print(val);
             },
             onFieldSubmitted: (val) {
               if (onSubmit != null) {
@@ -84,14 +85,14 @@ class KTextField extends StatelessWidget {
     );
   }
 
-  InputDecoration getInputDecotration(context,
+  InputDecoration getInputDecotration(BuildContext context,
       {String hintText, Widget suffixIcon}) {
     return InputDecoration(
         // helperText: '',
         hintText: hintText,
         fillColor: backgroundColor ?? Colors.transparent,
         filled: backgroundColor != null,
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
         border: OutlineInputBorder(
           borderSide: BorderSide(
             color: Theme.of(context).dividerColor,
@@ -124,7 +125,7 @@ class KTextField extends StatelessWidget {
     }
   }
 
-  Function(String) validators(FieldType choice, BuildContext context) {
+  String Function(String) validators(FieldType choice, BuildContext context) {
     switch (choice) {
       case FieldType.name:
         return KValidator.buildValidators(context, choice);

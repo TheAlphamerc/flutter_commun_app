@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app_start/signup/social/social_signup_cubit.dart';
@@ -20,7 +19,7 @@ class ContinueWithPage extends StatelessWidget {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
               create: (context) => SocialSignupCubit(getIt<AuthRepo>()),
-              child: ContinueWithPage(),
+              child: const ContinueWithPage(),
             ));
   }
 
@@ -37,11 +36,11 @@ class ContinueWithPage extends StatelessWidget {
       style: ButtonStyle(
           backgroundColor:
               MaterialStateProperty.all(backgroundColor ?? Colors.transparent),
-          padding:
-              MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 10)),
+          padding: MaterialStateProperty.all(
+              const EdgeInsets.symmetric(vertical: 10)),
           shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-          side: MaterialStateProperty.all(BorderSide(width: .3))),
+          side: MaterialStateProperty.all(const BorderSide(width: .3))),
       child: Row(
         children: [
           Image.asset(
@@ -120,12 +119,12 @@ class ContinueWithPage extends StatelessWidget {
       body: BlocListener<SocialSignupCubit, SocialSignupState>(
         listener: listener,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 _button(context,
                     image: Images.phoneIcon,
                     title: context.locale.continuwWithPhone, onPressed: () {
@@ -159,10 +158,10 @@ class ContinueWithPage extends StatelessWidget {
                     .pB(20),
 
                 /// Already have an account
-                SignupTermsOfServiceWidget(),
+                const SignupTermsOfServiceWidget(),
 
                 /// Sign in Text
-                AlreadyHaveAccountWidget()
+                const AlreadyHaveAccountWidget()
               ],
             ),
           ),

@@ -5,7 +5,7 @@ import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/sign_up/otp_Verification_page.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/otp_verification_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/already_have_account_widget.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_terms_of_service_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -17,7 +17,7 @@ class SignupWithMobilePage extends StatelessWidget {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
               create: (context) => SignupMobileCubit(getIt<AuthRepo>()),
-              child: SignupWithMobilePage(),
+              child: const SignupWithMobilePage(),
             ));
   }
 
@@ -32,11 +32,11 @@ class SignupWithMobilePage extends StatelessWidget {
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
                 backgroundColor ?? context.disabledColor),
-            padding:
-                MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 20)),
+            padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(vertical: 20)),
             shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-            side: MaterialStateProperty.all(BorderSide(width: .3))),
+            side: MaterialStateProperty.all(const BorderSide(width: .3))),
         child: Text(
           title,
           style: TextStyles.headline16(context).copyWith(
@@ -52,7 +52,7 @@ class SignupWithMobilePage extends StatelessWidget {
       orElse: () {},
       created: (credentails) {
         Navigator.pop(context);
-        print("Navigate to Home page");
+        Utility.cprint("Navigate to Home page");
         Navigator.push(context, CreateUserNamePage.getRoute(credentails));
       },
       response: (state, message) {
@@ -76,18 +76,18 @@ class SignupWithMobilePage extends StatelessWidget {
             {
               Utility.displaySnackbar(context,
                   msg: Utility.decodeStateMessage(message));
-              print(message);
+              Utility.cprint(message);
               break;
             }
           case EVerifyMobileState.VerficationFailed:
             {
               Utility.displaySnackbar(context,
                   msg: Utility.decodeStateMessage(message));
-              print(message);
+              Utility.cprint(message);
               break;
             }
           default:
-            print(message);
+            Utility.cprint(message);
         }
       },
     );
@@ -121,11 +121,11 @@ class SignupWithMobilePage extends StatelessWidget {
         body: BlocListener<SignupMobileCubit, SignupMobileState>(
           listener: listener,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Stack(
               children: [
                 SingleChildScrollView(
-                  child: Container(
+                  child: SizedBox(
                     height: context.height,
                     child: Form(
                       key: context.watch<SignupMobileCubit>().formKey,
@@ -136,7 +136,7 @@ class SignupWithMobilePage extends StatelessWidget {
                             context.locale.signUp,
                             style: TextStyles.headline36(context),
                           ),
-                          SizedBox(height: 72),
+                          const SizedBox(height: 72),
                           KTextField(
                             controller:
                                 context.watch<SignupMobileCubit>().phone,
@@ -150,15 +150,14 @@ class SignupWithMobilePage extends StatelessWidget {
                   ),
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SignupTermsOfServiceWidget().pB(16),
+                    const SignupTermsOfServiceWidget().pB(16),
                     _button(context,
                             title: context.locale.next,
                             backgroundColor: context.primaryColor)
                         .pB(10),
-                    AlreadyHaveAccountWidget()
+                    const AlreadyHaveAccountWidget()
                   ],
                 )
               ],

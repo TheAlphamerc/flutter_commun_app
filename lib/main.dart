@@ -2,12 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/splash.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setUpDependency();
@@ -24,11 +23,11 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      locale: Locale('es', ''),
+      locale: const Locale('es', ''),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      home: SplashPage(),
+      home: const SplashPage(),
     );
   }
 }

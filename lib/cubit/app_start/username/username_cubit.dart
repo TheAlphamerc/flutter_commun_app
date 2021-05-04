@@ -15,7 +15,7 @@ class UsernameCubit extends Cubit<UsernameState> {
   final AuthRepo authRepo;
   final UserCredential userCredential;
   UsernameCubit({this.authRepo, this.userCredential})
-      : super(UsernameState.initial()) {
+      : super(const UsernameState.initial()) {
     loader = CustomLoader();
     username = TextEditingController();
   }
@@ -24,9 +24,9 @@ class UsernameCubit extends Cubit<UsernameState> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   CustomLoader loader;
 
-  void checkUserNameAvailability(BuildContext context) async {
+  Future checkUserNameAvailability(BuildContext context) async {
     loader.showLoader(context, message: context.locale.checking);
-    var response = await authRepo.checkUserNameAvailability(username.text);
+    final response = await authRepo.checkUserNameAvailability(username.text);
     loader.hideLoader();
     response.fold((l) {
       emit(UsernameState.respose(EUsernameState.AlreadyExists,
@@ -50,7 +50,7 @@ class UsernameCubit extends Cubit<UsernameState> {
         phoneNumber: userCredential.user.phoneNumber);
 
     loader.showLoader(context, message: "Creating");
-    var response = await authRepo.createUserAccount(model);
+    final response = await authRepo.createUserAccount(model);
     loader.hideLoader();
     response.fold((l) {
       emit(UsernameState.respose(

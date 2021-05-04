@@ -7,7 +7,7 @@ import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart'
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SplashPage extends StatefulWidget {
-  SplashPage({Key key}) : super(key: key);
+  const SplashPage({Key key}) : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -20,8 +20,8 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Widget _body() {
-    var height = 150.0;
-    return Container(
+    const height = 150.0;
+    return SizedBox(
       height: context.height,
       width: context.width,
       child: Container(
@@ -29,8 +29,8 @@ class _SplashPageState extends State<SplashPage> {
         width: height,
         alignment: Alignment.center,
         child: Container(
-          padding: EdgeInsets.all(50),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(50),
+          decoration: const BoxDecoration(
             // color: Colors.white,
             borderRadius: BorderRadius.all(
               Radius.circular(10),
@@ -39,14 +39,15 @@ class _SplashPageState extends State<SplashPage> {
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              Platform.isIOS
-                  ? CupertinoActivityIndicator(
-                      radius: 35,
-                    )
-                  : CircularProgressIndicator(
-                      strokeWidth: 2,
-                    ),
-              FlutterLogo()
+              if (Platform.isIOS)
+                const CupertinoActivityIndicator(
+                  radius: 35,
+                )
+              else
+                const CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              const FlutterLogo()
             ],
           ),
         ),
@@ -63,7 +64,7 @@ class _SplashPageState extends State<SplashPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _body();
           } else if (snapshot.data == null) {
-            return GetStartedPage();
+            return const GetStartedPage();
           } else {
             return Scaffold(
               appBar: AppBar(),
@@ -74,14 +75,14 @@ class _SplashPageState extends State<SplashPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Home page"),
-                    SizedBox(height: 40),
+                    const Text("Home page"),
+                    const SizedBox(height: 40),
                     OutlinedButton(
                       onPressed: () {
                         FirebaseAuth.instance.signOut();
                         setState(() {});
                       },
-                      child: Text("Logout"),
+                      child: const Text("Logout"),
                     )
                   ],
                 ),

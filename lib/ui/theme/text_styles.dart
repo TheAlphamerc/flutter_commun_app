@@ -10,7 +10,7 @@ class TextStyles {
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: context.themeType == ThemeType.LIGHT
-              ? Color(0xff424242)
+              ? const Color(0xff424242)
               : Colors.white);
 
   static TextStyle bodyText15(BuildContext context) =>
@@ -48,7 +48,7 @@ class TextStyles {
       bodyText14(context).copyWith(
         fontWeight: FontWeight.w600,
         color: context.themeType == ThemeType.LIGHT
-            ? Color(0xff919191)
+            ? const Color(0xff919191)
             : Colors.white,
       );
   static TextStyle subtitle16(BuildContext context) =>

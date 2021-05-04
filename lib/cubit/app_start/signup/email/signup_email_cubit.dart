@@ -11,7 +11,7 @@ part 'signup_email_cubit.freezed.dart';
 
 class SignupEmailCubit extends Cubit<SignupEmailState> {
   final AuthRepo authRepo;
-  SignupEmailCubit(this.authRepo) : super(SignupEmailState.initial()) {
+  SignupEmailCubit(this.authRepo) : super(const SignupEmailState.initial()) {
     email = TextEditingController();
     password = TextEditingController();
     confirmPassword = TextEditingController();
@@ -26,12 +26,14 @@ class SignupEmailCubit extends Cubit<SignupEmailState> {
   ValueNotifier<bool> displayConfirmPasswords = ValueNotifier<bool>(false);
   CustomLoader loader;
 
+  // ignore: avoid_setters_without_getters
   set setDisplayPasswords(bool value) => displayPasswords.value = value;
+  // ignore: avoid_setters_without_getters
   set setDisplayConfirmPasswords(bool value) =>
       displayConfirmPasswords.value = value;
 
   Future signupWithEmail(BuildContext context) async {
-    var isValid = formKey.currentState.validate();
+    final isValid = formKey.currentState.validate();
     if (!isValid) {
       return;
     } else if (password.text != confirmPassword.text) {

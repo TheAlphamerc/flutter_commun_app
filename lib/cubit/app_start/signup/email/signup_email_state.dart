@@ -8,4 +8,5 @@ abstract class SignupEmailState with _$SignupEmailState {
   const factory SignupEmailState.created(UserCredential credential) = _Created;
 }
 
+// ignore: constant_identifier_names
 enum EVerifyEmaileState { Error }

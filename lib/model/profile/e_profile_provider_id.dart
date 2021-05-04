@@ -1,5 +1,6 @@
 part of 'profile_model.dart';
 
+// ignore: constant_identifier_names
 enum EProfileProviderId { Password, Google, Phone }
 const _$EProfileProviderIdTypeMap = {
   EProfileProviderId.Password: 'password',
@@ -7,7 +8,7 @@ const _$EProfileProviderIdTypeMap = {
   EProfileProviderId.Phone: "phone"
 };
 
-extension convert on EProfileProviderId {
+extension EProfileProviderIdHelper on EProfileProviderId {
   String encode() => _$EProfileProviderIdTypeMap[this];
 
   EProfileProviderId key(String value) => _decodeEProfileProviderId(value);
@@ -43,6 +44,8 @@ extension convert on EProfileProviderId {
       default:
     }
     if (elseMaybe != null) return elseMaybe.call();
+
+    return null;
   }
 
   T mayBeWhen<T>(

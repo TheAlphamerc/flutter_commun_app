@@ -23,5 +23,5 @@ abstract class ProfileModel with _$ProfileModel {
 extension ProfileModelHelper on ProfileModel {
   /// Returns enum value of  `EProfileProviderId` on the basis of `providerId`
   EProfileProviderId get eProviderId =>
-      EProfileProviderId.Google.key(this.providerId);
+      EProfileProviderId.Google.key(providerId);
 }

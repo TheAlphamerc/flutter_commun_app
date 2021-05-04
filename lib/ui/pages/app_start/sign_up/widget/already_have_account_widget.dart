@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class AlreadyHaveAccountWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class AlreadyHaveAccountWidget extends StatelessWidget {
                   .copyWith(color: context.primaryColor),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  print("Navigate to Signin");
+                  Utility.cprint("Navigate to Signin");
                 }),
         ],
       ),

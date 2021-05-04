@@ -18,7 +18,7 @@ class CreateUserNamePage extends StatelessWidget {
         builder: (BuildContext context) => BlocProvider(
               create: (context) => UsernameCubit(
                   authRepo: getIt<AuthRepo>(), userCredential: userCredential),
-              child: CreateUserNamePage(),
+              child: const CreateUserNamePage(),
             ));
   }
 
@@ -33,11 +33,11 @@ class CreateUserNamePage extends StatelessWidget {
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
                 backgroundColor ?? context.disabledColor),
-            padding:
-                MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 20)),
+            padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(vertical: 20)),
             shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-            side: MaterialStateProperty.all(BorderSide(width: .3))),
+            side: MaterialStateProperty.all(const BorderSide(width: .3))),
         child: Text(
           title,
           style: TextStyles.headline16(context).copyWith(
@@ -53,15 +53,9 @@ class CreateUserNamePage extends StatelessWidget {
       orElse: () {},
       created: (profile) {
         /// Permform action on the basis of login type
-        profile.eProviderId.mayBeWhen(() {
-          logger.i("Account created:successfully!!. Navigate to Home page");
-        }, phone: () {
-          logger.i("Navigate to update profile and username screen");
-          Navigator.pushReplacement(
-            context,
-            OnBoardUserProfilePage.getRoute(profile),
-          );
-        });
+        logger.i("Account created:successfully!!. Navigate to Home page");
+        Navigator.pushReplacement(
+            context, OnBoardUserProfilePage.getRoute(profile));
       },
       respose: (state, message) {
         state.when(
@@ -102,11 +96,11 @@ class CreateUserNamePage extends StatelessWidget {
       body: BlocListener<UsernameCubit, UsernameState>(
         listener: listener,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Stack(
             children: [
               SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: context.height,
                   child: Form(
                     key: context.watch<UsernameCubit>().formKey,
@@ -124,7 +118,7 @@ class CreateUserNamePage extends StatelessWidget {
                         ).pT(19),
                         Column(
                           children: [
-                            SizedBox(height: 72),
+                            const SizedBox(height: 72),
                             KTextField(
                               controller:
                                   context.watch<UsernameCubit>().username,
@@ -132,7 +126,7 @@ class CreateUserNamePage extends StatelessWidget {
                               hintText: context.locale.username,
                               backgroundColor: KColors.middle_gray_2,
                             ).pH(24),
-                            SizedBox(height: 40),
+                            const SizedBox(height: 40),
                           ],
                         ).extended
                       ],

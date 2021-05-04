@@ -5,5 +5,5 @@ part 'signin_state.dart';
 part 'signin_cubit.freezed.dart';
 
 class SigninCubit extends Cubit<SigninState> {
-  SigninCubit() : super(SigninState.initial());
+  SigninCubit() : super(const SigninState.initial());
 }

@@ -1,6 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 // import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as custom;
 
 class Utility {
@@ -21,7 +20,7 @@ class Utility {
 
   static String encodeStateMessage(String message) {
     if (message != null) {
-      return message + " ##" + DateTime.now().millisecond.toString();
+      return "$message ##${DateTime.now().millisecond}";
     }
     return "";
   }
@@ -31,5 +30,12 @@ class Utility {
       return message.split("##")[0];
     }
     return "";
+  }
+
+  static void cprint(String message, {dynamic error}) {
+    if (kDebugMode) {
+      // ignore: avoid_print
+      print(message);
+    }
   }
 }

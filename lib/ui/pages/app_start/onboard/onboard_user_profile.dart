@@ -17,7 +17,7 @@ class OnBoardUserProfilePage extends StatelessWidget {
     return MaterialPageRoute<T>(builder: (_) {
       return BlocProvider(
         create: (context) => OnboardProfileCubit(model, getIt<ProfileRepo>()),
-        child: OnBoardUserProfilePage(),
+        child: const OnBoardUserProfilePage(),
       );
     });
   }
@@ -32,11 +32,11 @@ class OnBoardUserProfilePage extends StatelessWidget {
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
                 backgroundColor ?? context.disabledColor),
-            padding:
-                MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 20)),
+            padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(vertical: 20)),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50))),
-            side: MaterialStateProperty.all(BorderSide(width: .3))),
+            side: MaterialStateProperty.all(const BorderSide(width: .3))),
         child: Text(
           title,
           style: TextStyles.headline16(context).copyWith(
@@ -50,7 +50,7 @@ class OnBoardUserProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF3F5FA),
+      backgroundColor: const Color(0xffF3F5FA),
       appBar: AppBar(
         centerTitle: true,
         title: Title(
@@ -61,35 +61,37 @@ class OnBoardUserProfilePage extends StatelessWidget {
             )),
         backgroundColor: context.theme.appBarTheme.backgroundColor,
       ),
-      body: Container(
+      body: SizedBox(
         width: context.width,
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Container(
                 width: context.width,
-                margin: EdgeInsets.symmetric(horizontal: 12),
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 decoration: BoxDecorations.decoration(context,
-                    offset: Offset(0, 0), blurRadius: 2),
+                    offset: const Offset(0, 0), blurRadius: 2),
                 child: Column(
                   children: [
-                    _UserAvatar().pB(30),
-                    _ProfileBanner().pB(30),
-                    UsernameField(label: "Name", type: FieldType.name).pB(10),
-                    UsernameField(label: "UserName", type: FieldType.name)
+                    const _UserAvatar().pB(30),
+                    const _ProfileBanner().pB(30),
+                    const UsernameField(label: "Name", type: FieldType.name)
                         .pB(10),
-                    UsernameField(label: "Website", type: FieldType.name)
+                    const UsernameField(label: "UserName", type: FieldType.name)
                         .pB(10),
-                    UsernameField(label: "Bio", type: FieldType.name).pB(20),
+                    const UsernameField(label: "Website", type: FieldType.name)
+                        .pB(10),
+                    const UsernameField(label: "Bio", type: FieldType.name)
+                        .pB(20),
                   ],
                 ),
               ).pB(20),
               _button(context,
                   title: "Save", backgroundColor: context.primaryColor),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -103,7 +105,7 @@ class _UserAvatar extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  void pickImage(BuildContext context) async {}
+  void pickImage(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +116,7 @@ class _UserAvatar extends StatelessWidget {
             children: [
               CustomPaint(
                 painter: CirclePainter(color: theme.disabledColor),
-                child: Container(
+                child: SizedBox(
                   height: 100,
                   width: 100,
                   child: Image.asset(Images.onBoardPicFour),
@@ -125,7 +127,7 @@ class _UserAvatar extends StatelessWidget {
                 width: 40,
                 child: CircleAvatar(
                   backgroundColor: theme.primaryColor,
-                  child: Icon(Icons.camera),
+                  child: const Icon(Icons.camera),
                 ).ripple(() {
                   pickImage(context);
                 }),
@@ -148,7 +150,7 @@ class _UserAvatar extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                       boxShadow: [
-                        BoxShadow(
+                        const BoxShadow(
                             color: Color(0xffaaaaaa),
                             offset: Offset(3, 3),
                             blurRadius: 10)
@@ -159,7 +161,7 @@ class _UserAvatar extends StatelessWidget {
                   width: 40,
                   child: CircleAvatar(
                     backgroundColor: theme.primaryColor,
-                    child: Icon(Icons.camera),
+                    child: const Icon(Icons.camera),
                   ).ripple(() {
                     pickImage(context);
                   }),
@@ -168,7 +170,6 @@ class _UserAvatar extends StatelessWidget {
             ),
           ),
         );
-    ;
   }
 }
 
@@ -177,7 +178,7 @@ class _ProfileBanner extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  void pickImage(BuildContext context) async {}
+  void pickImage(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +187,7 @@ class _ProfileBanner extends StatelessWidget {
           () => Stack(
             alignment: Alignment.bottomRight,
             children: [
-              Container(
+              SizedBox(
                 width: context.width,
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
@@ -201,7 +202,7 @@ class _ProfileBanner extends StatelessWidget {
                 width: 40,
                 child: CircleAvatar(
                   backgroundColor: theme.primaryColor,
-                  child: Icon(Icons.camera),
+                  child: const Icon(Icons.camera),
                 ).ripple(() {
                   pickImage(context);
                 }),
@@ -224,7 +225,7 @@ class _ProfileBanner extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                       boxShadow: [
-                        BoxShadow(
+                        const BoxShadow(
                             color: Color(0xffaaaaaa),
                             offset: Offset(3, 3),
                             blurRadius: 10)
@@ -235,7 +236,7 @@ class _ProfileBanner extends StatelessWidget {
                   width: 40,
                   child: CircleAvatar(
                     backgroundColor: theme.primaryColor,
-                    child: Icon(Icons.camera),
+                    child: const Icon(Icons.camera),
                   ).ripple(() {
                     pickImage(context);
                   }),
@@ -244,7 +245,6 @@ class _ProfileBanner extends StatelessWidget {
             ),
           ),
         );
-    ;
   }
 }
 
@@ -317,10 +317,11 @@ class UsernameField extends StatelessWidget {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecorations.outlineBorder(context, radius: 10, width: 1),
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -331,7 +332,7 @@ class UsernameField extends StatelessWidget {
     );
   }
 
-  InputDecoration getInputDecotration(context,
+  InputDecoration getInputDecotration(BuildContext context,
       {String hintText, Widget suffixIcon, dartz.Option<bool> isValid}) {
     return InputDecoration(
       // helperText: '',

@@ -42,11 +42,11 @@ class FirebaseAuthService {
   /// Creating new user doesn't mean its data is saved in firebase firestore/realtime database.
   Future<Either<String, UserCredential>> verifyOTP(
       {String verificationId, String smsCode}) async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    final PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);
     String errorMessage;
     // Sign the user in (or link) with the credential
-    var userCredential = await auth
+    final userCredential = await auth
         .signInWithCredential(credential)
         .onError((FirebaseAuthException error, stackTrace) {
       log("VerifyOTP", error: error);
@@ -62,29 +62,29 @@ class FirebaseAuthService {
   /// Return [False] if username is not available to acquire
   Future<Either<String, bool>> checkUserNameAvailability(
       String userName) async {
-    var query = await firestore
+    final query = await firestore
         .collection(CollectionsConstants.profile)
         .where("username", isEqualTo: userName)
         .get();
-    var data = query.docs;
+    final data = query.docs;
     if (data != null && data.isNotEmpty) {
-      return Future.value(Left("User name already in use"));
+      return Future.value(const Left("User name already in use"));
     } else {
-      return Future.value(Right(true));
+      return Future.value(const Right(true));
     }
   }
 
   Future<Either<String, bool>> checkMobileAvailability(
       String phoneNumber) async {
-    var query = await firestore
+    final query = await firestore
         .collection(CollectionsConstants.profile)
         .where("phoneNumber", isEqualTo: phoneNumber)
         .get();
-    var data = query.docs;
+    final data = query.docs;
     if (data != null && data.isNotEmpty) {
-      return Future.value(Left("Mobile name already in use"));
+      return Future.value(const Left("Mobile name already in use"));
     } else {
-      return Future.value(Right(true));
+      return Future.value(const Right(true));
     }
   }
 
@@ -92,14 +92,14 @@ class FirebaseAuthService {
     await firestore
         .collection(CollectionsConstants.profile)
         .add({"username": userName});
-    return Future.value(Right(true));
+    return Future.value(const Right(true));
   }
 
   /// Create user account in firebase
   Future<Either<String, UserCredential>> createAcountWithEmailAndPassword(
       String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      final UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
       return Right(userCredential);
@@ -107,14 +107,14 @@ class FirebaseAuthService {
       String errorMessage = e.message;
       if (e.code == 'weak-password') {
         errorMessage = 'The password provided is too weak.';
-        print(errorMessage);
+        // print(errorMessage);
       } else if (e.code == 'email-already-in-use') {
         errorMessage = "The account already exists for that email.";
-        print(errorMessage);
+        // print(errorMessage);
       }
       return Left(errorMessage);
     } catch (e) {
-      print(e);
+      // print(e);
       return Left(e.toString());
     }
   }
@@ -123,20 +123,20 @@ class FirebaseAuthService {
   /// Return [True] if email is available to acquire.
   /// Return [False] if email is not available to acquire
   Future<Either<String, bool>> checkEmailAvailability(String email) async {
-    var query = await firestore
+    final query = await firestore
         .collection(CollectionsConstants.profile)
         .where("email", isEqualTo: email)
         .get();
-    var data = query.docs;
+    final data = query.docs;
     if (data != null && data.isNotEmpty) {
-      return Future.value(Left("Email already Taken"));
+      return Future.value(const Left("Email already Taken"));
     } else {
-      return Future.value(Right(true));
+      return Future.value(const Right(true));
     }
   }
 
   Future<Either<String, UserCredential>> signInWithGoogle() async {
-    GoogleSignIn _googleSignIn = GoogleSignIn(
+    final GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: ['email'],
     );
     try {
@@ -148,7 +148,7 @@ class FirebaseAuthService {
           await googleUser.authentication;
 
       // Create a new credential
-      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
@@ -160,11 +160,11 @@ class FirebaseAuthService {
       if (userCredential != null) {
         return Right(userCredential);
       } else {
-        return Left("Something went wrong");
+        return const Left("Something went wrong");
       }
     } catch (error) {
-      print(error);
-      return Left("Something went wrong");
+      // print(error);
+      return const Left("Something went wrong");
     }
   }
 
@@ -174,6 +174,6 @@ class FirebaseAuthService {
     await firestore
         .collection(CollectionsConstants.profile)
         .add(model.toJson());
-    return Future.value(Right(true));
+    return Future.value(const Right(true));
   }
 }

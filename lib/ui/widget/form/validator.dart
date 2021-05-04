@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 
 class KValidator {
-  static Function(String) buildValidators(
+  static String Function(String) buildValidators(
       BuildContext context, FieldType choice) {
     // final "Invalid =" AppLocalizations.of(context);
-    Function(String) optional = (String val) => null;
+    final String Function(String) optional = (String val) => null;
 
-    Function(String) emailValidators = (String value) {
+    final String Function(String) emailValidators = (String value) {
       if (!RegExp(
               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
           .hasMatch(value)) {
@@ -31,19 +31,21 @@ class KValidator {
       return null;
     };
 
-    Function(String) nameValidators = (String value) {
+    final String Function(String) nameValidators = (String value) {
       if (value.isEmpty) {
         return "Name field can not be empty";
       }
       if (value.length > 32) {
         return "Name length can not be greter then 32";
       }
+      // ignore: unnecessary_raw_strings
       if (!value.startsWith(RegExp(r'[A-za-z]'))) {
         return "Invalid name format";
       }
       if (value.length < 3) {
         return "Name length can not be lesser then 3 charater";
       }
+      // ignore: unnecessary_raw_strings
       if (value.contains(RegExp(r'[0-9]'))) {
         return "Invalid name format";
       }
@@ -51,7 +53,7 @@ class KValidator {
       return null;
     };
 
-    Function(String) phoneValidtors = (String value) {
+    String Function(String) phoneValidtors = (String value) {
       if (value.isEmpty) {
         return "Mobile field can not be empty";
       }
@@ -75,7 +77,7 @@ class KValidator {
       return null;
     };
 
-    Function(String) passwordValidators = (String value) {
+    String Function(String) passwordValidators = (String value) {
       if (value.isEmpty) {
         return "Password field is required";
       }
@@ -86,7 +88,7 @@ class KValidator {
       return null;
     };
 
-    Function(String) confirmPasswordValidators = (String value) {
+    String Function(String) confirmPasswordValidators = (String value) {
       if (value.isEmpty) {
         return "Invalid fieldEmptyText";
       } else if (value.length < 8) {
@@ -95,7 +97,7 @@ class KValidator {
 
       return null;
     };
-    Function(String) canNotEmptyTextValidator = (String value) {
+    String Function(String) canNotEmptyTextValidator = (String value) {
       if (value.isEmpty) {
         return "Field can not be empty";
       }
@@ -105,7 +107,7 @@ class KValidator {
 
       return null;
     };
-    Function(String) forgotPasswordValidators = (String value) {
+    String Function(String) forgotPasswordValidators = (String value) {
       if (value.isEmpty) {
         return "Invalid fieldEmptyText";
       }
