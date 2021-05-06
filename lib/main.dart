@@ -1,33 +1,27 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/ui/app/commun_app.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/splash.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setUpDependency();
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: AppTheme.lightTheme.copyWith(
-        textTheme: GoogleFonts.sourceSansProTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      locale: const Locale('es', ''),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      debugShowCheckedModeBanner: false,
-      home: const SplashPage(),
-    );
-  }
+  const app = CommunApp(home: SplashPage());
+
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (details) {
+    logger.e(details.exceptionAsString(), null, details.stack);
+  };
+
+  runZonedGuarded(
+    () => runApp(app),
+    (error, stackTrace) =>
+        Utility.cprint("App", error: error, stackTrace: stackTrace),
+  );
 }

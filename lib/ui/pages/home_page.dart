@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,8 +29,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 40),
             OutlinedButton(
               onPressed: () {
-                FirebaseAuth.instance.signOut();
-                setState(() {});
+                context.read<AppCubit>().logout();
               },
               child: const Text("Logout"),
             )

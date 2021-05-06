@@ -1,17 +1,17 @@
-import 'package:flutter_commun_app/helper/utility.dart';
-import 'package:flutter_commun_app/ui/pages/home_page.dart';
-import 'package:flutter_commun_app/ui/widget/form/validator.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
+import 'package:flutter_commun_app/cubit/app_start/onboard/onboard_profile_cubit.dart';
 import 'package:flutter_commun_app/helper/file_utility.dart';
 import 'package:flutter_commun_app/helper/images.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
-import 'package:flutter_commun_app/cubit/app_start/onboard/onboard_profile_cubit.dart';
 import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
+import 'package:flutter_commun_app/ui/widget/form/validator.dart';
 import 'package:flutter_commun_app/ui/widget/painter/circle_border_painter.dart';
 
 class OnBoardUserProfilePage extends StatelessWidget {
@@ -66,9 +66,7 @@ class OnBoardUserProfilePage extends StatelessWidget {
               Utility.displaySnackbar(context,
                   msg: Utility.decodeStateMessage(message));
               await Future.delayed(const Duration(milliseconds: 500));
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.push(context, HomePage.getRoute());
+              context.read<AppCubit>().checkAuthentication();
             },
           );
         });
@@ -117,7 +115,8 @@ class OnBoardUserProfilePage extends StatelessWidget {
                             .pB(10),
                         UsernameField(
                                 label: "UserName",
-                                type: FieldType.name,
+                                type: FieldType.text,
+                                readOnly: true,
                                 controller: context
                                     .watch<OnboardProfileCubit>()
                                     .username)
@@ -310,6 +309,7 @@ class UsernameField extends StatelessWidget {
     @required this.type,
     this.maxLines = 1,
     this.height = 70,
+    this.readOnly = false,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -317,6 +317,7 @@ class UsernameField extends StatelessWidget {
   final FieldType type;
   final int maxLines;
   final double height;
+  final bool readOnly;
 
   Widget field(BuildContext context, dartz.Option<bool> val) {
     return TextFormField(
@@ -330,6 +331,7 @@ class UsernameField extends StatelessWidget {
         context,
         isValid: val,
       ),
+      readOnly: readOnly,
       validator: KValidator.buildValidators(context, type),
       textInputAction: TextInputAction.next,
     );
@@ -338,7 +340,11 @@ class UsernameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecorations.outlineBorder(context, radius: 10, width: 1),
+      decoration: BoxDecorations.outlineBorder(context, radius: 10, width: 1)
+          .copyWith(
+              color: !readOnly
+                  ? context.onPrimary
+                  : context.disabledColor.withOpacity(.07)),
       padding: const EdgeInsets.only(top: 6, left: 16, right: 16),
       child: Stack(
         // crossAxisAlignment: CrossAxisAlignment.start,

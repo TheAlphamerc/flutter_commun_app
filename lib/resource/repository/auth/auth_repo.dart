@@ -23,7 +23,10 @@ abstract class AuthRepo {
   Future<Either<String, bool>> checkMobileAvailability(String mobile);
   Future<Either<String, bool>> checkEmailAvailability(String email);
   Future<Either<String, bool>> createUserName(String userName);
-
   Future<Either<String, UserCredential>> signupWithGoogle();
   Future<Either<String, bool>> createUserAccount(ProfileModel model);
+
+  /// Fetch current firebase user
+  Future<Either<String, User>> getFirebaseUser();
+  Future<void> logout();
 }

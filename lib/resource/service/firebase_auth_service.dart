@@ -177,4 +177,17 @@ class FirebaseAuthService {
         .set(model.toJson());
     return Future.value(const Right(true));
   }
+
+  Future<Either<String, User>> getFirebaseUser() async {
+    try {
+      final user = auth.currentUser;
+      return Right(user);
+    } on FirebaseAuthException catch (error) {
+      return Left(error.message);
+    }
+  }
+
+  Future<void> logout() async {
+    await auth.signOut();
+  }
 }

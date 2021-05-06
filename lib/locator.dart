@@ -1,3 +1,4 @@
+import 'package:flutter_commun_app/resource/service/navigation/navigation_service.dart';
 import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,8 @@ void setUpDependency() {
   ));
   getIt.registerSingleton<FirebaseStorageService>(
       FirebaseStorageService(firebase_storage.FirebaseStorage.instance));
+
+  getIt.registerSingleton<NavigationService>(NavigationService());
 
   /// Repo
   getIt.registerSingleton<AuthRepo>(AuthRepoImpl(getIt<FirebaseAuthService>()));

@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart';
-import 'package:flutter_commun_app/ui/pages/home_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SplashPage extends StatefulWidget {
@@ -58,19 +56,6 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<User>(
-        future: Future.value(FirebaseAuth.instance.currentUser),
-        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _body();
-          } else if (snapshot.data == null) {
-            return const GetStartedPage();
-          } else {
-            return const HomePage();
-          }
-        },
-      ),
-    );
+    return Scaffold(body: _body());
   }
 }

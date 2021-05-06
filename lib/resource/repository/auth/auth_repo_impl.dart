@@ -56,4 +56,17 @@ class AuthRepoImpl implements AuthRepo {
       return Right(r);
     });
   }
+
+  @override
+  Future<Either<String, User>> getFirebaseUser() async {
+    final response = await authService.getFirebaseUser();
+    return response.fold((l) => Left(l), (r) async {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<void> logout() async {
+    return authService.logout();
+  }
 }
