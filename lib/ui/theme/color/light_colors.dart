@@ -62,11 +62,11 @@ class KColors {
   static const Color transparent = Color(0xff00000000);
 
   static const Color bg_dialog_color = white;
+  static const Color bottomSheetDialogBcg = Color(0xffF7F7F9);
   static const Color light_button = white;
   static const Color light_button_pressed = middle_gray_3;
   static const Color bottom_area_border = Color(0xffFFEBEBF1);
   static const Color bottom_area_border_dark_theme = Color(0xffFF000000);
-  static const Color bottom_sheet_dialog_bcg = Color(0xffF7F7F9);
   static const Color bottom_sheet_dialog_dangerous = Color(0xffED2C5B);
   static const Color blue_button_disabled = Color(0xffA5A7BD);
   static const Color cover_gradient_start_color = Color(0xff4D000000);

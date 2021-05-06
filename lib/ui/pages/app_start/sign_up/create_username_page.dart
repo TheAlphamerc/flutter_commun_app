@@ -1,6 +1,6 @@
-import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app_start/username/username_cubit.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
@@ -15,11 +15,12 @@ class CreateUserNamePage extends StatelessWidget {
   const CreateUserNamePage({Key key}) : super(key: key);
   static MaterialPageRoute getRoute(UserCredential userCredential) {
     return MaterialPageRoute(
-        builder: (BuildContext context) => BlocProvider(
-              create: (context) => UsernameCubit(
-                  authRepo: getIt<AuthRepo>(), userCredential: userCredential),
-              child: const CreateUserNamePage(),
-            ));
+      builder: (BuildContext context) => BlocProvider(
+        create: (context) => UsernameCubit(
+            authRepo: getIt<AuthRepo>(), userCredential: userCredential),
+        child: const CreateUserNamePage(),
+      ),
+    );
   }
 
   Widget _button(BuildContext context, {String title, Color backgroundColor}) {
@@ -125,6 +126,10 @@ class CreateUserNamePage extends StatelessWidget {
                               type: FieldType.name,
                               hintText: context.locale.username,
                               backgroundColor: KColors.middle_gray_2,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(
+                                    RegExp("[^A-Za-z0-9]"))
+                              ],
                             ).pH(24),
                             const SizedBox(height: 40),
                           ],

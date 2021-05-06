@@ -6,10 +6,3 @@ abstract class OnboardProfileState with _$OnboardProfileState {
   const factory OnboardProfileState.response(
       EOnboardProfileState response, String message) = _Response;
 }
-
-enum EOnboardProfileState {
-  // ignore: constant_identifier_names
-  Updating,
-  // ignore: constant_identifier_names
-  Updated,
-}

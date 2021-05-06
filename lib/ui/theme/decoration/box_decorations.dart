@@ -1,10 +1,14 @@
 part of '../theme.dart';
 
 class BoxDecorations {
-  static BoxDecoration decoration(BuildContext context,
-          {Offset offset = const Offset(4, 4), double blurRadius = 10}) =>
+  static BoxDecoration decoration(
+    BuildContext context, {
+    Offset offset = const Offset(4, 4),
+    double blurRadius = 10,
+    double borderRadius = 5,
+  }) =>
       BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(borderRadius),
         color: Theme.of(context).colorScheme.onPrimary,
         boxShadow: <BoxShadow>[
           BoxShadow(

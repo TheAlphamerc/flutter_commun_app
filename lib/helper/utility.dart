@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/locator.dart';
 // import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as custom;
 
 class Utility {
@@ -20,7 +21,8 @@ class Utility {
 
   static String encodeStateMessage(String message) {
     if (message != null) {
-      return "$message ##${DateTime.now().millisecond}";
+      final mess = "$message ##${DateTime.now().microsecondsSinceEpoch}";
+      return mess;
     }
     return "";
   }
@@ -32,10 +34,16 @@ class Utility {
     return "";
   }
 
-  static void cprint(String message, {dynamic error}) {
+  static void cprint(String message,
+      {dynamic error, String label, StackTrace stackTrace}) {
     if (kDebugMode) {
       // ignore: avoid_print
-      print(message);
+      if (error != null) {
+        logger.e(label ?? 'Log', error, stackTrace);
+      } else {
+        // ignore: avoid_print
+        print("[${label ?? 'Log'}] $message");
+      }
     }
   }
 }

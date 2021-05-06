@@ -11,9 +11,17 @@ class FirebaseProfileService {
   FirebaseProfileService(this.auth, this.firestore);
 
   Future<Either<String, bool>> updateUserProfile(ProfileModel model) async {
+    String errorMessage;
     await firestore
         .collection(CollectionsConstants.profile)
-        .add(model.toJson());
+        .doc(model.id)
+        .update(model.toJson())
+        .onError((FirebaseException error, stackTrace) {
+      errorMessage = error.message;
+    });
+    if (errorMessage != null) {
+      return Left(errorMessage);
+    }
     return Future.value(const Right(true));
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart';
+import 'package:flutter_commun_app/ui/pages/home_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SplashPage extends StatefulWidget {
@@ -66,28 +67,7 @@ class _SplashPageState extends State<SplashPage> {
           } else if (snapshot.data == null) {
             return const GetStartedPage();
           } else {
-            return Scaffold(
-              appBar: AppBar(),
-              body: Container(
-                height: context.height,
-                width: context.width,
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Home page"),
-                    const SizedBox(height: 40),
-                    OutlinedButton(
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                        setState(() {});
-                      },
-                      child: const Text("Logout"),
-                    )
-                  ],
-                ),
-              ),
-            );
+            return const HomePage();
           }
         },
       ),

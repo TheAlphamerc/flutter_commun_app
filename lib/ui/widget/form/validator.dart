@@ -31,6 +31,17 @@ class KValidator {
       return null;
     };
 
+    final String Function(String) urlValidators = (String value) {
+      if (value.isEmpty) {
+        return null;
+      } else if (!RegExp(
+              r"^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
+          .hasMatch(value)) {
+        return "Invalid Url format";
+      }
+      return null;
+    };
+
     final String Function(String) nameValidators = (String value) {
       if (value.isEmpty) {
         return "Name field can not be empty";
@@ -160,6 +171,7 @@ class KValidator {
     };
 
     if (choice == FieldType.name) return nameValidators;
+    if (choice == FieldType.url) return urlValidators;
     if (choice == FieldType.email) return emailValidators;
     if (choice == FieldType.password) return passwordValidators;
     if (choice == FieldType.phone) return phoneValidtors;

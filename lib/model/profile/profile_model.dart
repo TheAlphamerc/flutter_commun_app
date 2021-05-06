@@ -13,6 +13,9 @@ abstract class ProfileModel with _$ProfileModel {
     String createdAt,
     String photoURL,
     String phoneNumber,
+    String website,
+    String bio,
+    String bannerURL,
     String providerId,
     @Default(false) isVerified,
   }) = _ProfileModel;

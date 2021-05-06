@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/validator.dart';
 
@@ -10,7 +11,8 @@ enum FieldType {
   confirmPassword,
   reset,
   text,
-  optional
+  optional,
+  url
 }
 
 class KTextField extends StatelessWidget {
@@ -29,6 +31,7 @@ class KTextField extends StatelessWidget {
       this.obscureText = false,
       this.textCapitalization = TextCapitalization.sentences,
       this.padding = const EdgeInsets.all(0),
+      this.inputFormatters,
       this.backgroundColor})
       : super(key: key);
   final TextEditingController controller;
@@ -44,6 +47,7 @@ class KTextField extends StatelessWidget {
   final Function(String) onChange;
   final String Function(String) validator;
   final Color backgroundColor;
+  final List<TextInputFormatter> inputFormatters;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,6 +69,7 @@ class KTextField extends StatelessWidget {
                 onSubmit(val);
               }
             },
+            inputFormatters: inputFormatters,
             obscureText: obscureText,
             maxLines: maxLines,
             onChanged: onChange,
@@ -120,6 +125,8 @@ class KTextField extends StatelessWidget {
         return TextInputType.phone;
       case FieldType.reset:
         return TextInputType.emailAddress;
+      case FieldType.url:
+        return TextInputType.url;
       default:
         return TextInputType.text;
     }

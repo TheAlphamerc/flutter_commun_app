@@ -9,7 +9,8 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 part 'signup_email_state.dart';
 part 'signup_email_cubit.freezed.dart';
 
-class SignupEmailCubit extends Cubit<SignupEmailState> {
+class SignupEmailCubit extends Cubit<SignupEmailState>
+    with SignupEmailCubitMixin {
   final AuthRepo authRepo;
   SignupEmailCubit(this.authRepo) : super(const SignupEmailState.initial()) {
     email = TextEditingController();
@@ -17,14 +18,6 @@ class SignupEmailCubit extends Cubit<SignupEmailState> {
     confirmPassword = TextEditingController();
     loader = CustomLoader();
   }
-
-  TextEditingController email;
-  TextEditingController password;
-  TextEditingController confirmPassword;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  ValueNotifier<bool> displayPasswords = ValueNotifier<bool>(false);
-  ValueNotifier<bool> displayConfirmPasswords = ValueNotifier<bool>(false);
-  CustomLoader loader;
 
   // ignore: avoid_setters_without_getters
   set setDisplayPasswords(bool value) => displayPasswords.value = value;
@@ -60,10 +53,24 @@ class SignupEmailCubit extends Cubit<SignupEmailState> {
 
   @override
   Future<void> close() {
+    dispose();
+    return super.close();
+  }
+}
+
+mixin SignupEmailCubitMixin {
+  TextEditingController email;
+  TextEditingController password;
+  TextEditingController confirmPassword;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  ValueNotifier<bool> displayPasswords = ValueNotifier<bool>(false);
+  ValueNotifier<bool> displayConfirmPasswords = ValueNotifier<bool>(false);
+  CustomLoader loader;
+
+  void dispose() {
     email.dispose();
     password.dispose();
     displayPasswords.dispose();
     displayConfirmPasswords.dispose();
-    return super.close();
   }
 }

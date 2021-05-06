@@ -39,6 +39,12 @@ mixin AppTheme {
         primaryTextTheme: ThemeData.light().textTheme.copyWith(
               subtitle1: const TextStyle(color: KColors.dark_gray),
             ),
+        bottomSheetTheme: ThemeData.light().bottomSheetTheme.copyWith(
+              backgroundColor: KColors.bottomSheetDialogBcg,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+            ),
       );
 
   static ThemeData getThemeFromKey(ThemeType themeKey) {

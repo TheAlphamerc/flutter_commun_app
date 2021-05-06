@@ -173,7 +173,8 @@ class FirebaseAuthService {
   Future<Either<String, bool>> createUserAccount(ProfileModel model) async {
     await firestore
         .collection(CollectionsConstants.profile)
-        .add(model.toJson());
+        .doc(model.id)
+        .set(model.toJson());
     return Future.value(const Right(true));
   }
 }
