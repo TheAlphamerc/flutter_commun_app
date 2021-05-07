@@ -9,7 +9,7 @@ import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
 import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 part 'onboard_profile_state.dart';
 part 'onboard_profile_cubit.freezed.dart';
 part 'e_onboard_profile_state.dart';
@@ -47,14 +47,14 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
     final profileURL = await image.fold(
       () => null,
       (file) async {
-        return uploadProfileImage(context, file, "avatar");
+        return uploadProfileImage(context, file, context.locale.avatar);
       },
     );
 
     final bannerURL = await banner.fold(
       () => null,
       (file) async {
-        return uploadProfileImage(context, file, "banner");
+        return uploadProfileImage(context, file, context.locale.banner);
       },
     );
     final model = profile.copyWith.call(
@@ -66,7 +66,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
         bannerURL: bannerURL);
 
     /// Display loader
-    loader.showLoader(context, message: "Updating profile");
+    loader.showLoader(context, message: context.locale.updating_profile);
     final response = await profileRepo.updateUserProfile(model);
 
     /// Hide loader
@@ -82,8 +82,10 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
       /// Upload profile picture to firebase
 
       /// Profile is saved to database
-      emit(OnboardProfileState.response(EOnboardProfileState.Updated,
-          Utility.encodeStateMessage("Profile Updating sucessfully")));
+      emit(OnboardProfileState.response(
+          EOnboardProfileState.Updated,
+          Utility.encodeStateMessage(
+              context.locale.profile_updated_successfully)));
     });
   }
 

@@ -81,7 +81,7 @@ class OnBoardUserProfilePage extends StatelessWidget {
         title: Title(
             color: Colors.white,
             child: Text(
-              "General Info",
+              context.locale.general_info,
               style: TextStyles.headline18(context),
             )),
         backgroundColor: context.theme.appBarTheme.backgroundColor,
@@ -108,13 +108,13 @@ class OnBoardUserProfilePage extends StatelessWidget {
                         const _UserAvatar().pB(10),
                         const _ProfileBanner().pB(20),
                         UsernameField(
-                                label: "Name",
+                                label: context.locale.name,
                                 type: FieldType.name,
                                 controller:
                                     context.watch<OnboardProfileCubit>().name)
                             .pB(10),
                         UsernameField(
-                                label: "UserName",
+                                label: context.locale.username,
                                 type: FieldType.text,
                                 readOnly: true,
                                 controller: context
@@ -122,14 +122,14 @@ class OnBoardUserProfilePage extends StatelessWidget {
                                     .username)
                             .pB(10),
                         UsernameField(
-                                label: "Website",
+                                label: context.locale.website,
                                 type: FieldType.url,
                                 controller: context
                                     .watch<OnboardProfileCubit>()
                                     .website)
                             .pB(10),
                         UsernameField(
-                            label: "Bio",
+                            label: context.locale.bio,
                             type: FieldType.optional,
                             maxLines: 4,
                             controller:
@@ -139,7 +139,8 @@ class OnBoardUserProfilePage extends StatelessWidget {
                   ),
                 ).pB(20),
                 _button(context,
-                    title: "Save", backgroundColor: context.primaryColor),
+                    title: context.locale.save,
+                    backgroundColor: context.primaryColor),
                 const SizedBox(height: 20),
               ],
             ),

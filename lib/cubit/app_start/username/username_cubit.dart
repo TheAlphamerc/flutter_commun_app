@@ -49,7 +49,7 @@ class UsernameCubit extends Cubit<UsernameState> {
         providerId: userCredential.user.providerData.first.providerId,
         phoneNumber: userCredential.user.phoneNumber);
 
-    loader.showLoader(context, message: "Creating");
+    loader.showLoader(context, message: context.locale.creating);
     final response = await authRepo.createUserAccount(model);
     loader.hideLoader();
     response.fold((l) {

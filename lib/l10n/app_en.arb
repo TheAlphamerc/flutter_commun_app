@@ -66,5 +66,14 @@
   "something_went_wrong": "Something went wrong",
   "logout": "Logout",
   "checking": "Checking",
-  "creating": "Creating"
+  "creating": "Creating",
+  "general_info": "General Info",
+  "name": "Name",
+  "bio": "bio",
+  "website": "Website",
+  "updating_profile": "Updating profile",
+  "avatar": "avatar",
+  "banner": "banner",
+  "profile_updated_successfully": "Profile Updated successfully",
+  "save": "Save"
   }
