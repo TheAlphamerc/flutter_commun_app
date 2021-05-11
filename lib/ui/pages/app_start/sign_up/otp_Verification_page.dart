@@ -218,7 +218,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
                           node: node6,
                           onChanged: (value) {
                             if (value.length == 1) {
-                              node4.unfocus();
+                              node6.unfocus();
                             }
                             if (value.isEmpty) {
                               FocusScope.of(context).previousFocus();
@@ -281,7 +281,7 @@ class CustomOTPTextField extends StatelessWidget {
               ),
             ),
             filled: true,
-            fillColor: KColors.middle_gray_2,
+            fillColor: KColors.light_gray,
             contentPadding: const EdgeInsets.only(bottom: 10)),
 
         showCursor: true,
@@ -289,6 +289,7 @@ class CustomOTPTextField extends StatelessWidget {
         style: TextStyles.headline20(context),
         inputFormatters: [
           LengthLimitingTextInputFormatter(1),
+          FilteringTextInputFormatter.deny(RegExp("[^0-9]"))
         ],
         focusNode: focusNode,
         onChanged: onChanged,

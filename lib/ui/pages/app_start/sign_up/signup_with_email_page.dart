@@ -115,7 +115,7 @@ class SignupWithEmailPage extends StatelessWidget {
                             controller: context.watch<SignupEmailCubit>().email,
                             type: FieldType.email,
                             hintText: context.locale.your_email_address,
-                            backgroundColor: KColors.middle_gray_2,
+                            backgroundColor: KColors.light_gray,
                           ).pH(24),
                           const SizedBox(height: 12),
                           ValueListenableBuilder<bool>(
@@ -129,7 +129,7 @@ class SignupWithEmailPage extends StatelessWidget {
                                     context.watch<SignupEmailCubit>().password,
                                 type: FieldType.password,
                                 hintText: context.locale.create_password,
-                                backgroundColor: KColors.middle_gray_2,
+                                backgroundColor: KColors.light_gray,
                                 obscureText: !value,
                                 suffixIcon: IconButton(
                                   icon: Icon(value
@@ -158,7 +158,7 @@ class SignupWithEmailPage extends StatelessWidget {
                                 type: FieldType.password,
                                 obscureText: !value,
                                 hintText: context.locale.confirm_password,
-                                backgroundColor: KColors.middle_gray_2,
+                                backgroundColor: KColors.light_gray,
                                 suffixIcon: IconButton(
                                   icon: Icon(value
                                       ? Icons.visibility_off

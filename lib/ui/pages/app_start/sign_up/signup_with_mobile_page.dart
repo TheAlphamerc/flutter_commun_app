@@ -142,7 +142,7 @@ class SignupWithMobilePage extends StatelessWidget {
                                 context.watch<SignupMobileCubit>().phone,
                             type: FieldType.phone,
                             hintText: context.locale.phone_no,
-                            backgroundColor: KColors.middle_gray_2,
+                            backgroundColor: KColors.light_gray,
                           ).pH(24),
                         ],
                       ),

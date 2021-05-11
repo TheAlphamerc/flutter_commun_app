@@ -107,13 +107,13 @@ class OnBoardUserProfilePage extends StatelessWidget {
                       children: [
                         const _UserAvatar().pB(10),
                         const _ProfileBanner().pB(20),
-                        UsernameField(
+                        _CustomInputField(
                                 label: context.locale.name,
                                 type: FieldType.name,
                                 controller:
                                     context.watch<OnboardProfileCubit>().name)
                             .pB(10),
-                        UsernameField(
+                        _CustomInputField(
                                 label: context.locale.username,
                                 type: FieldType.text,
                                 readOnly: true,
@@ -121,14 +121,14 @@ class OnBoardUserProfilePage extends StatelessWidget {
                                     .watch<OnboardProfileCubit>()
                                     .username)
                             .pB(10),
-                        UsernameField(
+                        _CustomInputField(
                                 label: context.locale.website,
                                 type: FieldType.url,
                                 controller: context
                                     .watch<OnboardProfileCubit>()
                                     .website)
                             .pB(10),
-                        UsernameField(
+                        _CustomInputField(
                             label: context.locale.bio,
                             type: FieldType.optional,
                             maxLines: 4,
@@ -302,8 +302,8 @@ class _ProfileBanner extends StatelessWidget {
   }
 }
 
-class UsernameField extends StatelessWidget {
-  const UsernameField({
+class _CustomInputField extends StatelessWidget {
+  const _CustomInputField({
     Key key,
     this.controller,
     this.label,

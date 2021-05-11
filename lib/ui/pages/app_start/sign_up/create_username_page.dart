@@ -125,7 +125,7 @@ class CreateUserNamePage extends StatelessWidget {
                                   context.watch<UsernameCubit>().username,
                               type: FieldType.name,
                               hintText: context.locale.username,
-                              backgroundColor: KColors.middle_gray_2,
+                              backgroundColor: KColors.light_gray,
                               inputFormatters: [
                                 FilteringTextInputFormatter.deny(
                                     RegExp("[^A-Za-z0-9]"))
