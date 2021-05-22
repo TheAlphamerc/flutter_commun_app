@@ -40,6 +40,10 @@ class TextStyles {
       headline16(context).copyWith(
         fontSize: 26,
       );
+  static TextStyle headline30(BuildContext context) =>
+      headline16(context).copyWith(
+        fontSize: 30,
+      );
   static TextStyle headline36(BuildContext context) =>
       headline16(context).copyWith(
         fontSize: 36,

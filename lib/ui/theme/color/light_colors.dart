@@ -14,7 +14,7 @@ class KColors {
   static const Color secondary = Color(0xff0545FF);
 
   static const Color primaryLight = Color(0xFF3D6AF3);
-  static const Color background = Color(0xffffffff);
+  static const Color background = Color(0xffF3F5FA);
   static const Color errorColor = Color(0xffC70044);
   static const Color notificationColor = Color(0xffFF5E5E);
   static const Color cardColor = Color(0xffededed);

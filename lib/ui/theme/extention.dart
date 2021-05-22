@@ -9,6 +9,8 @@ extension TextStyleHelpers on TextStyle {
       copyWith(color: Theme.of(context).colorScheme.onPrimary);
   TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
   TextStyle size(double value) => copyWith(fontSize: value);
+  TextStyle withOpacity(double value) =>
+      copyWith(color: color.withOpacity(value));
 }
 
 extension PaddingHelper on Widget {

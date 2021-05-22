@@ -5,7 +5,7 @@ import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/resource/service/navigation/navigation_service.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart';
-import 'package:flutter_commun_app/ui/pages/home_page.dart';
+import 'package:flutter_commun_app/ui/pages/home/home_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -56,7 +56,7 @@ class _PensilAppState extends State<CommunApp> {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (BuildContext context) => "Commun",
-            themeMode: ThemeMode.dark,
+            themeMode: ThemeMode.light,
           );
         },
       ),
