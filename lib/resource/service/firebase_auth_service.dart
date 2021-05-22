@@ -119,6 +119,23 @@ class FirebaseAuthService {
     }
   }
 
+  /// Attempts to sign in a user with the given email address and password.
+  Future<Either<String, UserCredential>> signInWithEmail(
+      String email, String password) async {
+    try {
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return Right(userCredential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        // print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        // print('Wrong password provided for that user.');
+      }
+      return Left(e.code);
+    }
+  }
+
   /// Check if email is already exists or not.
   /// Return [True] if email is available to acquire.
   /// Return [False] if email is not available to acquire

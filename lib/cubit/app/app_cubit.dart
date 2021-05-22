@@ -27,8 +27,8 @@ class AppCubit extends Cubit<AppState> {
     );
   }
 
-  void logout() {
-    authRepo.logout();
+  Future logout() async {
+    await authRepo.logout();
     emit(const AppState.response(
         estate: EAppState.loggedOut, message: "Logged out from app"));
   }

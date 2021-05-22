@@ -20,7 +20,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
   final ProfileRepo profileRepo;
   OnboardProfileCubit(this.profile, this.profileRepo)
       : super(OnboardProfileState.initial(profile)) {
-    name = TextEditingController(text: profile.username ?? "");
+    name = TextEditingController(text: profile.name ?? "");
     username = TextEditingController(text: profile.username);
     website = TextEditingController();
     bio = TextEditingController();

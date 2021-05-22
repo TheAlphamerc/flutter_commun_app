@@ -9,4 +9,4 @@ abstract class SocialSignupState with _$SocialSignupState {
 }
 
 // ignore: constant_identifier_names
-enum ESocialSignupState { Error, EmailAlreadyInUse, CheckingEmail }
+enum ESocialSignupState { Error, AccountAlreadyExists, CheckingEmail }

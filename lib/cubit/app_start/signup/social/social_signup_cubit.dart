@@ -37,8 +37,8 @@ class SocialSignupCubit extends Cubit<SocialSignupState> {
     loader.hideLoader();
     response.fold(
         (l) => emit(SocialSignupState.response(
-            ESocialSignupState.EmailAlreadyInUse,
-            Utility.encodeStateMessage(context.locale.email_already_taken))),
+            ESocialSignupState.AccountAlreadyExists,
+            Utility.encodeStateMessage("Account Already exists"))),
         (r) => emit(SocialSignupState.created(userCredential)));
   }
 }

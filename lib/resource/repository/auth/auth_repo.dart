@@ -19,6 +19,9 @@ abstract class AuthRepo {
   Future<Either<String, UserCredential>> signupWithEmail(
       {String email, String password});
 
+  Future<Either<String, UserCredential>> signInWithEmail(
+      {String email, String password});
+
   Future<Either<String, bool>> checkUserNameAvailability(String userName);
   Future<Either<String, bool>> checkMobileAvailability(String mobile);
   Future<Either<String, bool>> checkEmailAvailability(String email);

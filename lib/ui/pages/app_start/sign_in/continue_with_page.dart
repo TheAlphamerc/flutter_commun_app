@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/cubit/app_start/signup/social/social_signup_cubit.dart';
 import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_in/signin_with_email_page.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_in/signin_with_mobile_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_email_page.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_mobile_page.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/already_have_account_widget.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_terms_of_service_widget.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/dont_have%20account_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 import '../../../../locator.dart';
@@ -29,6 +29,7 @@ class ContinueWithPage extends StatelessWidget {
       onPressed: () {
         if (onPressed == null) {
           logger.w("$title feature is in development");
+          Utility.displaySnackbar(context, msg: "Feature under development");
           return;
         }
         onPressed();
@@ -43,10 +44,7 @@ class ContinueWithPage extends StatelessWidget {
           side: MaterialStateProperty.all(const BorderSide(width: .3))),
       child: Row(
         children: [
-          Image.asset(
-            image,
-            height: 40,
-          ).pH(25),
+          Image.asset(image, height: 40).pH(25),
           Text(
             title,
             style: TextStyles.headline16(context).copyWith(
@@ -66,7 +64,7 @@ class ContinueWithPage extends StatelessWidget {
       created: (credentails) {
         Navigator.push(context, CreateUserNamePage.getRoute(credentails));
       },
-      response: (state, message) {
+      response: (state, message) async {
         switch (state) {
           case ESocialSignupState.Error:
             {
@@ -79,10 +77,10 @@ class ContinueWithPage extends StatelessWidget {
               context.read<SocialSignupCubit>().checkEmailAvailability(context);
             }
             break;
-          case ESocialSignupState.EmailAlreadyInUse:
+          case ESocialSignupState.AccountAlreadyExists:
             {
-              Utility.displaySnackbar(context,
-                  msg: Utility.decodeStateMessage(message));
+              await Future.delayed(const Duration(milliseconds: 500));
+              context.read<AppCubit>().checkAuthentication();
             }
             break;
           default:
@@ -112,7 +110,7 @@ class ContinueWithPage extends StatelessWidget {
           ),
         ).circular,
         title: Text(
-          context.locale.signUp,
+          context.locale.signIn,
           style: TextStyles.headline36(context),
         ),
       ),
@@ -127,13 +125,13 @@ class ContinueWithPage extends StatelessWidget {
                 const SizedBox(height: 40),
                 _button(context,
                     image: Images.phoneIcon,
-                    title: context.locale.continuwWithPhone, onPressed: () {
-                  Navigator.push(context, SignupWithMobilePage.getRoute());
+                    title: "Login with Phone", onPressed: () {
+                  Navigator.push(context, SigninWithMobilePage.getRoute());
                 }),
                 _button(context,
                     image: Images.emailIconBlack,
-                    title: context.locale.continuwWithEmail, onPressed: () {
-                  Navigator.push(context, SignupWithEmailPage.getRoute());
+                    title: "Login With Email", onPressed: () {
+                  Navigator.push(context, SignInWithEmailPage.getRoute());
                 }),
                 _button(context,
                     image: Images.googleLogo,
@@ -157,11 +155,8 @@ class ContinueWithPage extends StatelessWidget {
                         backgroundColor: KColors.black)
                     .pB(20),
 
-                /// Already have an account
-                const SignupTermsOfServiceWidget(),
-
                 /// Sign in Text
-                const AlreadyHaveAccountWidget()
+                const DontHaveAccountWidget()
               ],
             ),
           ),

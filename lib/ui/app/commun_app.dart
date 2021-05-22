@@ -56,7 +56,7 @@ class _PensilAppState extends State<CommunApp> {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (BuildContext context) => "Commun",
-            themeMode: ThemeMode.light,
+            themeMode: ThemeMode.dark,
           );
         },
       ),

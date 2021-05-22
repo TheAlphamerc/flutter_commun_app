@@ -1,10 +1,11 @@
+// ignore: file_names
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/sign_up_with_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
-class AlreadyHaveAccountWidget extends StatelessWidget {
-  const AlreadyHaveAccountWidget({Key key}) : super(key: key);
+class DontHaveAccountWidget extends StatelessWidget {
+  const DontHaveAccountWidget({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
