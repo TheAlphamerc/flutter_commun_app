@@ -58,7 +58,7 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<String, bool>> createUserAccount(ProfileModel model) async {
     final response = await authService.createUserAccount(model);
     return response.fold((l) => Left(l), (r) async {
-      await getIt<SharedPreferenceHelper>().saveUserProfile(model);
+      await getIt<Session>().saveUserProfile(model);
       return Right(r);
     });
   }

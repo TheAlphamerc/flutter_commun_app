@@ -2,6 +2,7 @@ part of 'theme.dart';
 
 extension TextStyleHelpers on TextStyle {
   TextStyle get bold => copyWith(fontWeight: FontWeight.bold);
+  TextStyle get normal => copyWith(fontWeight: FontWeight.normal);
   TextStyle get white => copyWith(color: Colors.white);
   TextStyle primary(BuildContext context) =>
       copyWith(color: Theme.of(context).primaryColor);
@@ -88,9 +89,12 @@ extension CornerRadius on Widget {
 }
 
 extension OnPressed on Widget {
-  Widget ripple(Function onPressed,
-          {BorderRadiusGeometry borderRadius =
-              const BorderRadius.all(Radius.circular(5))}) =>
+  Widget ripple(
+    Function onPressed, {
+    double radius = 0,
+    BorderRadiusGeometry borderRadius =
+        const BorderRadius.all(Radius.circular(5)),
+  }) =>
       Stack(
         children: <Widget>[
           this,
@@ -102,7 +106,11 @@ extension OnPressed on Widget {
             child: TextButton(
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(borderRadius: borderRadius),
+                    RoundedRectangleBorder(
+                      borderRadius: radius != null
+                          ? BorderRadius.all(Radius.circular(radius))
+                          : borderRadius,
+                    ),
                   ),
                 ),
                 onPressed: () {

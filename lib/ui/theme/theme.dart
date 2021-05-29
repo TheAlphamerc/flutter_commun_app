@@ -28,6 +28,9 @@ mixin AppTheme {
             onSecondary: KColors.onPrimary,
             onBackground: KColors.onSurfaceLightColor),
         // textTheme: TextThemes.lightTextTheme,
+        floatingActionButtonTheme: ThemeData.light()
+            .floatingActionButtonTheme
+            .copyWith(backgroundColor: KColors.primary),
         appBarTheme: ThemeData.light().appBarTheme.copyWith(
               color: KColors.appBarColor,
               elevation: 1,

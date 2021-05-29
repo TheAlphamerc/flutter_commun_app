@@ -61,7 +61,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
         name: name.text,
         username: username.text,
         bio: bio.text,
-        photoURL: profileURL,
+        photoURL: profileURL ?? profile.photoURL,
         website: website.text,
         bannerURL: bannerURL);
 

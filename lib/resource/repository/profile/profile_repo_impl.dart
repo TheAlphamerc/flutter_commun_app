@@ -16,4 +16,9 @@ class ProfileRepoImpl extends ProfileRepo {
     return storageService.uploadFile(file, uploadPath,
         onFileUpload: onFileUpload);
   }
+
+  @override
+  Future<Either<String, ProfileModel>> getUserProfile(String userId) async {
+    return profileService.getUserProfile(userId);
+  }
 }

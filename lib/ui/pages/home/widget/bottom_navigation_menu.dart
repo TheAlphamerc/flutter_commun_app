@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/ui/pages/post/create_post_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class BottomNavigationMenu extends StatelessWidget {
@@ -17,7 +18,9 @@ class BottomNavigationMenu extends StatelessWidget {
             _icon(context, icon: Icons.home, onPressed: () {}).extended,
             _icon(context, icon: Icons.explore, onPressed: () {}),
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, CreatePostPage.getRoute());
+              },
               mini: true,
               backgroundColor: context.primaryColor,
               child: Icon(

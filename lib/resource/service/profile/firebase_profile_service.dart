@@ -24,4 +24,17 @@ class FirebaseProfileService {
     }
     return Future.value(const Right(true));
   }
+
+  Future<Either<String, ProfileModel>> getUserProfile(String userId) async {
+    final ref = await firestore
+        .collection(CollectionsConstants.profile)
+        .doc(userId)
+        .get();
+    if (ref != null) {
+      final user = ProfileModel.fromJson(ref.data());
+      return Right(user);
+    } else {
+      return const Left("User not found");
+    }
+  }
 }

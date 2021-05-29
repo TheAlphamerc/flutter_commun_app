@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
+import 'package:flutter_commun_app/resource/service/auth/verify_phone_response.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/resource/service/verify_phone_response.dart';
 import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
