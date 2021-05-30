@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_commun_app/cubit/home/feed/post_feed_cubit.dart';
+import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
+import 'package:flutter_commun_app/ui/pages/home/feed/feed_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/bottom_navigation_menu.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/feed_app_bar.dart';
-import 'package:flutter_commun_app/ui/pages/home/widget/whats_new_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
   static Route<T> getRoute<T>() {
-    return MaterialPageRoute(builder: (_) => const HomePage());
+    return MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(providers: [
+              BlocProvider(
+                create: (context) =>
+                    PostFeedCubit(getIt<PostRepo>())..getPosts(),
+              ),
+            ], child: const HomePage()));
   }
 
   @override
@@ -22,18 +31,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: context.theme.backgroundColor,
       appBar: const FeedAppBar(),
       bottomNavigationBar: const BottomNavigationMenu(),
-      body: Container(
-        height: context.height,
-        width: context.width,
-        alignment: Alignment.center,
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            SizedBox(height: 10),
-            WhatsNewWidget(),
-          ],
-        ),
-      ),
+      body: const Feedpage(),
     );
   }
 }

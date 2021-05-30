@@ -167,6 +167,16 @@ extension StringHelper on String {
   }
 
   bool get isNotNullEmpty => this != null && isNotEmpty;
+
+  String get toPostTime {
+    if (this == null || isEmpty) {
+      return '';
+    }
+    final dt = DateTime.parse(this).toLocal();
+    final dat =
+        '${DateFormat.jm().format(dt)} - ${DateFormat("dd MMM yy").format(dt)}';
+    return dat;
+  }
 }
 
 extension ThemeHelper on BuildContext {

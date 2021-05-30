@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-// ignore: directives_ordering
-export 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
+export 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 part 'color/light_colors.dart';
 part 'text_styles.dart';
 part 'extention.dart';

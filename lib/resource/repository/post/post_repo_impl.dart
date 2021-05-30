@@ -16,4 +16,9 @@ class PostRepoImpl extends PostRepo {
     return storageService.uploadFile(file, uploadPath,
         onFileUpload: onFileUpload);
   }
+
+  @override
+  Future<Either<String, List<PostModel>>> getPostLists(String userId) {
+    return postService.getPostLists(userId);
+  }
 }
