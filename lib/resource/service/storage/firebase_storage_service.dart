@@ -32,6 +32,7 @@ class FirebaseStorageService {
               const FileUploadTaskResponse.onError("permission-denied"));
         }
       });
+      await task;
       final filePath = await ref.getDownloadURL();
       Utility.cprint('Upload complete.');
       return Right(filePath);

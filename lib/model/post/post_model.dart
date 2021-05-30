@@ -1,4 +1,3 @@
-import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'post_model.freezed.dart';

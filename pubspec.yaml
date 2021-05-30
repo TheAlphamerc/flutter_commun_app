@@ -42,6 +42,7 @@ dependencies:
 
   dartz: ^0.9.2
   get_it: ^6.1.1
+  rxdart: ^0.26.0
   freezed: ^0.12.7
   equatable: ^2.0.0
   flutter_bloc: ^6.1.3

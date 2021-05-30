@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
 import 'package:flutter_commun_app/ui/pages/post/create_post_bottom_menu.dart';
+import 'package:flutter_commun_app/ui/pages/post/widget/create_post_images.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -35,75 +37,114 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Widget _userAvatar(BuildContext context) {
     final user = context.watch<AppCubit>().user;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          if (user != null &&
-              user.photoURL != null &&
-              !user.photoURL.contains("object-not-found"))
-            CircleAvatar(
-              radius: 20,
-              key: const ValueKey("user-profile"),
-              backgroundColor: KColors.light_gray,
-              backgroundImage: NetworkImage(user.photoURL),
-            )
-          else
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            if (user != null &&
+                user.photoURL != null &&
+                !user.photoURL.contains("object-not-found"))
+              CircleAvatar(
+                radius: 20,
+                key: const ValueKey("user-profile"),
+                backgroundColor: KColors.light_gray,
+                backgroundImage: NetworkImage(user.photoURL),
+              )
+            else
+              const CircleAvatar(
+                radius: 20,
+                backgroundImage: AssetImage(Images.onBoardPicFour),
+              ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("You will post in",
+                    style: TextStyles.subtitle14(context)
+                        .copyWith(fontSize: 10, fontWeight: FontWeight.w500)),
+                const SizedBox(height: 0),
+                Text("Timeline", style: TextStyles.headline16(context)),
+              ],
+            ),
+            const Spacer(),
             const CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage(Images.onBoardPicFour),
-            ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("You will post in",
-                  style: TextStyles.subtitle14(context)
-                      .copyWith(fontSize: 10, fontWeight: FontWeight.w500)),
-              const SizedBox(height: 0),
-              Text("Timeline", style: TextStyles.headline16(context)),
-            ],
-          ),
-          const Spacer(),
-          const CircleAvatar(
-            backgroundColor: KColors.light_gray,
-            radius: 12,
-            child: Icon(
-              Icons.keyboard_arrow_down_sharp,
-              size: 25,
-              color: KColors.light_gray_2,
-            ),
-          ).p(8).ripple(() {}, radius: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _editor(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TextFormField(
-        controller: context.watch<CreatePostCubit>().description,
-        focusNode: node,
-        autocorrect: false,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        enableInteractiveSelection: false,
-        enableSuggestions: false,
-        maxLines: null,
-        onEditingComplete: () {},
-        onFieldSubmitted: (val) {},
-        onSaved: (d) {},
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "Enter text",
-          hintStyle: TextStyles.subtitle16(context).normal,
+              backgroundColor: KColors.light_gray,
+              radius: 12,
+              child: Icon(
+                Icons.keyboard_arrow_down_sharp,
+                size: 25,
+                color: KColors.light_gray_2,
+              ),
+            ).p(8).ripple(() {}, radius: 20),
+          ],
         ),
       ),
     );
   }
 
-  void onPostSubmit() async {
+  Widget _editor(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextFormField(
+          controller: context.watch<CreatePostCubit>().description,
+          focusNode: node,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          enableInteractiveSelection: false,
+          enableSuggestions: false,
+          maxLines: null,
+          onEditingComplete: () {},
+          onFieldSubmitted: (val) {},
+          onSaved: (d) {},
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "Enter text",
+            hintStyle: TextStyles.subtitle16(context).normal,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _images(BuildContext context) {
+    return context.watch<CreatePostCubit>().files.value.fold(
+          () => SliverToBoxAdapter(
+            child: Container(),
+          ),
+          (files) => SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid.count(
+              crossAxisCount: files.length > 1 ? 2 : 1,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              children: files.map((file) {
+                return CreatePostImage(
+                  image: file,
+                  onImageRemove: (image) =>
+                      context.read<CreatePostCubit>().removeFile(image),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+  }
+
+  Widget _bottomSpace() {
+    return const SliverToBoxAdapter(
+      child: SizedBox(
+        height: 60,
+      ),
+    );
+  }
+
+  void onImageSelected(File file) {
+    context.read<CreatePostCubit>().addFiles([file]);
+  }
+
+  Future onPostSubmit() async {
     await context.read<CreatePostCubit>().createPost(context);
   }
 
@@ -149,15 +190,19 @@ class _CreatePostPageState extends State<CreatePostPage> {
           bottomSheet: CreatePostBottomMenu(
             node: node,
             onSubmit: onPostSubmit,
+            onImageSelected: onImageSelected,
             isLoading: state.map(
                 initial: (s) => false,
                 response: (s) => s.estate == ECreatePostState.saving),
           ),
           body: SizedBox(
-            child: Column(
-              children: [
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
                 _userAvatar(context),
                 _editor(context),
+                _images(context),
+                _bottomSpace()
               ],
             ),
           ),

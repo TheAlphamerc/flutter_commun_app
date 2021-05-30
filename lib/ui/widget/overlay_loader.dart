@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/images.dart';
@@ -20,24 +18,24 @@ class CustomLoader {
   }
   CustomLoader._createObject();
 
-  //static OverlayEntry _overlayEntry;
-  OverlayState _overlayState; //= new OverlayState();
+  OverlayState _overlayState;
   OverlayEntry _overlayEntry;
 
-  void _buildLoader({String message}) {
+  void _buildLoader({String message, Stream<String> progress}) {
     _overlayEntry = OverlayEntry(
-      builder: (context) {
+      builder: (BuildContext context) {
         return SizedBox(
-            height: context.width,
-            width: context.height,
-            child: buildLoader(context, message: message));
+            height: context.height,
+            width: context.width,
+            child: buildLoader(context, message: message, progress: progress));
       },
     );
   }
 
-  void showLoader(BuildContext context, {String message}) {
+  void showLoader(BuildContext context,
+      {String message, Stream<String> progress}) {
     _overlayState = Overlay.of(context);
-    _buildLoader(message: message);
+    _buildLoader(message: message, progress: progress);
     _overlayState.insert(_overlayEntry);
   }
 
@@ -51,16 +49,17 @@ class CustomLoader {
   }
 
   Widget buildLoader(BuildContext context,
-      {Color backgroundColor, String message}) {
+      {Color backgroundColor, String message, Stream<String> progress}) {
     backgroundColor ??= const Color(0xffa8a8a8).withOpacity(.5);
     const height = 140.0;
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: CustomScreenLoader(
+      body: _CustomScreenLoader(
           height: height,
           width: height,
           backgroundColor: backgroundColor,
           message: message,
+          progress: progress,
           onTap: () {
             hideLoader();
           }),
@@ -68,20 +67,22 @@ class CustomLoader {
   }
 }
 
-class CustomScreenLoader extends StatelessWidget {
+class _CustomScreenLoader extends StatelessWidget {
   final Color backgroundColor;
   final double height;
   final double width;
-  final GestureTapCallback onTap;
+  final VoidCallback onTap;
   final String message;
-  const CustomScreenLoader(
-      {Key key,
-      this.backgroundColor = const Color(0xfff8f8f8),
-      this.height = 40,
-      this.width = 40,
-      this.onTap,
-      this.message})
-      : super(key: key);
+  final Stream<String> progress;
+  const _CustomScreenLoader({
+    Key key,
+    this.backgroundColor = const Color(0xfff8f8f8),
+    this.height = 40,
+    this.width = 40,
+    this.onTap,
+    this.message,
+    this.progress,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +112,7 @@ class CustomScreenLoader extends StatelessWidget {
                     fit: StackFit.expand,
                     alignment: Alignment.center,
                     children: <Widget>[
-                      if (Platform.isIOS)
-                        const CupertinoActivityIndicator(radius: 45)
-                      else
-                        const CircularProgressIndicator(strokeWidth: 2),
+                      const CircularProgressIndicator.adaptive(strokeWidth: 2),
                       Center(
                         child: Image.asset(
                           Images.twitterLogo,
@@ -127,11 +125,31 @@ class CustomScreenLoader extends StatelessWidget {
                   ),
                 ),
                 if (message != null)
-                  Text(
-                    message,
-                    style: TextStyles.subtitle16(context),
-                    overflow: TextOverflow.ellipsis,
-                  ).pT(10).hP8
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      StreamBuilder(
+                        stream: progress,
+                        initialData: "",
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (!snapshot.data.isNotNullEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return Text(
+                            "${snapshot.data} ",
+                            style: TextStyles.subtitle16(context),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        },
+                      ),
+                      Text(
+                        message,
+                        style: TextStyles.subtitle16(context),
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ).pT(10).hP8,
               ],
             ),
           ),

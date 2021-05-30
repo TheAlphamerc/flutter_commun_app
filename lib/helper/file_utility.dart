@@ -57,8 +57,7 @@ mixin FileUtility {
                     _setImage(context, ImageSource.camera, onSelected);
                     Navigator.pop(context);
                   }),
-                  _button(context, "From Gallery", Icons.camera_alt_outlined,
-                      () {
+                  _button(context, "From Gallery", Icons.image_outlined, () {
                     _setImage(context, ImageSource.gallery, onSelected);
                     Navigator.pop(context);
                   }),

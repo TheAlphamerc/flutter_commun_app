@@ -35,5 +35,6 @@ void setUpDependency() {
   getIt.registerSingleton<ProfileRepo>(ProfileRepoImpl(
       getIt<FirebaseProfileService>(), getIt<FirebaseStorageService>()));
   getIt.registerSingleton<Session>(SessionImpl());
-  getIt.registerSingleton<PostRepo>(PostRepoImpl(getIt<FirebasePostService>()));
+  getIt.registerSingleton<PostRepo>(PostRepoImpl(
+      getIt<FirebasePostService>(), getIt<FirebaseStorageService>()));
 }

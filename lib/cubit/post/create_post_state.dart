@@ -7,4 +7,4 @@ abstract class CreatePostState with _$CreatePostState {
       {ECreatePostState estate, String message}) = _Response;
 }
 
-enum ECreatePostState { saving, saved, eror }
+enum ECreatePostState { saving, saved, eror, fileAdded, fileRemoved }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/helper/file_utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class CreatePostBottomMenu extends StatelessWidget {
@@ -6,19 +9,21 @@ class CreatePostBottomMenu extends StatelessWidget {
       {Key key,
       @required this.node,
       @required this.onSubmit,
+      @required this.onImageSelected,
       this.isLoading = false})
       : super(key: key);
   final FocusNode node;
   final VoidCallback onSubmit;
   final bool isLoading;
+  final Function(File) onImageSelected;
 
-  Widget _wrap(Widget child) {
+  Widget _wrap(Widget child, {VoidCallback onPressed}) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100), color: KColors.light_gray),
       child: child,
-    );
+    ).ripple(onPressed, radius: 20);
   }
 
   Widget _loader(BuildContext context) {
@@ -32,6 +37,27 @@ class CreatePostBottomMenu extends StatelessWidget {
     );
   }
 
+  void _handleKeyBoardFocus() {
+    if (isLoading) {
+      return;
+    }
+    if (node.hasFocus) {
+      FocusManager.instance.primaryFocus.unfocus();
+    } else {
+      FocusManager.instance.primaryFocus.requestFocus(node);
+    }
+  }
+
+  void _handleImagePick(BuildContext context) {
+    FileUtility.chooseImageBottomSheet(
+      context,
+      (file) => file.fold(
+        () => null,
+        (image) => onImageSelected(image),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -41,23 +67,20 @@ class CreatePostBottomMenu extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
           child: Row(
             children: [
-              _wrap(const Icon(
-                Icons.keyboard,
-                size: 20,
-              )).ripple(() {
-                if (isLoading) {
-                  return;
-                }
-                if (node.hasFocus) {
-                  FocusManager.instance.primaryFocus.unfocus();
-                } else {
-                  FocusManager.instance.primaryFocus.requestFocus(node);
-                }
-              }, radius: 20).pR(10),
-              _wrap(const Icon(
-                Icons.image,
-                size: 20,
-              )).pR(10),
+              _wrap(
+                const Icon(
+                  Icons.keyboard,
+                  size: 20,
+                ),
+                onPressed: _handleKeyBoardFocus,
+              ).pR(10),
+              _wrap(
+                const Icon(
+                  Icons.image,
+                  size: 20,
+                ),
+                onPressed: () => _handleImagePick(context),
+              ).pR(10),
               _wrap(Row(
                 children: [
                   const Icon(MdiIcons.fileDocument, size: 18).pR(6),

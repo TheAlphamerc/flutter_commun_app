@@ -165,6 +165,8 @@ extension StringHelper on String {
       return this;
     }
   }
+
+  bool get isNotNullEmpty => this != null && isNotEmpty;
 }
 
 extension ThemeHelper on BuildContext {
