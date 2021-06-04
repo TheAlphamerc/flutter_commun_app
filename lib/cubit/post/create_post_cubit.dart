@@ -88,7 +88,9 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
       for (final file in files) {
         progress.sink.add("${files.indexOf(file) + 1} file");
         final response = await postRepo.uploadFile(
-            file, Constants.createFilePath(file.path),
+            file,
+            Constants.createFilePath(file.path,
+                folderName: Constants.postImagePath),
             onFileUpload: onFileUpload);
         progress.sink.add("");
         response.fold(

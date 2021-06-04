@@ -14,6 +14,18 @@ class FirebasePostService {
     return Future.value(const Right(true));
   }
 
+  Future<Either<String, bool>> deletePost(PostModel model) async {
+    try {
+      await firestore
+          .collection(CollectionsConstants.feed)
+          .doc(model.id)
+          .delete();
+      return const Right(true);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
   Future<Either<String, List<PostModel>>> getPostLists(String userId) async {
     final List<PostModel> _feedlist = [];
     final querySnapshot =
@@ -34,5 +46,31 @@ class FirebasePostService {
     } else {
       return const Left("No Post found");
     }
+  }
+
+  Stream<QuerySnapshot> listenPostToChange() {
+    return firestore.collection(CollectionsConstants.feed).snapshots();
+    //       .listen((QuerySnapshot snapshot) {
+    //     // Return if there is no tweets in database
+    //   if (snapshot.docChanges.isEmpty) {
+    //     return;
+    //   }
+    //   final map = snapshot.docChanges.first.doc.data();
+    //   if (snapshot.docChanges.first.type == DocumentChangeType.added) {
+    //     onPostAdded(PostModel.fromJson(map));
+    //   } else if (snapshot.docChanges.first.type ==
+    //       DocumentChangeType.removed) {
+    //     onPostDelete(PostModel.fromJson(map));
+    //   } else if (snapshot.docChanges.first.type ==
+    //       DocumentChangeType.modified) {
+    //     onPostUpdate(PostModel.fromJson(map));
+    //   }
+    // });
+
+    //   return Future.value(true);
+    // } catch (error) {
+    //   // cprint(error, errorIn: 'databaseInit');
+    //   return Future.value(false);
+    // }
   }
 }

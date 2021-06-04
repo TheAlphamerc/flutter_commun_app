@@ -45,4 +45,20 @@ class FirebaseStorageService {
       return Right(e.code);
     }
   }
+
+  Future deletePostFiles(List<String> list) async {
+    if (list != null && list.isNotEmpty) {
+      for (final path in list) {
+        if (path != null) {
+          final photoRef = storage.refFromURL(path);
+          Utility.cprint('[Path]$path');
+          try {
+            await photoRef.delete();
+          } catch (e) {
+            Utility.cprint('[deletePostFiles]', error: e);
+          }
+        }
+      }
+    }
+  }
 }
