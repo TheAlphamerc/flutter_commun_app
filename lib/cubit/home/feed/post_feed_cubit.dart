@@ -38,6 +38,73 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
     });
   }
 
+  Future handleVote(PostModel model, {@required bool isUpVote}) async {
+    /// Flag to check if post needed to update on firestore or not.
+    /// Restrict user to cast same vote more than one time.
+    bool updateRequired = false;
+
+    /// List of all upvotes on post
+    final upVotes = model.upVotes ?? <String>[];
+
+    /// List of all downvotes on post
+    final downVotes = model.downVotes ?? <String>[];
+
+    // TODO: Remove hardcoded userId and replace with dynamic one
+    const String myUserId = "4WRiIdvffacgRfsitXsKF0pQsr52";
+    switch (model.myVoteStatus(myUserId)) {
+      case PostVoteStatus.downVote:
+        {
+          /// If user has already cast his downvote and now he wants to change to upvote
+          if (isUpVote) {
+            downVotes.removeWhere((element) => element == myUserId);
+            upVotes.add(myUserId);
+            updateRequired = true;
+          }
+        }
+
+        break;
+      case PostVoteStatus.upVote:
+        {
+          /// If user has already cast his upvote and now he wants to change to downvote
+          if (!isUpVote) {
+            upVotes.removeWhere((element) => element == myUserId);
+
+            downVotes.add(myUserId);
+            updateRequired = true;
+          }
+        }
+
+        break;
+      case PostVoteStatus.noVote:
+        {
+          updateRequired = true;
+
+          if (isUpVote) {
+            /// If user wants to cast upvote
+            upVotes.add(myUserId);
+          } else {
+            /// If user wants to cast downvote
+            downVotes.add(myUserId);
+          }
+        }
+
+        break;
+      default:
+    }
+    if (!updateRequired) {
+      return;
+    }
+    // ignore: parameter_assignments
+    model = model.copyWith.call(downVotes: downVotes, upVotes: upVotes);
+    final response = await postrepo.handleVote(model);
+    response.fold((l) {
+      Utility.cprint(l);
+    }, (r) {
+      onPostUpdate(model);
+      Utility.cprint("Voted Sucess");
+    });
+  }
+
   void updatePostState(List<PostModel> list,
       {String error, EPostFeedState estate = EPostFeedState.loaded}) {
     emit(PostFeedState.response(
@@ -56,7 +123,9 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
       return;
     }
     if (snapshot.docChanges.first.type == DocumentChangeType.added) {
-      onPostAdded(PostModel.fromJson(map));
+      var model = PostModel.fromJson(map);
+      model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
+      onPostAdded(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
       onPostDelete(PostModel.fromJson(map));
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
@@ -66,7 +135,7 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
 
   /// Trigger when some post added to firestore
   void onPostAdded(PostModel model) {
-    final list = stateFeedList;
+    final list = stateFeedList ?? <PostModel>[];
     list.insert(0, model);
     updatePostState(list);
   }
@@ -74,7 +143,16 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
   /// Trigger when some post updated
   void onPostUpdate(PostModel model) {
     final list = stateFeedList;
-    final index = list.indexOf(model);
+    if (!list.any((element) => element.id == model.id)) {
+      return;
+    }
+    final oldModel = list.firstWhere((element) => element.id == model.id);
+    // ignore: parameter_assignments
+    model = model.copyWith.call(
+        upVotes: oldModel.upVotes,
+        downVotes: oldModel.downVotes,
+        shareList: oldModel.shareList);
+    final index = list.indexWhere((element) => element.id == model.id);
     list[index] = model;
     updatePostState(list);
   }

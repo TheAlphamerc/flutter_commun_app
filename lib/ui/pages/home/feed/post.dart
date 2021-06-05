@@ -85,7 +85,7 @@ class Post extends StatelessWidget {
           PostImages(list: post.images),
 
           /// Post bottom controls
-          PostBottomControl(model: post),
+          PostBottomControl(model: post, onPostAction: onPostAction),
         ],
       ),
     );

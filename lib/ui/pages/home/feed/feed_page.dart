@@ -32,6 +32,10 @@ class Feedpage extends StatelessWidget {
     }, delete: () async {
       Navigator.pop(context);
       await context.read<PostFeedCubit>().deletePost(model);
+    }, upVote: () async {
+      await context.read<PostFeedCubit>().handleVote(model, isUpVote: true);
+    }, downVote: () async {
+      await context.read<PostFeedCubit>().handleVote(model, isUpVote: false);
     });
   }
 

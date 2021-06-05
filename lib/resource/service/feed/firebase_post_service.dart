@@ -35,6 +35,8 @@ class FirebasePostService {
       for (var i = 0; i < data.length; i++) {
         var model = PostModel.fromJson(querySnapshot.docs[i].data());
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
+        final statics = await getPostVote(model);
+        statics.fold((l) => null, (r) => model = r);
         _feedlist.add(model);
       }
 
@@ -48,29 +50,57 @@ class FirebasePostService {
     }
   }
 
+  Future<Either<String, PostModel>> getPostVote(PostModel post) async {
+    final querySnapshot = await firestore
+        .collection(CollectionsConstants.feed)
+        .doc(post.id)
+        .collection(CollectionsConstants.postStatics)
+        .get();
+    final data = querySnapshot.docs;
+    if (data != null && data.isNotEmpty) {
+      for (var i = 0; i < data.length; i++) {
+        final map = querySnapshot.docs[i].data();
+
+        if (map.keys.contains("downVote")) {
+          final share = map["downVote"].cast<String>();
+          final voteList = cast<List<String>>(share);
+          // ignore: parameter_assignments
+          post = post.copyWith.call(downVotes: voteList);
+        }
+        if (map.keys.contains("upVote")) {
+          final share = map["upVote"].cast<String>();
+          final voteList = cast<List<String>>(share);
+          // ignore: parameter_assignments
+          post = post.copyWith.call(upVotes: voteList);
+        }
+        if (map.keys.contains("share")) {
+          final share = map["share"].cast<String>();
+          final sharesList = cast<List<String>>(share);
+          // ignore: parameter_assignments
+          post = post.copyWith.call(shareList: sharesList);
+        }
+      }
+
+      return Right(post);
+    } else {
+      return const Left("No statics found");
+    }
+  }
+
   Stream<QuerySnapshot> listenPostToChange() {
     return firestore.collection(CollectionsConstants.feed).snapshots();
-    //       .listen((QuerySnapshot snapshot) {
-    //     // Return if there is no tweets in database
-    //   if (snapshot.docChanges.isEmpty) {
-    //     return;
-    //   }
-    //   final map = snapshot.docChanges.first.doc.data();
-    //   if (snapshot.docChanges.first.type == DocumentChangeType.added) {
-    //     onPostAdded(PostModel.fromJson(map));
-    //   } else if (snapshot.docChanges.first.type ==
-    //       DocumentChangeType.removed) {
-    //     onPostDelete(PostModel.fromJson(map));
-    //   } else if (snapshot.docChanges.first.type ==
-    //       DocumentChangeType.modified) {
-    //     onPostUpdate(PostModel.fromJson(map));
-    //   }
-    // });
+  }
 
-    //   return Future.value(true);
-    // } catch (error) {
-    //   // cprint(error, errorIn: 'databaseInit');
-    //   return Future.value(false);
-    // }
+  Future<Either<String, bool>> handleVote(PostModel model) async {
+    final upVote = model.upVotes;
+    final downVote = model.downVotes;
+
+    firestore
+        .collection(CollectionsConstants.feed)
+        .doc(model.id)
+        .collection(CollectionsConstants.postStatics)
+        .doc(CollectionsConstants.postVote)
+        .set({"upVote": upVote, "downVote": downVote});
+    return Future.value(const Right(true));
   }
 }

@@ -11,12 +11,12 @@ abstract class PostModel with _$PostModel {
     String description,
     String createdBy,
     String articleUrl,
-    @Default(0) int upVote,
-    @Default(0) int downVote,
-    @Default(0) shareCount,
     List<String> comments,
     List<String> images,
     List<String> videos,
+    List<String> shareList,
+    List<String> upVotes,
+    List<String> downVotes,
     List<String> attachments,
     String modifiedAt,
     String createdAt,
@@ -27,7 +27,16 @@ abstract class PostModel with _$PostModel {
 
 extension PostModelHelper on PostModel {
   int get vote {
-    return upVote - downVote;
+    if (upVotes != null && downVotes != null) {
+      return upVotes.length - downVotes.length;
+    }
+    if (upVotes != null) {
+      return upVotes.length;
+    }
+    if (downVotes != null) {
+      return downVotes.length;
+    }
+    return 0;
   }
 
   String get commentsCount {
@@ -37,4 +46,26 @@ extension PostModelHelper on PostModel {
       return "";
     }
   }
+
+  String get shareCount {
+    if (shareList != null && shareList.isNotEmpty) {
+      return "${shareList.length}";
+    } else {
+      return "";
+    }
+  }
+
+  PostVoteStatus myVoteStatus(String myuserId) {
+    if (upVotes != null && upVotes.isNotEmpty && upVotes.contains(myuserId)) {
+      return PostVoteStatus.upVote;
+    } else if (downVotes != null &&
+        downVotes.isNotEmpty &&
+        downVotes.contains(myuserId)) {
+      return PostVoteStatus.downVote;
+    } else {
+      return PostVoteStatus.noVote;
+    }
+  }
 }
+
+enum PostVoteStatus { upVote, downVote, noVote }

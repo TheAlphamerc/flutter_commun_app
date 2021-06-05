@@ -18,8 +18,15 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
-  Future<Either<String, bool>> deletePost(PostModel model) {
-    storageService.deletePostFiles(model.images).then((value) => null);
+  Future<Either<String, bool>> deletePost(PostModel model) async {
+    model.images.value.fold(() => null, (a) async {
+      await storageService.deletePostFiles(model.images);
+    });
+
+    model.videos.value.fold(() => null, (a) async {
+      await storageService.deletePostFiles(model.videos);
+    });
+
     storageService.deletePostFiles(model.videos).then((value) => null);
     return postService.deletePost(model);
   }
@@ -32,5 +39,10 @@ class PostRepoImpl extends PostRepo {
   @override
   Stream<QuerySnapshot> listenPostToChange() {
     return postService.listenPostToChange();
+  }
+
+  @override
+  Future<Either<String, bool>> handleVote(PostModel model) {
+    return postService.handleVote(model);
   }
 }
