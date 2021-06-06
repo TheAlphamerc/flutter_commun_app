@@ -4,7 +4,22 @@ import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
-class CustomLoader {
+abstract class LoaderService {
+  static final LoaderService _instance = CustomLoader.instance;
+
+  /// access to the Singleton instance of LoaderService
+  static LoaderService get instance => _instance;
+
+  /// Short form to access the instance of LoaderService
+  static LoaderService get I => _instance;
+
+  void showLoader(BuildContext context,
+      {String message, Stream<String> progress});
+
+  void hideLoader();
+}
+
+class CustomLoader implements LoaderService {
   static CustomLoader _customLoader;
 
   static CustomLoader get instance => _customLoader;
@@ -32,6 +47,7 @@ class CustomLoader {
     );
   }
 
+  @override
   void showLoader(BuildContext context,
       {String message, Stream<String> progress}) {
     _overlayState = Overlay.of(context);
@@ -39,6 +55,7 @@ class CustomLoader {
     _overlayState.insert(_overlayEntry);
   }
 
+  @override
   void hideLoader() {
     try {
       _overlayEntry?.remove();

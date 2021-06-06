@@ -11,6 +11,7 @@ import 'package:flutter_commun_app/resource/service/storage/firebase_storage_ser
 import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/resource/session/session_impl.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
+import 'package:flutter_commun_app/ui/widget/kit/overlay_loader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -18,6 +19,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 final getIt = GetIt.instance;
 final logger = Logger();
 CustomBottomSheet sheet = CustomBottomSheet.instance;
+LoaderService loader = LoaderService.instance;
 void setUpDependency() {
   /// Firebase services
   getIt.registerSingleton<FirebaseAuthService>(

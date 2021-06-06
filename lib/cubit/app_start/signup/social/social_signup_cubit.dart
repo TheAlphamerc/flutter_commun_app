@@ -2,8 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
-import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
+import 'package:flutter_commun_app/ui/widget/kit/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 part 'social_signup_state.dart';
@@ -11,10 +12,7 @@ part 'social_signup_cubit.freezed.dart';
 
 class SocialSignupCubit extends Cubit<SocialSignupState> {
   final AuthRepo authRepo;
-  SocialSignupCubit(this.authRepo) : super(const SocialSignupState.initial()) {
-    loader = CustomLoader();
-  }
-  CustomLoader loader;
+  SocialSignupCubit(this.authRepo) : super(const SocialSignupState.initial());
   UserCredential userCredential;
 
   Future signupWithGoogle(BuildContext context) async {

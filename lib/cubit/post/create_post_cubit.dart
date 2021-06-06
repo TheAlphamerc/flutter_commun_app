@@ -10,19 +10,17 @@ import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
-import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
-part 'create_post_state.dart';
 part 'create_post_cubit.freezed.dart';
+part 'create_post_state.dart';
 
 class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
   final PostRepo postRepo;
   CreatePostCubit({this.postRepo}) : super(const CreatePostState.initial()) {
     getProfile().then((value) => null);
     description = TextEditingController();
-    loader = CustomLoader();
     progress = BehaviorSubject<String>();
   }
 
@@ -131,7 +129,6 @@ mixin CreatePostCubitMixin {
   TextEditingController description;
   ProfileModel user;
   List<File> files;
-  CustomLoader loader;
   BehaviorSubject<String> progress;
   void dispose() {
     progress.drain();

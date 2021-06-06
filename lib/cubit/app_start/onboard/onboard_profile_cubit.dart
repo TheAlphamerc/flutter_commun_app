@@ -1,18 +1,20 @@
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
-import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
+import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
-import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-part 'onboard_profile_state.dart';
-part 'onboard_profile_cubit.freezed.dart';
+import 'package:flutter_commun_app/ui/widget/kit/overlay_loader.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'e_onboard_profile_state.dart';
+part 'onboard_profile_cubit.freezed.dart';
+part 'onboard_profile_state.dart';
 
 class OnboardProfileCubit extends Cubit<OnboardProfileState>
     with OnboardProfileCubitMixin {
@@ -24,7 +26,6 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
     username = TextEditingController(text: profile.username);
     website = TextEditingController();
     bio = TextEditingController();
-    loader = CustomLoader();
   }
 
   void updateImage({Option<File> image, Option<File> banner}) {
@@ -95,7 +96,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
     /// Display loader
     loader.showLoader(context, message: "uploading $path");
     final response = await profileRepo.uploadFile(
-        file, "user/profile/${profile.id}/$path",
+        file, "user/${profile.id}/profile/$path",
         onFileUpload: (response) => onFileUpload(context, response));
 
     /// Hide loader
@@ -136,7 +137,6 @@ mixin OnboardProfileCubitMixin {
   TextEditingController username;
   TextEditingController website;
   TextEditingController bio;
-  CustomLoader loader;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   void dispose() {
     name.dispose();

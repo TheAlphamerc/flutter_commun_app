@@ -4,25 +4,23 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/resource/service/auth/verify_phone_response.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/ui/widget/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'signup_mobile_state.dart';
 part 'signup_mobile_cubit.freezed.dart';
+part 'signup_mobile_state.dart';
 
 class SignupMobileCubit extends Cubit<SignupMobileState> {
   final AuthRepo authRepo;
   SignupMobileCubit(this.authRepo) : super(const SignupMobileState.initial()) {
     phone = TextEditingController();
-    loader = CustomLoader();
   }
   String verificationId;
   TextEditingController phone;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  CustomLoader loader;
   UserCredential credential;
 
   Future continueWithPhone(BuildContext context) async {
