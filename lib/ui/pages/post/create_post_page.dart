@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_commun_app/cubit/post/create_post_cubit.dart';
+import 'package:flutter_commun_app/cubit/post/create/create_post_cubit.dart';
 import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';

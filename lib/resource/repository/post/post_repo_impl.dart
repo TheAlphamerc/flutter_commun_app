@@ -45,4 +45,9 @@ class PostRepoImpl extends PostRepo {
   Future<Either<String, bool>> handleVote(PostModel model) {
     return postService.handleVote(model);
   }
+
+  @override
+  Future<Either<String, PostModel>> getPostDetail(String postId) async {
+    return postService.getPostDetail(postId);
+  }
 }

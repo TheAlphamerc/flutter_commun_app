@@ -11,16 +11,23 @@ import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'post_feed_state.dart';
-part 'e_post_feed_state.dart';
-part 'post_feed_cubit.freezed.dart';
+part 'post_detail_state.dart';
+part 'e_post_detail_state.dart';
+part 'post_detail_cubit.freezed.dart';
 
-class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
-  final PostRepo postrepo;
-  PostFeedCubit(this.postrepo) : super(const PostFeedState.initial()) {
-    listenPostToChange = postrepo.listenPostToChange();
+class PostDetailCubit extends Cubit<PostDetailState>
+    implements PostBaseActions {
+  final PostRepo postRepo;
+  PostDetailCubit(this.postRepo, {@required String postId})
+      : super(
+            const PostDetailState.response(estate: EPostDetailState.loading)) {
+    listenPostToChange = postRepo.listenPostToChange();
     postSubscription = listenPostToChange.listen(postChangeListener);
+    getPostDetail(postId);
   }
+
+  @override
+  ProfileModel get myUser => getIt<Session>().user;
 
   @override
   Stream<QuerySnapshot> listenPostToChange;
@@ -28,33 +35,20 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   @override
   StreamSubscription<QuerySnapshot> postSubscription;
 
-  /// Loggedin user's profile
-  @override
-  ProfileModel get myUser => getIt<Session>().user;
-
-  /// Fetch posts from firebase firestore
-  Future getPosts() async {
-    final response = await postrepo.getPostLists("");
-    response.fold(
-      (l) => updatePostState(null,
-          error: "Post not available", estate: EPostFeedState.erorr),
-      (r) => updatePostState(r),
-    );
-  }
-
-  /// Delete posts from firestore
   @override
   Future deletePost(PostModel model) async {
-    final response = await postrepo.deletePost(model);
+    final response = await postRepo.deletePost(model);
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
+      updatePostModel(model,
+          estate: EPostDetailState.delete, message: "Post deleted");
       Utility.cprint("Post deleted");
     });
   }
 
   @override
-  Future handleVote(PostModel model, {@required bool isUpVote}) async {
+  Future handleVote(PostModel model, {bool isUpVote}) async {
     /// List of all upvotes on post
     final upVotes = model.upVotes ?? <String>[];
 
@@ -110,16 +104,31 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     }
     // ignore: parameter_assignments
     model = model.copyWith.call(downVotes: downVotes, upVotes: upVotes);
-    final response = await postrepo.handleVote(model);
+    final response = await postRepo.handleVote(model);
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
-      onPostUpdate(model);
+      updatePostModel(model, message: "Voted");
       Utility.cprint("Voted Sucess");
     });
   }
 
-  /// Listen to channge in posts collection
+  @override
+  void onPostDelete(PostModel model) {
+    emit(const PostDetailState.response(estate: EPostDetailState.delete));
+  }
+
+  @override
+  void onPostUpdate(PostModel model) {
+    final oldModel = statePost;
+    // ignore: parameter_assignments
+    model = model.copyWith.call(
+        upVotes: oldModel.upVotes,
+        downVotes: oldModel.downVotes,
+        shareList: oldModel.shareList);
+    updatePostModel(model);
+  }
+
   @override
   void postChangeListener(QuerySnapshot snapshot) {
     if (snapshot.docChanges.isEmpty) {
@@ -132,77 +141,37 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     if (snapshot.docChanges.first.type == DocumentChangeType.added) {
       var model = PostModel.fromJson(map);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
-      onPostAdded(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
-      var model = PostModel.fromJson(map);
-      model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
-      onPostDelete(model);
+      onPostDelete(PostModel.fromJson(map));
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
       onPostUpdate(PostModel.fromJson(map));
     }
   }
 
-  /// Trigger when some post added to firestore
-  void onPostAdded(PostModel model) {
-    final list = stateFeedList ?? <PostModel>[];
-    list.insert(0, model);
-    updatePostState(list);
+  void updatePostModel(PostModel model,
+      {String message, EPostDetailState estate = EPostDetailState.loaded}) {
+    emit(PostDetailState.response(
+        estate: estate,
+        message: Utility.encodeStateMessage(message),
+        post: model));
   }
 
-  /// Trigger when some post updated
-  @override
-  void onPostUpdate(PostModel model) {
-    final list = stateFeedList;
-    if (!list.any((element) => element.id == model.id)) {
-      return;
-    }
-    final oldModel = list.firstWhere((element) => element.id == model.id);
-    // ignore: parameter_assignments
-    model = model.copyWith.call(
-        upVotes: oldModel.upVotes,
-        downVotes: oldModel.downVotes,
-        shareList: oldModel.shareList);
-    updatePost(model);
-  }
-
-  /// Trigger when some posts deleted
-  @override
-  void onPostDelete(PostModel model) {
-    final list = List<PostModel>.from(stateFeedList);
-    if (list.any((element) => element.id == model.id)) {
-      list.removeWhere((element) => element.id == model.id);
-      updatePostState(list);
-    }
-  }
-
-  void updatePost(PostModel model) {
-    final list = stateFeedList;
-    final index = stateFeedList.indexWhere((element) => element.id == model.id);
-    list[index] = model;
-    updatePostState(list);
-  }
-
-  void updatePostState(List<PostModel> list,
-      {String error, EPostFeedState estate = EPostFeedState.loaded}) {
-    emit(PostFeedState.response(
-      estate: StateResponse(estate: estate, list: list),
-      message: Utility.encodeStateMessage(error),
-    ));
-  }
-
-  /// Retrieve posts from state
-  List<PostModel> get stateFeedList {
-    return state.when(
-      initial: () => null,
-      response: (estate, message) {
-        return estate.list;
-      },
+  Future getPostDetail(String postId) async {
+    final response = await postRepo.getPostDetail(postId);
+    response.fold(
+      (l) => updatePostModel(null,
+          estate: EPostDetailState.erorr, message: "Post not found"),
+      (r) => updatePostModel(r),
     );
+  }
+
+  PostModel get statePost {
+    return state.when(response: (estate, message, model) => model);
   }
 
   @override
   void dispose() {
-    listenPostToChange.drain();
     postSubscription.cancel();
+    listenPostToChange.drain();
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
-import 'package:flutter_commun_app/ui/pages/home/feed/widget/post_bottom_control.dart';
-import 'package:flutter_commun_app/ui/pages/home/feed/widget/post_header.dart';
-import 'package:flutter_commun_app/ui/pages/home/feed/widget/post_image.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/detail/post_detail_page.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/widget/post_bottom_control.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/widget/post_header.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/widget/post_image.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
@@ -23,10 +24,15 @@ class Post extends StatelessWidget {
   /// For ex. upVote, downVote, and share the post
   final OnPostAction onPostAction;
 
-  const Post({Key key, this.post, @required this.onPostAction, this.myUser})
+  const Post(
+      {Key key,
+      @required this.post,
+      @required this.onPostAction,
+      @required this.myUser})
       : super(key: key);
 
   Widget _trailing(BuildContext context) {
+    final bool isMyPost = myUser.id == post.createdBy;
     return IconButton(
       icon: Icon(
         Icons.more_vert,
@@ -41,6 +47,7 @@ class Post extends StatelessWidget {
               icon: MdiIcons.shareAll,
               onPressed: () {
                 onPostAction(PostAction.share, post);
+                Navigator.pop(context);
               },
               title: "Share",
             ),
@@ -48,28 +55,45 @@ class Post extends StatelessWidget {
               icon: Icons.bookmark,
               onPressed: () {
                 onPostAction(PostAction.favourite, post);
+                Navigator.pop(context);
               },
               title: "Add to Favourite",
             ),
-            PrimarySheetButton(
-              icon: Icons.edit,
-              onPressed: () {
-                onPostAction(PostAction.edit, post);
-              },
-              title: "Edit",
-            ),
-            PrimarySheetButton(
-              icon: Icons.delete,
-              onPressed: () {
-                onPostAction(PostAction.delete, post);
-              },
-              title: "Delete",
-              color: KColors.red,
-            ),
+
+            /// Post can be edit or delete by post owner only
+            if (isMyPost) ...[
+              PrimarySheetButton(
+                icon: Icons.edit,
+                onPressed: () {
+                  onPostAction(PostAction.edit, post);
+                  Navigator.pop(context);
+                },
+                title: "Edit",
+              ),
+              PrimarySheetButton(
+                icon: Icons.delete,
+                onPressed: () {
+                  onPostAction(PostAction.delete, post);
+                  Navigator.pop(context);
+                },
+                title: "Delete",
+                color: KColors.red,
+              ),
+            ]
           ],
         );
       },
     );
+  }
+
+  void onPostTap(BuildContext context) async {
+    final action =
+        await context.navigate.push(PostDetailPage.getRoute(post.id));
+    if (action != null && action is PostAction) {
+      onPostAction(action, post);
+    } else if (action != null && action is PostModel) {
+      onPostAction(PostAction.modify, action);
+    }
   }
 
   @override
@@ -85,11 +109,16 @@ class Post extends StatelessWidget {
 
           PostHeader(post: post, trailing: _trailing(context)),
 
-          /// Post description
-          Text(post.description ?? "").hP16,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              /// Post description
+              Text(post.description ?? "").hP16,
 
-          /// Post Images
-          PostImages(list: post.images),
+              /// Post Images
+              PostImages(list: post.images),
+            ],
+          ).ripple(() => onPostTap(context)),
 
           /// Post bottom controls
           PostBottomControl(

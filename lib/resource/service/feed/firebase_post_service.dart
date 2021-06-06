@@ -35,7 +35,7 @@ class FirebasePostService {
       for (var i = 0; i < data.length; i++) {
         var model = PostModel.fromJson(querySnapshot.docs[i].data());
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
-        final statics = await getPostVote(model);
+        final statics = await getPostStatics(model);
         statics.fold((l) => null, (r) => model = r);
         _feedlist.add(model);
       }
@@ -50,7 +50,7 @@ class FirebasePostService {
     }
   }
 
-  Future<Either<String, PostModel>> getPostVote(PostModel post) async {
+  Future<Either<String, PostModel>> getPostStatics(PostModel post) async {
     final querySnapshot = await firestore
         .collection(CollectionsConstants.feed)
         .doc(post.id)
@@ -102,5 +102,21 @@ class FirebasePostService {
         .doc(CollectionsConstants.postVote)
         .set({"upVote": upVote, "downVote": downVote});
     return Future.value(const Right(true));
+  }
+
+  Future<Either<String, PostModel>> getPostDetail(String postId) async {
+    final querySnapshot =
+        await firestore.collection(CollectionsConstants.feed).doc(postId).get();
+    final map = querySnapshot.data();
+    if (map != null) {
+      var model = PostModel.fromJson(map);
+      model = model.copyWith.call(id: querySnapshot.id);
+      final statics = await getPostStatics(model);
+      statics.fold((l) => null, (r) => model = r);
+
+      return Right(model);
+    } else {
+      return const Left("Post not found");
+    }
   }
 }

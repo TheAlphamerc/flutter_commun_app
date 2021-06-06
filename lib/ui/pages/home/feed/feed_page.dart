@@ -6,7 +6,7 @@ import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
-import 'package:flutter_commun_app/ui/pages/home/feed/post.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/whats_new_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
@@ -41,6 +41,8 @@ class Feedpage extends StatelessWidget {
       await context.read<PostFeedCubit>().handleVote(model, isUpVote: true);
     }, downVote: () async {
       await context.read<PostFeedCubit>().handleVote(model, isUpVote: false);
+    }, modify: () {
+      context.read<PostFeedCubit>().updatePost(model);
     });
   }
 
