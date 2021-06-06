@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
+import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/widget/post_bottom_control.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/widget/post_header.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/widget/post_image.dart';
@@ -11,9 +12,18 @@ import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
 typedef OnPostAction = void Function(PostAction action, PostModel model);
 
 class Post extends StatelessWidget {
+  /// Contains post data
   final PostModel post;
+
+  /// Logged in user profile
+  final ProfileModel myUser;
+
+  /// `onPostAction` is a callback which trigger when user perform some action
+  ///
+  /// For ex. upVote, downVote, and share the post
   final OnPostAction onPostAction;
-  const Post({Key key, this.post, @required this.onPostAction})
+
+  const Post({Key key, this.post, @required this.onPostAction, this.myUser})
       : super(key: key);
 
   Widget _trailing(BuildContext context) {
@@ -73,10 +83,7 @@ class Post extends StatelessWidget {
         children: [
           /// User tile
 
-          PostHeader(
-            post: post,
-            trailing: _trailing(context),
-          ),
+          PostHeader(post: post, trailing: _trailing(context)),
 
           /// Post description
           Text(post.description ?? "").hP16,
@@ -85,7 +92,8 @@ class Post extends StatelessWidget {
           PostImages(list: post.images),
 
           /// Post bottom controls
-          PostBottomControl(model: post, onPostAction: onPostAction),
+          PostBottomControl(
+              model: post, onPostAction: onPostAction, myUser: myUser),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
+import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/post/create_post_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/circular_image.dart';
@@ -10,7 +10,7 @@ class WhatsNewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AppCubit>().user;
+    final user = getIt<Session>().user;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       color: context.onPrimary,

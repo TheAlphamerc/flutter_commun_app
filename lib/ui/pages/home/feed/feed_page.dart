@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/home/feed/post_feed_cubit.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
+import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/post.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/whats_new_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -15,11 +17,14 @@ class Feedpage extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate(
         list
-            .map((post) => Post(
-                  post: post,
-                  onPostAction: (action, model) =>
-                      onPostAction(context, action, model),
-                ))
+            .map(
+              (post) => Post(
+                post: post,
+                onPostAction: (action, model) =>
+                    onPostAction(context, action, model),
+                myUser: getIt<Session>().user,
+              ),
+            )
             .toList(),
         addAutomaticKeepAlives: false,
       ),

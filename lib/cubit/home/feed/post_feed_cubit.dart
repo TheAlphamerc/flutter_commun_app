@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
+import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
+import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'post_feed_state.dart';
@@ -17,6 +20,9 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
     listenPostToChange = postrepo.listenPostToChange();
     postSubscription = listenPostToChange.listen(postChangeListener);
   }
+
+  /// Loggedin user's profile
+  ProfileModel get myUser => getIt<Session>().user;
 
   /// Fetch posts from firebase firestore
   Future getPosts() async {
@@ -39,18 +45,13 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
   }
 
   Future handleVote(PostModel model, {@required bool isUpVote}) async {
-    /// Flag to check if post needed to update on firestore or not.
-    /// Restrict user to cast same vote more than one time.
-    bool updateRequired = false;
-
     /// List of all upvotes on post
     final upVotes = model.upVotes ?? <String>[];
 
     /// List of all downvotes on post
     final downVotes = model.downVotes ?? <String>[];
 
-    // TODO: Remove hardcoded userId and replace with dynamic one
-    const String myUserId = "4WRiIdvffacgRfsitXsKF0pQsr52";
+    final String myUserId = myUser.id;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
@@ -58,7 +59,11 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
           if (isUpVote) {
             downVotes.removeWhere((element) => element == myUserId);
             upVotes.add(myUserId);
-            updateRequired = true;
+          }
+
+          /// If user wants to undo his downvote
+          else {
+            downVotes.removeWhere((element) => element == myUserId);
           }
         }
 
@@ -70,15 +75,17 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
             upVotes.removeWhere((element) => element == myUserId);
 
             downVotes.add(myUserId);
-            updateRequired = true;
+          }
+
+          /// If user wants to undo his upvote
+          else {
+            upVotes.removeWhere((element) => element == myUserId);
           }
         }
 
         break;
       case PostVoteStatus.noVote:
         {
-          updateRequired = true;
-
           if (isUpVote) {
             /// If user wants to cast upvote
             upVotes.add(myUserId);
@@ -90,9 +97,6 @@ class PostFeedCubit extends Cubit<PostFeedState> with PostFeedCubitMixin {
 
         break;
       default:
-    }
-    if (!updateRequired) {
-      return;
     }
     // ignore: parameter_assignments
     model = model.copyWith.call(downVotes: downVotes, upVotes: upVotes);

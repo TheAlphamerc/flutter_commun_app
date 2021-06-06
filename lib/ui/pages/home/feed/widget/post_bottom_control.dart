@@ -1,39 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
+import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/post.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 
 class PostBottomControl extends StatelessWidget {
+  /// Contains post data
   final PostModel model;
+
+  /// Logged in user profile
+  final ProfileModel myUser;
+
+  /// `onPostAction` is a callback which trigger when user perform some action
+  ///
+  /// For ex. upVote, downVote, and share the post
   final OnPostAction onPostAction;
-  const PostBottomControl({Key key, this.model, this.onPostAction})
-      : super(key: key);
+  const PostBottomControl({
+    Key key,
+    @required this.model,
+    @required this.onPostAction,
+    @required this.myUser,
+  }) : super(key: key);
+
   Widget _icon(BuildContext context,
       {IconData icon, String text, bool isColoredIcon = false}) {
     final Color color = context.theme.iconTheme.color;
-    return Expanded(
-      flex: 4,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isColoredIcon ? context.primaryColor : color,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              text,
-              style: TextStyles.subtitle14(context)
-                  .copyWith(color: color, fontSize: 12),
-            )
-          ],
-        ),
-      ).ripple(() {}, radius: 30),
-    );
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Icon(
+            icon,
+            size: 24,
+            color: isColoredIcon ? context.primaryColor : color,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyles.subtitle14(context)
+                .copyWith(color: color, fontSize: 12),
+          )
+        ],
+      ),
+    ).ripple(() {}, radius: 30);
   }
 
   Widget _vote(BuildContext context) {
@@ -45,15 +56,22 @@ class PostBottomControl extends StatelessWidget {
           color: KColors.light_gray, borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
+          /// upVote icon
           Icon(Icons.arrow_upward_rounded,
                   color: isUpVote ? context.primaryColor : color)
               .ripple(() {
             onPostAction(PostAction.upVote, model);
           }),
           const SizedBox(width: 5),
+
+          /// Vote count
           Text("${model.vote}",
-              style: TextStyles.subtitle14(context).copyWith(color: color)),
+              style: TextStyles.subtitle14(context).copyWith(
+                  color:
+                      isUpVote || isdownVote ? context.primaryColor : color)),
           const SizedBox(width: 5),
+
+          /// Downvote icon
           Icon(Icons.arrow_downward_rounded,
                   color: isdownVote ? context.primaryColor : color)
               .ripple(() {
@@ -64,14 +82,14 @@ class PostBottomControl extends StatelessWidget {
     );
   }
 
+  /// Return true if loggedIn user already upVoted on post
   bool get isUpVote {
-    return model.myVoteStatus("4WRiIdvffacgRfsitXsKF0pQsr52") ==
-        PostVoteStatus.upVote;
+    return model.myVoteStatus(myUser.id) == PostVoteStatus.upVote;
   }
 
+  /// Return true if loggedIn user already downVoted on post
   bool get isdownVote {
-    return model.myVoteStatus("4WRiIdvffacgRfsitXsKF0pQsr52") ==
-        PostVoteStatus.downVote;
+    return model.myVoteStatus(myUser.id) == PostVoteStatus.downVote;
   }
 
   @override
@@ -83,10 +101,18 @@ class PostBottomControl extends StatelessWidget {
       width: context.width,
       child: Row(
         children: [
+          /// Vote icon
           _vote(context),
           const Spacer(),
+
+          /// Post views icon
+          // TODO: Remove static post view count and add dynamic one
           _icon(context, icon: Icons.remove_red_eye_outlined, text: "1.2K"),
+
+          /// Comments Icon
           _icon(context, icon: MdiIcons.chatOutline, text: model.commentsCount),
+
+          /// Share Icon
           _icon(context, icon: MdiIcons.shareOutline, text: model.shareCount),
         ],
       ),

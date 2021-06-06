@@ -1,12 +1,13 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/cubit/post/create_post_cubit.dart';
 import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
+import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/post/create_post_bottom_menu.dart';
 import 'package:flutter_commun_app/ui/pages/post/widget/create_post_images.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -36,7 +37,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   Widget _userAvatar(BuildContext context) {
-    final user = context.watch<AppCubit>().user;
+    final user = getIt<Session>().user;
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
