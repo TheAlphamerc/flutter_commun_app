@@ -119,6 +119,11 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     });
   }
 
+  @override
+  void reportPost(PostModel model) {
+    // TODO: implement reportPost
+  }
+
   /// Listen to channge in posts collection
   @override
   void postChangeListener(QuerySnapshot snapshot) {

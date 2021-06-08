@@ -52,7 +52,7 @@ class Post extends StatelessWidget {
           headerChild: PostHeader(post: post, contentPadding: EdgeInsets.zero),
           sheetButton: [
             PrimarySheetButton(
-              icon: MdiIcons.shareAll,
+              icon: MdiIcons.shareAllOutline,
               onPressed: () {
                 onPostAction(PostAction.share, post);
                 Navigator.pop(context);
@@ -60,7 +60,7 @@ class Post extends StatelessWidget {
               title: "Share",
             ),
             PrimarySheetButton(
-              icon: Icons.bookmark,
+              icon: Icons.bookmark_border_rounded,
               onPressed: () {
                 onPostAction(PostAction.favourite, post);
                 Navigator.pop(context);
@@ -87,7 +87,16 @@ class Post extends StatelessWidget {
                 title: "Delete",
                 color: KColors.red,
               ),
-            ]
+            ],
+            if (!isMyPost)
+              PrimarySheetButton(
+                icon: Icons.warning_amber_rounded,
+                onPressed: () {
+                  onPostAction(PostAction.report, post);
+                  Navigator.pop(context);
+                },
+                title: "Report",
+              ),
           ],
         );
       },

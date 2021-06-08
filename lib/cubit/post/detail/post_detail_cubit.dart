@@ -149,6 +149,11 @@ class PostDetailCubit extends Cubit<PostDetailState>
   }
 
   @override
+  void reportPost(PostModel model) {
+    // TODO: implement reportPost
+  }
+
+  @override
   void onPostDelete(PostModel model) {
     emit(const PostDetailState.response(estate: EPostDetailState.delete));
   }

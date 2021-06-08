@@ -14,6 +14,7 @@ abstract class PostBaseActions {
   Future handleVote(PostModel model, {@required bool isUpVote});
 
   void onPostUpdate(PostModel model);
+  void reportPost(PostModel model);
   void onPostDelete(PostModel model);
   void postChangeListener(QuerySnapshot snapshot);
 }

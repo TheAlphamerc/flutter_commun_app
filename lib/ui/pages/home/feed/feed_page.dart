@@ -42,6 +42,8 @@ class Feedpage extends StatelessWidget {
       await context.read<PostFeedCubit>().handleVote(model, isUpVote: false);
     }, modify: () {
       context.read<PostFeedCubit>().updatePost(model);
+    }, report: () {
+      context.read<PostFeedCubit>().reportPost(model);
     });
   }
 

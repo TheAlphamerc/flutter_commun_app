@@ -5,6 +5,7 @@ enum PostAction {
   delete,
   modify,
   share,
+  report,
   favourite,
   edit,
 }
@@ -33,6 +34,7 @@ extension ActionHelper on PostAction {
     T Function() share,
     T Function() favourite,
     T Function() edit,
+    T Function() report,
   }) {
     switch (this) {
       case PostAction.like:
@@ -74,6 +76,11 @@ extension ActionHelper on PostAction {
       case PostAction.edit:
         if (edit != null) {
           return edit.call();
+        }
+        break;
+      case PostAction.report:
+        if (report != null) {
+          return report.call();
         }
         break;
       default:

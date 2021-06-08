@@ -55,7 +55,7 @@ class Comment extends StatelessWidget {
               PrimarySheetButton(
                 icon: Icons.warning_amber_rounded,
                 onPressed: () {
-                  // onPostAction(PostAction.share, post);
+                  context.read<PostDetailCubit>().reportPost(post);
                   Navigator.pop(context);
                 },
                 title: "Report",
