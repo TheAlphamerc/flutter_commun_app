@@ -26,10 +26,17 @@ class PostDetailCubit extends Cubit<PostDetailState>
   PostDetailCubit(this.postRepo, {@required String postId})
       : super(
             const PostDetailState.response(estate: EPostDetailState.loading)) {
-    listenPostToChange = postRepo.listenPostToChange();
-    postSubscription = listenPostToChange.listen(postChangeListener);
     commentController = TextEditingController();
-    getPostDetail(postId);
+
+    /// Listen to post change
+    listenPostToChange = postRepo.listenToPostChange();
+    postSubscription = listenPostToChange.listen(postChangeListener);
+    getPostDetail(postId).then((value) {
+      /// Listen to comments changes
+      listenCommentsChange = postRepo.listenToCommentChange(postId);
+      commentsSubscription = listenCommentsChange.listen(commentChangeListener);
+    });
+    progress = BehaviorSubject<String>();
   }
   List<File> files = [];
   AttachmentType postType = AttachmentType.None;
@@ -40,18 +47,22 @@ class PostDetailCubit extends Cubit<PostDetailState>
     if (postType != type) {
       files = [];
     }
+    files = files ?? [];
     files.add(file);
     postType = type;
-    updatePostModel(state.post, message: "Image Added");
+    updatePostState(state.post, message: "Image Added");
   }
 
   void removeFiles(File file) {
     files.remove(file);
-    updatePostModel(state.post, message: "File Removed");
+    updatePostState(state.post, message: "File Removed");
   }
 
   @override
   ProfileModel get myUser => getIt<Session>().user;
+
+  Stream<QuerySnapshot> listenCommentsChange;
+  StreamSubscription<QuerySnapshot> commentsSubscription;
 
   @override
   Stream<QuerySnapshot> listenPostToChange;
@@ -65,7 +76,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
-      updatePostModel(model,
+      updatePostState(model,
           estate: EPostDetailState.delete, message: "Post deleted");
       Utility.cprint("Post deleted");
     });
@@ -132,7 +143,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
-      updatePostModel(model, message: "Voted");
+      updatePostState(model, message: "Voted");
       Utility.cprint("Voted Sucess");
     });
   }
@@ -150,7 +161,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
         upVotes: oldModel.upVotes,
         downVotes: oldModel.downVotes,
         shareList: oldModel.shareList);
-    updatePostModel(model);
+    updatePostState(model);
   }
 
   @override
@@ -172,22 +183,73 @@ class PostDetailCubit extends Cubit<PostDetailState>
     }
   }
 
+  void commentChangeListener(QuerySnapshot snapshot) {
+    if (snapshot.docChanges.isEmpty) {
+      return;
+    }
+    final map = snapshot.docChanges.first.doc.data();
+    if (snapshot.metadata.isFromCache) {
+      return;
+    }
+    if (snapshot.docChanges.first.type == DocumentChangeType.added) {
+      var model = PostModel.fromJson(map);
+      model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
+      onCommentAdd(model);
+    } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
+      var model = PostModel.fromJson(map);
+      model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
+      onCommentDelete(model);
+    } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
+      final model = PostModel.fromJson(map);
+      model.copyWith.call(id: snapshot.docChanges.first.doc.id);
+      onPostUpdate(model);
+    }
+  }
+
+  void onCommentDelete(PostModel model) {
+    final list = List<PostModel>.from(state.comments);
+    if (list.any((element) => element.id == model.id)) {
+      list.removeWhere((element) => element.id == model.id);
+      updatePostState(state.post, comments: list);
+    }
+  }
+
+  void onCommentAdd(PostModel model) {
+    final list = state.comments ?? <PostModel>[];
+    list.insert(0, model);
+    updatePostState(state.post, comments: list);
+  }
+
+  void onCommentUpdate(PostModel model) {
+    final list = state.comments ?? <PostModel>[];
+    if (!list.any((element) => element.id == model.id)) {
+      return;
+    }
+    final oldModel = list.firstWhere((element) => element.id == model.id);
+    // ignore: parameter_assignments
+    model = model.copyWith.call(
+        upVotes: oldModel.upVotes,
+        downVotes: oldModel.downVotes,
+        shareList: oldModel.shareList);
+    updatePostState(state.post, comments: list);
+  }
+
   Future getPostDetail(String postId) async {
     final response = await postRepo.getPostDetail(postId);
     response.fold(
-        (l) => updatePostModel(null,
+        (l) => updatePostState(null,
             estate: EPostDetailState.error, message: "Post not found"), (r) {
       getPostComments(postId);
-      updatePostModel(r);
+      updatePostState(r);
     });
   }
 
   Future getPostComments(String postId) async {
     final response = await postRepo.getPostComments(postId);
     response.fold(
-      (l) => updatePostModel(null,
+      (l) => updatePostState(null,
           estate: EPostDetailState.error, message: "Post not found"),
-      (r) => updatePostModel(state.post, comments: r),
+      (r) => updatePostState(state.post, comments: r),
     );
   }
 
@@ -204,20 +266,21 @@ class PostDetailCubit extends Cubit<PostDetailState>
         images: imagePath,
         parentPostId: state.post.id);
 
-    updatePostModel(state.post, estate: EPostDetailState.savingComment);
+    updatePostState(state.post, estate: EPostDetailState.savingComment);
 
     /// Save post in firebase firestore db
     final response = await postRepo.createComment(model);
     response.fold(
       (l) {
         Utility.cprint(l ?? "Operation failed");
-        updatePostModel(state.post,
+        updatePostState(state.post,
             estate: EPostDetailState.error,
             message: Utility.encodeStateMessage(l));
       },
       (r) {
+        files = null;
         commentController.text = "";
-        updatePostModel(state.post, estate: EPostDetailState.saved);
+        updatePostState(state.post, estate: EPostDetailState.saved);
       },
     );
   }
@@ -263,7 +326,19 @@ class PostDetailCubit extends Cubit<PostDetailState>
     );
   }
 
-  void updatePostModel(PostModel model,
+  Future deleteCommentFromServer(BuildContext context, PostModel model) async {
+    final response = await postRepo.deletePost(model);
+    response.fold(
+      (l) {
+        Utility.cprint(l);
+      },
+      (r) {
+        Utility.cprint("Comment deleted");
+      },
+    );
+  }
+
+  void updatePostState(PostModel model,
       {String message,
       EPostDetailState estate = EPostDetailState.loaded,
       List<PostModel> comments}) {
@@ -275,8 +350,17 @@ class PostDetailCubit extends Cubit<PostDetailState>
   }
 
   @override
-  void dispose() {
-    postSubscription.cancel();
-    listenPostToChange.drain();
+  Future<void> close() async {
+    await listenCommentsChange.drain();
+    await commentsSubscription.cancel();
+
+    await listenPostToChange.drain();
+    await postSubscription.cancel();
+
+    listenCommentsChange = null;
+    commentsSubscription = null;
+    postSubscription = null;
+    listenPostToChange = null;
+    return super.close();
   }
 }

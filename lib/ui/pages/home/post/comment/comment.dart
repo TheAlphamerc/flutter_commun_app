@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/cubit/post/detail/post_detail_cubit.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/comment/comment_bottom_control.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/detail/post_detail_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/widget/post_header.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/widget/post_image.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/circular_image.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
@@ -43,26 +46,20 @@ class Comment extends StatelessWidget {
         color: context.theme.iconTheme.color,
       ),
       onPressed: () {
+        FocusManager.instance.primaryFocus.unfocus();
         sheet.displayBottomSheet(
           context,
           headerChild: PostHeader(post: post, contentPadding: EdgeInsets.zero),
           sheetButton: [
-            PrimarySheetButton(
-              icon: MdiIcons.shareAll,
-              onPressed: () {
-                // onPostAction(PostAction.share, post);
-                Navigator.pop(context);
-              },
-              title: "Share",
-            ),
-            PrimarySheetButton(
-              icon: Icons.bookmark,
-              onPressed: () {
-                // onPostAction(PostAction.favourite, post);
-                Navigator.pop(context);
-              },
-              title: "Add to Favourite",
-            ),
+            if (!isMyPost)
+              PrimarySheetButton(
+                icon: Icons.warning_amber_rounded,
+                onPressed: () {
+                  // onPostAction(PostAction.share, post);
+                  Navigator.pop(context);
+                },
+                title: "Report",
+              ),
 
             /// Comment can be edit or delete by post owner only
             if (isMyPost) ...[
@@ -78,6 +75,7 @@ class Comment extends StatelessWidget {
                 icon: Icons.delete,
                 onPressed: () {
                   // onPostAction(PostAction.delete, post);
+                  context.read<PostDetailCubit>().deletePost(post);
                   Navigator.pop(context);
                 },
                 title: "Delete",
@@ -113,16 +111,25 @@ class Comment extends StatelessWidget {
           decoration: BoxDecoration(
               color: KColors.light_gray,
               borderRadius: BorderRadius.circular(8)),
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: "Posted by ", style: TextStyles.headline16(context)),
-                TextSpan(
-                    text: post.description,
-                    style: TextStyles.bodyText15(context)),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "Posted by ",
+                        style: TextStyles.headline16(context)),
+                    TextSpan(
+                        text: post.description,
+                        style: TextStyles.bodyText15(context)),
+                  ],
+                ),
+              ),
+
+              /// Post Images
+              PostImages(list: post.images),
+            ],
           ),
         ),
         subtitle: CommentBottomControl(
@@ -130,6 +137,7 @@ class Comment extends StatelessWidget {
           myUser: myUser,
           onPostAction: (PostAction action, PostModel model) {},
         ),
+        trailing: _trailing(context),
       ),
     );
   }

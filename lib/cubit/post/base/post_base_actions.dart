@@ -16,5 +16,4 @@ abstract class PostBaseActions {
   void onPostUpdate(PostModel model);
   void onPostDelete(PostModel model);
   void postChangeListener(QuerySnapshot snapshot);
-  void dispose();
 }

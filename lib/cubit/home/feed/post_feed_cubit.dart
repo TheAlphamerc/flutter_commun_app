@@ -18,7 +18,7 @@ part 'post_feed_cubit.freezed.dart';
 class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   final PostRepo postrepo;
   PostFeedCubit(this.postrepo) : super(const PostFeedState.initial()) {
-    listenPostToChange = postrepo.listenPostToChange();
+    listenPostToChange = postrepo.listenToPostChange();
     postSubscription = listenPostToChange.listen(postChangeListener);
   }
 
@@ -177,9 +177,12 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   void updatePost(PostModel model) {
     final list = stateFeedList;
-    final index = stateFeedList.indexWhere((element) => element.id == model.id);
-    list[index] = model;
-    updatePostState(list);
+    if (stateFeedList.any((element) => element.id == model.id)) {
+      final index =
+          stateFeedList.indexWhere((element) => element.id == model.id);
+      list[index] = model;
+      updatePostState(list);
+    }
   }
 
   void updatePostState(List<PostModel> list,
@@ -201,8 +204,9 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     listenPostToChange.drain();
     postSubscription.cancel();
+    return super.close();
   }
 }

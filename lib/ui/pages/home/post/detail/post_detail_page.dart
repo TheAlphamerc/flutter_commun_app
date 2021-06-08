@@ -43,9 +43,9 @@ class PostDetailPage extends StatelessWidget {
             ));
   }
 
-  Widget _post(BuildContext context, PostModel model, PostType type) {
+  Widget _post(BuildContext context, PostModel model) {
     return Post(
-      type: type,
+      type: PostType.detail,
       onPostAction: (PostAction action, PostModel model) =>
           handlePostAction(context, action, model),
       post: model,
@@ -134,8 +134,7 @@ class PostDetailPage extends StatelessWidget {
                       builder: (context, state) {
                         return state.estate.when(
                           loading: () => _loader(context),
-                          loaded: () =>
-                              _post(context, state.post, PostType.detail),
+                          loaded: () => _post(context, state.post),
                           erorr: () => Column(children: [Text(state.message)]),
                           delete: () => const SizedBox.shrink(),
                         );

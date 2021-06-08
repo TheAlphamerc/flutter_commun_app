@@ -19,5 +19,6 @@ abstract class PostRepo {
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
       {void Function(FileUploadTaskResponse response) onFileUpload});
   Future<Either<String, List<PostModel>>> getPostLists(String userId);
-  Stream<QuerySnapshot> listenPostToChange();
+  Stream<QuerySnapshot> listenToPostChange();
+  Stream<QuerySnapshot> listenToCommentChange(String parentPostId);
 }

@@ -96,6 +96,9 @@ class Post extends StatelessWidget {
 
   // ignore: avoid_void_async
   void onPostTap(BuildContext context) async {
+    if (type == PostType.detail) {
+      return;
+    }
     final action =
         await context.navigate.push(PostDetailPage.getRoute(post.id));
     if (action != null && action is PostAction) {
@@ -132,7 +135,11 @@ class Post extends StatelessWidget {
           /// Post bottom controls
           if (type != PostType.reply)
             PostBottomControl(
-                model: post, onPostAction: onPostAction, myUser: myUser),
+              model: post,
+              onPostAction: onPostAction,
+              myUser: myUser,
+              type: type,
+            ),
         ],
       ),
     );

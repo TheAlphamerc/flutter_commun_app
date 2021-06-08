@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/detail/post_detail_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
@@ -16,15 +17,22 @@ class PostBottomControl extends StatelessWidget {
   ///
   /// For ex. upVote, downVote, and share the post
   final OnPostAction onPostAction;
+
+  /// Determine the type of post
+  final PostType type;
   const PostBottomControl({
     Key key,
+    this.type,
     @required this.model,
     @required this.onPostAction,
     @required this.myUser,
   }) : super(key: key);
 
   Widget _icon(BuildContext context,
-      {IconData icon, String text, bool isColoredIcon = false}) {
+      {IconData icon,
+      String text,
+      bool isColoredIcon = false,
+      VoidCallback onPressed}) {
     final Color color = context.theme.iconTheme.color;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -44,7 +52,7 @@ class PostBottomControl extends StatelessWidget {
           )
         ],
       ),
-    ).ripple(() {}, radius: 30);
+    ).ripple(onPressed, radius: 30);
   }
 
   Widget _vote(BuildContext context) {
@@ -92,6 +100,19 @@ class PostBottomControl extends StatelessWidget {
     return model.myVoteStatus(myUser.id) == PostVoteStatus.downVote;
   }
 
+  Future openPostDetail(BuildContext context) async {
+    if (type == PostType.detail) {
+      return;
+    }
+    final action =
+        await context.navigate.push(PostDetailPage.getRoute(model.id));
+    if (action != null && action is PostAction) {
+      onPostAction(action, model);
+    } else if (action != null && action is PostModel) {
+      onPostAction(PostAction.modify, action);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -107,10 +128,13 @@ class PostBottomControl extends StatelessWidget {
 
           /// Post views icon
           // TODO: Remove static post view count and add dynamic one
-          _icon(context, icon: Icons.remove_red_eye_outlined, text: "1.2K"),
+          // _icon(context, icon: Icons.remove_red_eye_outlined, text: "1.2K"),
 
           /// Comments Icon
-          _icon(context, icon: MdiIcons.chatOutline, text: model.commentsCount),
+          _icon(context,
+              icon: MdiIcons.chatOutline,
+              text: model.commentsCount,
+              onPressed: () => openPostDetail(context)),
 
           /// Share Icon
           _icon(context, icon: MdiIcons.shareOutline, text: model.shareCount),

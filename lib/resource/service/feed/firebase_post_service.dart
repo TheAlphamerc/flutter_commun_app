@@ -26,10 +26,22 @@ class FirebasePostService {
 
   Future<Either<String, bool>> deletePost(PostModel model) async {
     try {
-      await firestore
-          .collection(CollectionsConstants.feed)
-          .doc(model.id)
-          .delete();
+      if (model.parentPostId != null) {
+        /// Delete if comment post
+        await firestore
+            .collection(CollectionsConstants.comment)
+            .doc(model.parentPostId)
+            .collection(CollectionsConstants.postStatics)
+            .doc(model.id)
+            .delete();
+      } else {
+        /// Delete if post
+        await firestore
+            .collection(CollectionsConstants.feed)
+            .doc(model.id)
+            .delete();
+      }
+
       return const Right(true);
     } catch (e) {
       return Left(e.toString());
@@ -99,6 +111,14 @@ class FirebasePostService {
 
   Stream<QuerySnapshot> listenPostToChange() {
     return firestore.collection(CollectionsConstants.feed).snapshots();
+  }
+
+  Stream<QuerySnapshot> listenToCommentChange(String parentPostId) {
+    return firestore
+        .collection(CollectionsConstants.comment)
+        .doc(parentPostId)
+        .collection(CollectionsConstants.postStatics)
+        .snapshots();
   }
 
   Future<Either<String, bool>> handleVote(PostModel model) async {

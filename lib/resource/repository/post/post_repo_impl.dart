@@ -42,8 +42,13 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
-  Stream<QuerySnapshot> listenPostToChange() {
+  Stream<QuerySnapshot> listenToPostChange() {
     return postService.listenPostToChange();
+  }
+
+  @override
+  Stream<QuerySnapshot> listenToCommentChange(String parentPostId) {
+    return postService.listenToCommentChange(parentPostId);
   }
 
   @override
