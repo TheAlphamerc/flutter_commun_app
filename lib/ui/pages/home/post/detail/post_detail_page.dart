@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/post/detail/post_detail_cubit.dart';
@@ -5,7 +6,10 @@ import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/comment/comment.dart';
+import 'package:flutter_commun_app/ui/pages/home/post/detail/widget/comment_entry_field.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class PostDetailPage extends StatelessWidget {
   final OnPostAction onPostAction;
@@ -18,6 +22,43 @@ class PostDetailPage extends StatelessWidget {
         child: const PostDetailPage(),
       );
     });
+  }
+
+  Widget _comments(BuildContext context, List<PostModel> list) {
+    return list.value.fold(
+        () => const SliverToBoxAdapter(
+              child: SizedBox(),
+            ),
+        (a) => SliverPadding(
+              padding: const EdgeInsets.only(bottom: 70),
+              sliver: SliverList(
+                  delegate: SliverChildListDelegate(list
+                      .map((e) => Comment(
+                            post: e,
+                            type: PostType.reply,
+                            myUser: context.watch<PostDetailCubit>().myUser,
+                            margin: EdgeInsets.zero,
+                          ))
+                      .toList())),
+            ));
+  }
+
+  Widget _post(BuildContext context, PostModel model, PostType type) {
+    return Post(
+      type: type,
+      onPostAction: (PostAction action, PostModel model) =>
+          handlePostAction(context, action, model),
+      post: model,
+      myUser: context.watch<PostDetailCubit>().myUser,
+      margin: EdgeInsets.zero,
+    );
+  }
+
+  Widget _loader(BuildContext context) {
+    return Container(
+        height: context.height - 100,
+        alignment: Alignment.center,
+        child: const CircularProgressIndicator());
   }
 
   void handlePostAction(
@@ -39,16 +80,14 @@ class PostDetailPage extends StatelessWidget {
   }
 
   void listener(BuildContext context, PostDetailState state) {
-    state.map(response: (estate) {
-      estate.estate.mayBeWhen(
-        elseMaybe: () {},
-        delete: () {},
-      );
-    });
+    state.estate.mayBeWhen(
+      elseMaybe: () {},
+      delete: () {},
+    );
   }
 
   Future<bool> onWillPop(BuildContext context) async {
-    Navigator.pop(context, context.read<PostDetailCubit>().statePost);
+    Navigator.pop(context, context.read<PostDetailCubit>().state.post);
     return Future.value(true);
   }
 
@@ -57,31 +96,94 @@ class PostDetailPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () => onWillPop(context),
       child: Scaffold(
-        appBar: AppBar(),
+        backgroundColor: context.theme.backgroundColor,
         body: SizedBox(
-          child: Column(
+          child: Stack(
             children: [
-              BlocConsumer<PostDetailCubit, PostDetailState>(
-                listener: listener,
-                builder: (context, state) {
-                  return state.when(response: (estate, message, model) {
-                    return estate.when(
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      loaded: () => Post(
-                        onPostAction: (PostAction action, PostModel model) =>
-                            handlePostAction(context, action, model),
-                        post: model,
-                        myUser: context.watch<PostDetailCubit>().myUser,
-                      ),
-                      erorr: () => Column(
-                        children: [Text(message)],
-                      ),
-                      delete: () => const SizedBox.shrink(),
-                    );
-                  });
-                },
-              )
+              CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    backgroundColor: context.onPrimary,
+                    title:
+                        Text("Thread", style: TextStyles.headline20(context)),
+                    leading: IconButton(
+                      icon: Icon(CupertinoIcons.chevron_back,
+                          color: context.theme.iconTheme.color),
+                      onPressed: () async {
+                        await onWillPop(context);
+                      },
+                    ),
+                    elevation: 1,
+                    bottom: const PreferredSize(
+                      preferredSize: Size.fromHeight(1),
+                      child: Divider(height: 1),
+                    ),
+                    snap: true,
+                    floating: true,
+                  ),
+                  SliverToBoxAdapter(
+                    child: BlocConsumer<PostDetailCubit, PostDetailState>(
+                      listener: listener,
+                      buildWhen: (previous, current) {
+                        if (current.estate == EPostDetailState.loading ||
+                            current.estate == EPostDetailState.loaded) {
+                          return true;
+                        }
+                        return false;
+                      },
+                      builder: (context, state) {
+                        return state.estate.when(
+                          loading: () => _loader(context),
+                          loaded: () =>
+                              _post(context, state.post, PostType.detail),
+                          erorr: () => Column(children: [Text(state.message)]),
+                          delete: () => const SizedBox.shrink(),
+                        );
+                      },
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      color: context.onPrimary,
+                      child: Row(
+                        children: [
+                          Text("Comments",
+                              style: TextStyles.headline20(context)),
+                          const Spacer(),
+                          TextButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all(
+                                    context.primaryColor)),
+                            child: const Text(
+                              "Newest first",
+                            ),
+                          ),
+                          const Icon(Icons.keyboard_arrow_down, size: 20)
+                        ],
+                      ).hP16,
+                    ),
+                  ),
+                  BlocBuilder<PostDetailCubit, PostDetailState>(
+                    buildWhen: (previous, current) {
+                      if (current.estate == EPostDetailState.loading ||
+                          current.estate == EPostDetailState.loaded) {
+                        return true;
+                      }
+                      return false;
+                    },
+                    builder: (context, state) {
+                      return state.estate.mayBeWhen(
+                        elseMaybe: () => const SliverToBoxAdapter(
+                          child: SizedBox.shrink(),
+                        ),
+                        loaded: () => _comments(context, state.comments),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const CommentEntryField()
             ],
           ),
         ),

@@ -11,6 +11,11 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
+  Future<Either<String, bool>> createComment(PostModel model) async {
+    return postService.createComment(model);
+  }
+
+  @override
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
       {Function(FileUploadTaskResponse response) onFileUpload}) {
     return storageService.uploadFile(file, uploadPath,
@@ -49,5 +54,10 @@ class PostRepoImpl extends PostRepo {
   @override
   Future<Either<String, PostModel>> getPostDetail(String postId) async {
     return postService.getPostDetail(postId);
+  }
+
+  @override
+  Future<Either<String, List<PostModel>>> getPostComments(String postId) {
+    return postService.getPostComments(postId);
   }
 }

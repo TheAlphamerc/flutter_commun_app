@@ -14,6 +14,16 @@ class FirebasePostService {
     return Future.value(const Right(true));
   }
 
+  Future<Either<String, bool>> createComment(PostModel model) async {
+    final json = model.toJson();
+    await firestore
+        .collection(CollectionsConstants.comment)
+        .doc(model.parentPostId)
+        .collection(CollectionsConstants.postStatics)
+        .add(json);
+    return Future.value(const Right(true));
+  }
+
   Future<Either<String, bool>> deletePost(PostModel model) async {
     try {
       await firestore
@@ -117,6 +127,33 @@ class FirebasePostService {
       return Right(model);
     } else {
       return const Left("Post not found");
+    }
+  }
+
+  Future<Either<String, List<PostModel>>> getPostComments(String postId) async {
+    final List<PostModel> _feedlist = [];
+    final querySnapshot = await firestore
+        .collection(CollectionsConstants.comment)
+        .doc(postId)
+        .collection(CollectionsConstants.postStatics)
+        .get();
+    final data = querySnapshot.docs;
+    if (data != null && data.isNotEmpty) {
+      for (var i = 0; i < data.length; i++) {
+        var model = PostModel.fromJson(querySnapshot.docs[i].data());
+        model = model.copyWith.call(id: querySnapshot.docs[i].id);
+        final statics = await getPostStatics(model);
+        statics.fold((l) => null, (r) => model = r);
+        _feedlist.add(model);
+      }
+
+      /// Sort Tweet by time
+      /// It helps to display newest Tweet first.
+      _feedlist.sort((x, y) =>
+          DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
+      return Right(_feedlist);
+    } else {
+      return const Left("No Post found");
     }
   }
 }

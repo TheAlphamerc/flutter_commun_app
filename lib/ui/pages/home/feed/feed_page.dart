@@ -35,7 +35,6 @@ class Feedpage extends StatelessWidget {
     action.when(elseMaybe: () {
       Utility.cprint("${action.toString()} is in development");
     }, delete: () async {
-      Navigator.pop(context);
       await context.read<PostFeedCubit>().deletePost(model);
     }, upVote: () async {
       await context.read<PostFeedCubit>().handleVote(model, isUpVote: true);

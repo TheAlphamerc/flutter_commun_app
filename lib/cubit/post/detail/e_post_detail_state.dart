@@ -1,6 +1,6 @@
 part of 'post_detail_cubit.dart';
 
-enum EPostDetailState { loading, loaded, erorr, delete }
+enum EPostDetailState { loading, loaded, error, delete, savingComment, saved }
 
 extension EAppStateHelper on EPostDetailState {
   T when<T>({
@@ -20,7 +20,7 @@ extension EAppStateHelper on EPostDetailState {
           return loaded.call();
         }
         break;
-      case EPostDetailState.erorr:
+      case EPostDetailState.error:
         if (erorr != null) {
           return erorr.call();
         }
@@ -41,6 +41,8 @@ extension EAppStateHelper on EPostDetailState {
     T Function() loaded,
     T Function() erorr,
     T Function() delete,
+    T Function() savingComment,
+    T Function() saved,
   }) {
     switch (this) {
       case EPostDetailState.loading:
@@ -57,7 +59,7 @@ extension EAppStateHelper on EPostDetailState {
           return elseMaybe();
         }
         break;
-      case EPostDetailState.erorr:
+      case EPostDetailState.error:
         if (erorr != null) {
           return erorr.call();
         } else {
@@ -67,6 +69,20 @@ extension EAppStateHelper on EPostDetailState {
       case EPostDetailState.delete:
         if (delete != null) {
           return delete.call();
+        } else {
+          return elseMaybe();
+        }
+        break;
+      case EPostDetailState.savingComment:
+        if (savingComment != null) {
+          return savingComment.call();
+        } else {
+          return elseMaybe();
+        }
+        break;
+      case EPostDetailState.saved:
+        if (saved != null) {
+          return saved.call();
         } else {
           return elseMaybe();
         }

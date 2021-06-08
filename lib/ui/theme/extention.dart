@@ -177,6 +177,15 @@ extension StringHelper on String {
         '${DateFormat.jm().format(dt)} - ${DateFormat("dd MMM yy").format(dt)}';
     return dat;
   }
+
+  String get toCommentTime {
+    if (this == null || isEmpty) {
+      return '';
+    }
+    final dt = DateTime.parse(this).toLocal();
+    final dat = DateFormat.jm().format(dt);
+    return dat;
+  }
 }
 
 extension ThemeHelper on BuildContext {

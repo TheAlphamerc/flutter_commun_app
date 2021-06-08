@@ -1,7 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 part 'post_model.freezed.dart';
 part 'post_model.g.dart';
+part 'e_post_type.dart';
+part 'e_attachment_type.dart';
 
 @freezed
 abstract class PostModel with _$PostModel {
@@ -11,6 +12,7 @@ abstract class PostModel with _$PostModel {
     String description,
     String createdBy,
     String articleUrl,
+    String parentPostId,
     List<String> comments,
     List<String> images,
     List<String> videos,

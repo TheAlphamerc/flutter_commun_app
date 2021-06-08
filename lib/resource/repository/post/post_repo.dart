@@ -11,9 +11,11 @@ part 'post_repo_impl.dart';
 
 abstract class PostRepo {
   Future<Either<String, bool>> createPost(PostModel model);
+  Future<Either<String, bool>> createComment(PostModel model);
   Future<Either<String, bool>> deletePost(PostModel model);
   Future<Either<String, bool>> handleVote(PostModel model);
   Future<Either<String, PostModel>> getPostDetail(String postId);
+  Future<Either<String, List<PostModel>>> getPostComments(String postId);
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
       {void Function(FileUploadTaskResponse response) onFileUpload});
   Future<Either<String, List<PostModel>>> getPostLists(String userId);

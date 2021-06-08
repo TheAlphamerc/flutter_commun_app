@@ -114,7 +114,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
-      onPostUpdate(model);
+      updatePost(model);
       Utility.cprint("Voted Sucess");
     });
   }

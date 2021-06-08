@@ -5,7 +5,7 @@ import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 abstract class LoaderService {
-  static final LoaderService _instance = CustomLoader.instance;
+  static final LoaderService _instance = CustomLoader();
 
   /// access to the Singleton instance of LoaderService
   static LoaderService get instance => _instance;
@@ -20,18 +20,18 @@ abstract class LoaderService {
 }
 
 class CustomLoader implements LoaderService {
-  static CustomLoader _customLoader;
+  // static CustomLoader _customLoader = CustomLoader();
 
-  static CustomLoader get instance => _customLoader;
+  // static CustomLoader get instance => _customLoader;
 
-  factory CustomLoader() {
-    if (_customLoader != null) {
-      return _customLoader;
-    } else {
-      return _customLoader = CustomLoader._createObject();
-    }
-  }
-  CustomLoader._createObject();
+  // factory CustomLoader() {
+  //   if (_customLoader != null) {
+  //     return _customLoader;
+  //   } else {
+  //     return _customLoader = CustomLoader._createObject();
+  //   }
+  // }
+  // CustomLoader._createObject();
 
   OverlayState _overlayState;
   OverlayEntry _overlayEntry;
