@@ -160,11 +160,13 @@ class _CustomScreenLoader extends StatelessWidget {
                           );
                         },
                       ),
-                      Text(
-                        message,
-                        style: TextStyles.subtitle16(context),
-                        overflow: TextOverflow.ellipsis,
-                      )
+                      Center(
+                        child: Text(
+                          message,
+                          style: TextStyles.subtitle16(context),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ).extended
                     ],
                   ).pT(10).hP8,
               ],

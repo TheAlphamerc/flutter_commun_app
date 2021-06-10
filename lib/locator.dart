@@ -1,4 +1,5 @@
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
+import 'package:flutter_commun_app/resource/service/community/firebase_community_service.dart';
 import 'package:flutter_commun_app/resource/service/feed/firebase_post_service.dart';
 import 'package:flutter_commun_app/resource/service/navigation/navigation_service.dart';
 import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/resource/session/session_impl.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
 import 'package:flutter_commun_app/ui/widget/kit/overlay_loader.dart';
+import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -30,6 +32,8 @@ void setUpDependency() {
       () => FirebaseStorageService(firebase_storage.FirebaseStorage.instance));
   getIt.registerSingleton<FirebasePostService>(
       FirebasePostService(FirebaseFirestore.instance));
+  getIt.registerLazySingleton<FirebaseCommunityService>(
+      () => FirebaseCommunityService(FirebaseFirestore.instance));
 
   /// Flutter service
   getIt.registerSingleton<NavigationService>(NavigationService());
@@ -41,4 +45,6 @@ void setUpDependency() {
   getIt.registerSingleton<Session>(SessionImpl());
   getIt.registerSingleton<PostRepo>(PostRepoImpl(
       getIt<FirebasePostService>(), getIt<FirebaseStorageService>()));
+  getIt.registerLazySingleton<CommunityFeedRepo>(() => CommunityFeedRepoImpl(
+      getIt<FirebaseCommunityService>(), getIt<FirebaseStorageService>()));
 }

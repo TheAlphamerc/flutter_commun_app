@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 abstract class CustomBottomSheet {
   static final CustomBottomSheet _instance = CustomBottomSheetImpl();
@@ -11,14 +12,14 @@ abstract class CustomBottomSheet {
   static CustomBottomSheet get I => _instance;
 
   void displayBottomSheet(BuildContext context,
-      {List<PrimarySheetButton> sheetButton, Widget headerChild});
+      {List<PrimarySheetButton> sheetButton, Widget headerChild, Widget body});
 }
 
 class CustomBottomSheetImpl implements CustomBottomSheet {
   @override
   void displayBottomSheet(BuildContext context,
-      {List<PrimarySheetButton> sheetButton, Widget headerChild}) {
-    showModalBottomSheet(
+      {List<PrimarySheetButton> sheetButton, Widget headerChild, Widget body}) {
+    showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext _) {
         return BottomSheet(
@@ -52,7 +53,8 @@ class CustomBottomSheetImpl implements CustomBottomSheet {
                       })
                     ],
                   ).pV(15),
-                  ...[
+                  if (body != null) body,
+                  if (sheetButton != null) ...[
                     for (var item in sheetButton) item,
                   ],
                   const SizedBox(height: 30)

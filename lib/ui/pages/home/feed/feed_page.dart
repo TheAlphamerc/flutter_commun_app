@@ -86,34 +86,38 @@ class Feedpage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: context.height,
-      width: context.width,
-      alignment: Alignment.center,
-      child: RefreshIndicator(
-        onRefresh: () async {
-          await context.read<PostFeedCubit>().getPosts();
-        },
-        child: CustomScrollView(
-          slivers: [
-            _appbar(context),
-            BlocBuilder<PostFeedCubit, PostFeedState>(
-              builder: (BuildContext context, PostFeedState state) {
-                return state.when(
-                  initial: () => const SliverToBoxAdapter(
-                      child: Center(child: CircularProgressIndicator())),
-                  response: (estate, message) {
-                    return estate.estate.mayBeWhen(
-                      elseMaybe: () =>
-                          const SliverToBoxAdapter(child: SizedBox()),
-                      erorr: () => _noPosts(context),
-                      loaded: () => _postList(context, estate.list),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+    return Scaffold(
+      // appBar: const FeedAppBar(),
+      // bottomNavigationBar: const BottomNavigationMenu(),
+      body: Container(
+        height: context.height,
+        width: context.width,
+        alignment: Alignment.center,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await context.read<PostFeedCubit>().getPosts();
+          },
+          child: CustomScrollView(
+            slivers: [
+              _appbar(context),
+              BlocBuilder<PostFeedCubit, PostFeedState>(
+                builder: (BuildContext context, PostFeedState state) {
+                  return state.when(
+                    initial: () => const SliverToBoxAdapter(
+                        child: Center(child: CircularProgressIndicator())),
+                    response: (estate, message) {
+                      return estate.estate.mayBeWhen(
+                        elseMaybe: () =>
+                            const SliverToBoxAdapter(child: SizedBox()),
+                        erorr: () => _noPosts(context),
+                        loaded: () => _postList(context, estate.list),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

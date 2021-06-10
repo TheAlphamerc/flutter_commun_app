@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_commun_app/cubit/app/bottom_menu/bottom_main_menu_cubit.dart';
 import 'package:flutter_commun_app/ui/pages/post/create_post_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
@@ -15,8 +17,12 @@ class BottomNavigationMenu extends StatelessWidget {
         height: 60,
         child: Row(
           children: [
-            _icon(context, icon: Icons.home, onPressed: () {}).extended,
-            _icon(context, icon: Icons.explore, onPressed: () {}),
+            _icon(context, icon: Icons.home, onPressed: () {
+              context.read<BottomMainMenuCubit>().updateCurrentPageIndex(0);
+            }).extended,
+            _icon(context, icon: Icons.explore, onPressed: () {
+              context.read<BottomMainMenuCubit>().updateCurrentPageIndex(1);
+            }),
             FloatingActionButton(
               onPressed: () {
                 Navigator.push(context, CreatePostPage.getRoute());

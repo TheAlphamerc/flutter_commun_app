@@ -19,7 +19,7 @@ class FirebasePostService {
     await firestore
         .collection(CollectionsConstants.comment)
         .doc(model.parentPostId)
-        .collection(CollectionsConstants.postStatics)
+        .collection(CollectionsConstants.statics)
         .add(json);
     return Future.value(const Right(true));
   }
@@ -31,7 +31,7 @@ class FirebasePostService {
         await firestore
             .collection(CollectionsConstants.comment)
             .doc(model.parentPostId)
-            .collection(CollectionsConstants.postStatics)
+            .collection(CollectionsConstants.statics)
             .doc(model.id)
             .delete();
       } else {
@@ -76,7 +76,7 @@ class FirebasePostService {
     final querySnapshot = await firestore
         .collection(CollectionsConstants.feed)
         .doc(post.id)
-        .collection(CollectionsConstants.postStatics)
+        .collection(CollectionsConstants.statics)
         .get();
     final data = querySnapshot.docs;
     if (data != null && data.isNotEmpty) {
@@ -117,7 +117,7 @@ class FirebasePostService {
     return firestore
         .collection(CollectionsConstants.comment)
         .doc(parentPostId)
-        .collection(CollectionsConstants.postStatics)
+        .collection(CollectionsConstants.statics)
         .snapshots();
   }
 
@@ -128,7 +128,7 @@ class FirebasePostService {
     firestore
         .collection(CollectionsConstants.feed)
         .doc(model.id)
-        .collection(CollectionsConstants.postStatics)
+        .collection(CollectionsConstants.statics)
         .doc(CollectionsConstants.postVote)
         .set({"upVote": upVote, "downVote": downVote});
     return Future.value(const Right(true));
@@ -155,7 +155,7 @@ class FirebasePostService {
     final querySnapshot = await firestore
         .collection(CollectionsConstants.comment)
         .doc(postId)
-        .collection(CollectionsConstants.postStatics)
+        .collection(CollectionsConstants.statics)
         .get();
     final data = querySnapshot.docs;
     if (data != null && data.isNotEmpty) {
