@@ -1,5 +1,6 @@
 part of 'post_model.dart';
 
+// ignore: constant_identifier_names
 enum AttachmentType { Video, Image, Document, Poll, Quiz, Question, None }
 
 // value used for calculation
@@ -46,7 +47,7 @@ AttachmentType decodeFileUploadKey(String value) {
       ?.key;
 }
 
-extension convertor on AttachmentType {
+extension AttachmentTypeHelper on AttachmentType {
   String encode() => _$PostTypeMap[this];
   String get value => _$PostTypeMapLabel[this];
   String get fileUploadKey => _$PostTypeFileUploadLabel[this];

@@ -4,14 +4,13 @@ import 'package:flutter_commun_app/cubit/app/bottom_menu/bottom_main_menu_cubit.
 import 'package:flutter_commun_app/cubit/community/feed/community_feed_cubit.dart';
 import 'package:flutter_commun_app/cubit/home/feed/post_feed_cubit.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
 import 'package:flutter_commun_app/ui/pages/community/community_feed.dart';
-import 'package:flutter_commun_app/ui/pages/community/widget/community_feed_app_bar.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/feed_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/bottom_navigation_menu.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/feed_app_bar.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);

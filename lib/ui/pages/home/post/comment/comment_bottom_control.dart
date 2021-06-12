@@ -23,30 +23,6 @@ class CommentBottomControl extends StatelessWidget {
     @required this.myUser,
   }) : super(key: key);
 
-  Widget _icon(BuildContext context,
-      {IconData icon, String text, bool isColoredIcon = false}) {
-    final Color color = context.theme.iconTheme.color;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Icon(
-            icon,
-            size: 24,
-            color: isColoredIcon ? context.primaryColor : color,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: TextStyles.subtitle14(context)
-                .copyWith(color: color, fontSize: 12),
-          )
-        ],
-      ),
-    ).ripple(() {}, radius: 30);
-  }
-
   Widget _vote(BuildContext context) {
     final Color color = context.theme.iconTheme.color;
     return Container(

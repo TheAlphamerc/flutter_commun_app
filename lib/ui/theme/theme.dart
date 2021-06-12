@@ -1,13 +1,11 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_commun_app/ui/theme/index.dart';
+export 'package:flutter_commun_app/ui/theme/index.dart';
 export 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 part 'color/light_colors.dart';
-part 'text_styles.dart';
-part 'extention.dart';
 part 'decoration/box_decorations.dart';
+part 'text_styles.dart';
 
 // ignore: constant_identifier_names
 enum ThemeType { LIGHT, DARK }

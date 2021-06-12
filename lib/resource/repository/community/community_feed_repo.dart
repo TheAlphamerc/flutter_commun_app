@@ -15,6 +15,11 @@ abstract class CommunityFeedRepo {
   Future<Either<String, bool>> updateCommunity(CommunityModel model);
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
       {Function(FileUploadTaskResponse response) onFileUpload});
-  Future<Either<String, List<CommunityModel>>> getCommunitiesList();
-  Future<Either<String, bool>> joinCommunity(String communityId, String userId);
+  Future<Either<String, List<CommunityModel>>> getCommunitiesList(
+      String userId);
+  Future<Either<String, bool>> joinCommunity(
+      {String communityId, String userId, MemberRole role});
+
+  Future<Either<String, bool>> leaveCommunity(
+      {String communityId, String userId});
 }

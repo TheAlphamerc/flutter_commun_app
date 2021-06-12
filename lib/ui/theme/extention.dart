@@ -1,4 +1,4 @@
-part of 'theme.dart';
+part of 'index.dart';
 
 extension TextStyleHelpers on TextStyle {
   TextStyle get bold => copyWith(fontWeight: FontWeight.bold);
@@ -175,6 +175,15 @@ extension StringHelper on String {
     final dt = DateTime.parse(this).toLocal();
     final dat =
         '${DateFormat.jm().format(dt)} - ${DateFormat("dd MMM yy").format(dt)}';
+    return dat;
+  }
+
+  String get toHMTime {
+    if (this == null || isEmpty) {
+      return '';
+    }
+    final dt = DateTime.parse(this).toLocal();
+    final dat = DateFormat("hh:mm:ss").format(dt);
     return dat;
   }
 

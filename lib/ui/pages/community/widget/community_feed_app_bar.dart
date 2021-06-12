@@ -1,21 +1,22 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/community/create/create_community_cubit.dart';
-import 'package:flutter_commun_app/cubit/community/feed/community_feed_cubit.dart';
 import 'package:flutter_commun_app/helper/file_utility.dart';
 import 'package:flutter_commun_app/helper/images.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
+import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield2.dart';
 import 'package:flutter_commun_app/ui/widget/painter/circle_border_painter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
-  const CommunityFeedAppBar({Key key}) : super(key: key);
+  final Function(CommunityModel model) onCommunityCreated;
+  const CommunityFeedAppBar({Key key, this.onCommunityCreated})
+      : super(key: key);
 
   void createCommunity(BuildContext context) {
     showCupertinoModalBottomSheet(
@@ -79,10 +80,12 @@ class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
                         if (state.estate == ECreateCommunityState.saved) {
                           Utility.displaySnackbar(context,
                               msg: "Community Created successfully");
+                          onCommunityCreated(state.community);
+
                           Navigator.pop(context);
                         }
                       },
-                      child: _button(context,
+                      child: _createCommunityButton(context,
                               title: "Create Community",
                               padding: const EdgeInsets.symmetric(vertical: 15))
                           .pB(30),
@@ -95,7 +98,7 @@ class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
     );
   }
 
-  Widget _button(BuildContext context,
+  Widget _createCommunityButton(BuildContext context,
       {String title,
       Color backgroundColor,
       EdgeInsetsGeometry padding = const EdgeInsets.symmetric(vertical: 20)}) {
@@ -168,6 +171,9 @@ class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
             createCommunity(context);
           },
           mini: true,
+          elevation: 0,
+          heroTag: "Create_Community",
+          tooltip: "Create Community",
           child: const Icon(Icons.add),
         ))
       ],

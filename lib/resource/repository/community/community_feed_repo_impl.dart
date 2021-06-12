@@ -24,13 +24,22 @@ class CommunityFeedRepoImpl implements CommunityFeedRepo {
   }
 
   @override
-  Future<Either<String, List<CommunityModel>>> getCommunitiesList() {
-    return communService.getCommunitiesList();
+  Future<Either<String, List<CommunityModel>>> getCommunitiesList(
+      String userId) {
+    return communService.getCommunitiesList(userId);
   }
 
   @override
   Future<Either<String, bool>> joinCommunity(
-      String communityId, String userId) async {
-    return communService.joinCommunity(communityId, userId);
+      {String communityId, String userId, MemberRole role}) async {
+    return communService.joinCommunity(
+        communityId: communityId, userId: userId, role: role);
+  }
+
+  @override
+  Future<Either<String, bool>> leaveCommunity(
+      {String communityId, String userId}) {
+    return communService.leaveCommunity(
+        communityId: communityId, userId: userId);
   }
 }

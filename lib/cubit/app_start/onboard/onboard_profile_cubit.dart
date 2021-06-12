@@ -9,7 +9,6 @@ import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/ui/widget/kit/overlay_loader.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'e_onboard_profile_state.dart';

@@ -11,6 +11,7 @@ class CommunityTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isJoined = model.myRole != MemberRole.notDefine.encode();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: context.onPrimary,
@@ -30,12 +31,16 @@ class CommunityTile extends StatelessWidget {
             ],
           ).extended,
           Chip(
-            label: Text("Join",
-                style: TextStyles.headline16(context).onPrimary(context)),
-            backgroundColor: context.primaryColor,
-          )
+                  label: Text(isJoined ? "Joined" : "Join",
+                      style: TextStyles.headline16(context).copyWith(
+                          color: !isJoined
+                              ? context.onPrimary
+                              : context.primaryColor)),
+                  backgroundColor:
+                      isJoined ? KColors.light_gray : context.primaryColor)
+              .ripple(onJoinButtonPressed, radius: 40)
         ],
       ),
-    ).ripple(onJoinButtonPressed);
+    );
   }
 }

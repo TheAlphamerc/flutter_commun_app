@@ -5,7 +5,7 @@ import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/ui/pages/community/widget/community_feed_app_bar.dart';
 import 'package:flutter_commun_app/ui/pages/community/widget/community_tile.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:flutter_commun_app/ui/widget/kit/alert.dart';
 
 class CommunityFeed extends StatelessWidget {
   const CommunityFeed({Key key}) : super(key: key);
@@ -15,8 +15,41 @@ class CommunityFeed extends StatelessWidget {
     });
   }
 
-  Widget _communityList(List<CommunityModel> list) {
-    return Container();
+  Widget _noCommunityJoined(BuildContext context) {
+    return SliverToBoxAdapter(
+        child: SizedBox(
+      height: context.height * .2,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("No Joined community found",
+              style: TextStyles.headline16(context)),
+          Text(
+            "Looks like you haven't joined any community yet",
+            style: TextStyles.subtitle14(context),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ));
+  }
+
+  void onCommunityCreated(BuildContext context, CommunityModel model) {
+    context.read<CommunityFeedCubit>().onCommunityCreated(model);
+  }
+
+  void handleJoinButtonPressed(BuildContext context, CommunityModel model) {
+    if (model.myRole == MemberRole.notDefine.encode()) {
+      context.read<CommunityFeedCubit>().joinCommunity(model.id);
+    } else {
+      Alert.confirmDialog(
+        context,
+        message: "Are you sure you want to leave community ?",
+        onConfirm: () {
+          context.read<CommunityFeedCubit>().leaveCommunity(model.id);
+        },
+      );
+    }
   }
 
   void stateListener(BuildContext context, CommunityFeedState state) {}
@@ -24,40 +57,82 @@ class CommunityFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: const CommunityFeedAppBar(),
+        backgroundColor: KColors.background,
+        appBar: CommunityFeedAppBar(
+          onCommunityCreated: (model) => onCommunityCreated(context, model),
+        ),
         body: BlocConsumer<CommunityFeedCubit, CommunityFeedState>(
           listener: stateListener,
           builder: (context, state) {
             return SizedBox(
               child: RefreshIndicator(
-                onRefresh: () async {
-                  context.read<CommunityFeedCubit>().getCommunitiesList();
-                },
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Text(
-                        "My Communities",
-                        style: TextStyles.headline20(context),
-                      ).p16,
-                    ),
-                    if (state.list.notNullAndEmpty)
-                      SliverList(
-                        delegate: SliverChildListDelegate(
-                          state.list
-                              .map((e) => CommunityTile(
-                                  model: e,
-                                  onJoinButtonPressed: () {
-                                    context
-                                        .read<CommunityFeedCubit>()
-                                        .joinCommunity(e.id);
-                                  }))
-                              .toList(),
-                        ),
-                      )
-                  ],
-                ),
-              ),
+                  onRefresh: () async {
+                    context.read<CommunityFeedCubit>().getCommunitiesList();
+                  },
+                  child: state.estate.mayBeWhen(
+                    initial: () {
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                    elseMaybe: () {
+                      return CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Text(
+                              "My Communities",
+                              style: TextStyles.headline20(context),
+                            ).p16,
+                          ),
+                          context
+                              .watch<CommunityFeedCubit>()
+                              .myCommunity
+                              .value
+                              .fold(
+                                () => _noCommunityJoined(context),
+                                (list) =>
+                                    // if (state.list.notNullAndEmpty)
+                                    SliverList(
+                                  delegate: SliverChildListDelegate(
+                                    list
+                                        .map((e) => CommunityTile(
+                                            model: e,
+                                            onJoinButtonPressed: () =>
+                                                handleJoinButtonPressed(
+                                                    context, e)))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                          SliverToBoxAdapter(
+                            child: Text(
+                              "Trending",
+                              style: TextStyles.headline20(context),
+                            ).p16,
+                          ),
+                          context
+                              .watch<CommunityFeedCubit>()
+                              .otheCommunity
+                              .value
+                              .fold(
+                                () =>
+                                    const SliverToBoxAdapter(child: SizedBox()),
+                                (list) => SliverList(
+                                  delegate: SliverChildListDelegate(
+                                    list
+                                        .map((e) => CommunityTile(
+                                            model: e,
+                                            onJoinButtonPressed: () {
+                                              context
+                                                  .read<CommunityFeedCubit>()
+                                                  .joinCommunity(e.id);
+                                            }))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                        ],
+                      );
+                    },
+                  )),
             );
           },
         ),

@@ -35,14 +35,22 @@ class Utility {
   }
 
   static void cprint(String message,
-      {dynamic error, String label, StackTrace stackTrace}) {
+      {dynamic error,
+      String label,
+      StackTrace stackTrace,
+      bool enableLogger = false}) {
     if (kDebugMode) {
       // ignore: avoid_print
       if (error != null) {
         logger.e(label ?? 'Log', error, stackTrace);
       } else {
-        // ignore: avoid_print
-        print("[${label ?? 'Log'}] $message");
+        if (enableLogger) {
+          logger.i(
+              "[${label ?? 'Log'}] ${DateTime.now().toIso8601String().toHMTime} $message");
+        } else {
+          // ignore: avoid_print
+          print("[${label ?? 'Log'}] $message");
+        }
       }
     }
   }

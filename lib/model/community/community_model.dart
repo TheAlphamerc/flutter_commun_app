@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'community_model.g.dart';
 part 'e_social_link_type.dart';
+part 'e_user_role.dart';
 part 'community_model.freezed.dart';
 
 @freezed
@@ -43,6 +44,8 @@ abstract class CommunityModel with _$CommunityModel {
     String description,
     String modifiedAt,
     String createdAt,
+    String createdBy,
+    String myRole,
     List<SocialLink> socialLinks,
   }) = _CommunityModel;
   factory CommunityModel.fromJson(Map<String, dynamic> json) =>

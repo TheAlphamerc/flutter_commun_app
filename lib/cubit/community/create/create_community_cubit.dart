@@ -7,6 +7,7 @@ import 'package:flutter_commun_app/helper/constant.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
+import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
@@ -37,13 +38,14 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState> {
   }
 
   Future createCommunity(BuildContext context) async {
-    bool isValid = formKey.currentState.validate();
+    final bool isValid = formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     var model = CommunityModel(
         name: name.text,
         description: description.text,
+        createdBy: getIt<Session>().user.id,
         coverImage: CoverImage(createdAt: DateTime.now().toIso8601String()));
     DocumentReference doc;
     loader.showLoader(context, message: "Creating");
@@ -56,6 +58,7 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState> {
         image.fold(() {
           image = none();
           updateState(ECreateCommunityState.saved,
+              community: model,
               message: Utility.encodeStateMessage("Community Created"));
         }, (a) async {
           doc = r;
@@ -76,6 +79,7 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState> {
               (r) async {
                 image = none();
                 updateState(ECreateCommunityState.saved,
+                    community: model,
                     message: Utility.encodeStateMessage("File Added"));
               },
             );

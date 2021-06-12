@@ -50,8 +50,16 @@ extension EAppStateHelper on ECommunityFeedState {
     T Function() delete,
     T Function() savingComment,
     T Function() saved,
+    T Function() initial,
   }) {
     switch (this) {
+      case ECommunityFeedState.initial:
+        if (initial != null) {
+          return initial();
+        } else {
+          return elseMaybe();
+        }
+        break;
       case ECommunityFeedState.loading:
         if (loading != null) {
           return loading.call();
