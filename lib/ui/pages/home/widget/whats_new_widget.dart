@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_commun_app/cubit/community/feed/community_feed_cubit.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/post/create_post_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -26,7 +28,8 @@ class WhatsNewWidget extends StatelessWidget {
         ],
       ),
     ).ripple(() {
-      Navigator.push(context, CreatePostPage.getRoute());
+      Navigator.push(context,
+          CreatePostPage.getRoute2(context.read<CommunityFeedCubit>()));
     });
   }
 }

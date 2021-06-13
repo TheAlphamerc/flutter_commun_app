@@ -54,7 +54,7 @@ abstract class CommunityModel with _$CommunityModel {
 
 extension CommunityModelHelper on CommunityModel {
   Map<String, dynamic> get getJson {
-    var map = toJson();
+    final map = toJson();
     map.removeWhere((key, value) => key.contains("coverImage"));
     // map.putIfAbsent(
     //     "coverImage",

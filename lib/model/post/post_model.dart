@@ -6,23 +6,25 @@ part 'e_attachment_type.dart';
 
 @freezed
 abstract class PostModel with _$PostModel {
-  const factory PostModel({
-    String id,
-    String title,
-    String description,
-    String createdBy,
-    String articleUrl,
-    String parentPostId,
-    List<String> comments,
-    List<String> images,
-    List<String> videos,
-    List<String> shareList,
-    List<String> upVotes,
-    List<String> downVotes,
-    List<String> attachments,
-    String modifiedAt,
-    String createdAt,
-  }) = _PostModel;
+  const factory PostModel(
+      {String id,
+      String title,
+      String description,
+      String createdBy,
+      String articleUrl,
+      String parentPostId,
+      List<String> comments,
+      List<String> images,
+      List<String> videos,
+      List<String> shareList,
+      List<String> upVotes,
+      List<String> downVotes,
+      List<String> attachments,
+      String modifiedAt,
+      String createdAt,
+      String communityId,
+      String communityName,
+      String communityAvatar}) = _PostModel;
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 }

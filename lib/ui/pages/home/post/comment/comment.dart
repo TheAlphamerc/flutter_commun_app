@@ -49,7 +49,11 @@ class Comment extends StatelessWidget {
         FocusManager.instance.primaryFocus.unfocus();
         sheet.displayBottomSheet(
           context,
-          headerChild: PostHeader(post: post, contentPadding: EdgeInsets.zero),
+          headerChild: PostHeader(
+            post: post,
+            contentPadding: EdgeInsets.zero,
+            type: type,
+          ),
           sheetButton: [
             if (!isMyPost)
               PrimarySheetButton(

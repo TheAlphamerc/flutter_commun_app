@@ -86,63 +86,62 @@ extension AttachmentTypeHelper on AttachmentType {
     }
   }
 
-  when({
-    Function() image,
-    Function() video,
-    Function() poll,
-    Function() quiz,
-    Function() document,
-    Function() question,
-    Function() elseMaybe,
-  }) {
-    print(this);
-    switch (this) {
-      case AttachmentType.Video:
-        if (video != null) {
-          video.call();
-        } else {
-          if (elseMaybe != null) elseMaybe.call();
-        }
-        break;
-      case AttachmentType.Image:
-        if (image != null) {
-          image.call();
-        } else {
-          if (elseMaybe != null) elseMaybe.call();
-        }
-        break;
-      case AttachmentType.Quiz:
-        if (quiz != null) {
-          quiz.call();
-        } else {
-          if (elseMaybe != null) elseMaybe.call();
-        }
-        break;
-      case AttachmentType.Poll:
-        if (poll != null) {
-          poll.call();
-        } else {
-          if (elseMaybe != null) elseMaybe.call();
-        }
-        break;
-      case AttachmentType.Document:
-        if (document != null) {
-          document.call();
-        } else {
-          if (elseMaybe != null) elseMaybe.call();
-        }
-        break;
-      case AttachmentType.Question:
-        if (question != null) {
-          question.call();
-        } else {
-          if (elseMaybe != null) elseMaybe.call();
-        }
-        break;
-      default:
-        if (elseMaybe != null) elseMaybe.call();
-    }
-  }
+  // when({
+  //   Function() image,
+  //   Function() video,
+  //   Function() poll,
+  //   Function() quiz,
+  //   Function() document,
+  //   Function() question,
+  //   Function() elseMaybe,
+  // }) {
+  //   switch (this) {
+  //     case AttachmentType.Video:
+  //       if (video != null) {
+  //         video.call();
+  //       } else {
+  //         if (elseMaybe != null) elseMaybe.call();
+  //       }
+  //       break;
+  //     case AttachmentType.Image:
+  //       if (image != null) {
+  //         image.call();
+  //       } else {
+  //         if (elseMaybe != null) elseMaybe.call();
+  //       }
+  //       break;
+  //     case AttachmentType.Quiz:
+  //       if (quiz != null) {
+  //         quiz.call();
+  //       } else {
+  //         if (elseMaybe != null) elseMaybe.call();
+  //       }
+  //       break;
+  //     case AttachmentType.Poll:
+  //       if (poll != null) {
+  //         poll.call();
+  //       } else {
+  //         if (elseMaybe != null) elseMaybe.call();
+  //       }
+  //       break;
+  //     case AttachmentType.Document:
+  //       if (document != null) {
+  //         document.call();
+  //       } else {
+  //         if (elseMaybe != null) elseMaybe.call();
+  //       }
+  //       break;
+  //     case AttachmentType.Question:
+  //       if (question != null) {
+  //         question.call();
+  //       } else {
+  //         if (elseMaybe != null) elseMaybe.call();
+  //       }
+  //       break;
+  //     default:
+  //       if (elseMaybe != null) elseMaybe.call();
+  //   }
+  // }
 
   T whenMaybe<T>(
     T Function() elseMaybe, {
@@ -153,7 +152,6 @@ extension AttachmentTypeHelper on AttachmentType {
     T Function() document,
     T Function() question,
   }) {
-    print(this);
     switch (this) {
       case AttachmentType.Video:
         if (video != null) {

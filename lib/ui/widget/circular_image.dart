@@ -5,23 +5,32 @@ import 'package:flutter_commun_app/ui/widget/painter/circle_border_painter.dart'
 
 class CircularImage extends StatelessWidget {
   final String path;
-  const CircularImage({Key key, this.path}) : super(key: key);
+  final double stroke;
+  final Color strokeColor;
+  final double height;
+  const CircularImage({
+    Key key,
+    this.path,
+    this.strokeColor = KColors.light_gray,
+    this.stroke = 1,
+    this.height = 40,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: CircleBorderPainter(color: context.disabledColor),
+      painter: CircleBorderPainter(color: strokeColor, stroke: stroke),
       child: SizedBox(
-        height: 40,
-        width: 40,
-        child: path != null
+        height: height,
+        width: height,
+        child: path != null && !path.contains("object-not-found")
             ? CircleAvatar(
                 radius: 20,
                 key: const ValueKey("user-profile"),
                 backgroundColor: KColors.light_gray,
                 backgroundImage: NetworkImage(path),
               )
-            : Image.asset(Images.onBoardPicFour),
+            : Image.asset(Images.defaultUser),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/constant.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
@@ -18,32 +19,33 @@ part 'create_post_state.dart';
 
 class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
   final PostRepo postRepo;
-  CreatePostCubit({this.postRepo}) : super(const CreatePostState.initial()) {
-    getProfile().then((value) => null);
+  CreatePostCubit({this.postRepo, @required CommunityModel community})
+      : super(
+            const CreatePostState.response(estate: ECreatePostState.initial)) {
     description = TextEditingController();
     progress = BehaviorSubject<String>();
+    setCommunity(community);
+  }
+  void setCommunity(CommunityModel community) {
+    updateState(ECreatePostState.fileAdded,
+        message: "Community updated", model: community);
   }
 
+  /// Add file
   void addFiles(List<File> list) {
     files ??= <File>[];
     files.addAll(list);
-    emit(CreatePostState.response(
-        estate: ECreatePostState.fileAdded,
-        message: Utility.encodeStateMessage("File Addded")));
+    updateState(ECreatePostState.fileAdded, message: "File Added");
   }
 
+  /// Remove file
   void removeFile(File file) {
     files.remove(file);
     if (files.isEmpty) {
       files = null;
     }
-    emit(CreatePostState.response(
-        estate: ECreatePostState.fileRemoved,
-        message: Utility.encodeStateMessage("File Removed")));
-  }
 
-  Future getProfile() async {
-    user = await getIt<Session>().getUserProfile();
+    updateState(ECreatePostState.fileRemoved, message: "File Removed");
   }
 
   Future<void> createPost(BuildContext context) async {
@@ -56,22 +58,23 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
         description: description.text,
         createdBy: user.id,
         createdAt: DateTime.now().toUtc().toIso8601String(),
-        images: imagePath);
-    emit(const CreatePostState.response(estate: ECreatePostState.saving));
+        images: imagePath,
+        communityId: state.community.id,
+        communityAvatar: state.community.avatar,
+        communityName: state.community.name);
+
+    updateState(ECreatePostState.saving);
 
     /// Save post in firebase firestore db
     final response = await postRepo.createPost(model);
     response.fold(
       (l) {
         Utility.cprint(l ?? "Operation failed");
-        emit(CreatePostState.response(
-            estate: ECreatePostState.eror,
-            message: l ?? "Post created failed"));
+        updateState(ECreatePostState.eror, message: "Post created failed");
       },
       (r) {
-        emit(const CreatePostState.response(
-            estate: ECreatePostState.saved,
-            message: "Post created successfully"));
+        updateState(ECreatePostState.saved,
+            message: "Post created successfully");
       },
     );
   }
@@ -118,6 +121,14 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
     );
   }
 
+  void updateState(ECreatePostState estate,
+      {String message, CommunityModel model}) {
+    emit(CreatePostState.response(
+        estate: estate,
+        community: model ?? state.community,
+        message: Utility.encodeStateMessage(message)));
+  }
+
   @override
   Future<void> close() {
     dispose();
@@ -127,9 +138,9 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
 
 mixin CreatePostCubitMixin {
   TextEditingController description;
-  ProfileModel user;
   List<File> files;
   BehaviorSubject<String> progress;
+  ProfileModel get user => getIt<Session>().user;
   void dispose() {
     progress.drain();
     description.dispose();

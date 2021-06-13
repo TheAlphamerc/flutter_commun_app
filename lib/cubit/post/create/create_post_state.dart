@@ -2,9 +2,10 @@ part of 'create_post_cubit.dart';
 
 @freezed
 abstract class CreatePostState with _$CreatePostState {
-  const factory CreatePostState.initial() = _Initial;
   const factory CreatePostState.response(
-      {ECreatePostState estate, String message}) = _Response;
+      {ECreatePostState estate,
+      String message,
+      CommunityModel community}) = _Response;
 }
 
-enum ECreatePostState { saving, saved, eror, fileAdded, fileRemoved }
+enum ECreatePostState { initial, saving, saved, eror, fileAdded, fileRemoved }

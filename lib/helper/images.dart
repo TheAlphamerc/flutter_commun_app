@@ -15,5 +15,6 @@ mixin Images {
   static const String instagramLogo = 'assets/icon/signup/instagram_logo.png';
   static const String phoneIcon = 'assets/icon/signup/phone_icon.png';
 
-  static String defaultUser = 'assets/image/onboard/default_profile_img.png';
+  static const String defaultUser =
+      'assets/image/onboard/default_profile_img.png';
 }

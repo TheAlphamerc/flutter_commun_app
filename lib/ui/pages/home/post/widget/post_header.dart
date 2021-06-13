@@ -4,23 +4,49 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/circular_image.dart';
 
 class PostHeader extends StatelessWidget {
+  final PostModel post;
+
+  /// Widget to be displayed on tailing part of header tile
+  final Widget trailing;
+
+  /// The tile's internal padding.
+
+  ///Insets a [PostHeader]'s contents
+
+  ///If null, EdgeInsets.only(left: 16, right: 16) is used.
+  final EdgeInsetsGeometry contentPadding;
+
+  /// Determine the type of post
+  final PostType type;
+
   const PostHeader(
       {Key key,
       this.post,
       this.trailing,
-      this.contentPadding = const EdgeInsets.only(left: 16, right: 16)})
+      this.contentPadding = const EdgeInsets.only(left: 16, right: 16),
+      this.type})
       : super(key: key);
-  final PostModel post;
-  final Widget trailing;
-  final EdgeInsetsGeometry contentPadding;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const CircularImage(),
+      /// TODO: Use useravatar in case of Comments
+      leading: CircularImage(path: post.communityAvatar),
       contentPadding: contentPadding,
-      title: Text("Posted by", style: TextStyles.headline16(context)),
-      subtitle: Text(post.createdAt.toPostTime,
-          style: TextStyles.bodyText14(context)),
+      title: Text(post.communityName ?? "Posted by",
+          style: TextStyles.headline15(context)),
+      subtitle: RichText(
+        text: TextSpan(children: [
+          TextSpan(
+              text: post.createdAt.toPostTime,
+              style: TextStyles.bodyText14(context).size(12)),
+          if (type != PostType.reply)
+            TextSpan(
+                text: " Posted by",
+                style:
+                    TextStyles.bodyText14(context).primary(context).size(12)),
+        ]),
+      ),
       trailing: trailing,
     );
   }

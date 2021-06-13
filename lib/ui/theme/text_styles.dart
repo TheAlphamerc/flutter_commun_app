@@ -27,6 +27,11 @@ class TextStyles {
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
+  static TextStyle headline15(BuildContext context) =>
+      bodyText15(context).copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      );
 
   static TextStyle headline18(BuildContext context) =>
       headline16(context).copyWith(

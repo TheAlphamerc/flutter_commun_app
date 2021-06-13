@@ -17,13 +17,11 @@ class ImageViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        child: Center(
-          child: InteractiveViewer(
-            minScale: .3,
-            maxScale: 5,
-            child: CachedNetworkImage(imageUrl: path),
-          ),
+      body: Center(
+        child: InteractiveViewer(
+          minScale: .3,
+          maxScale: 5,
+          child: CachedNetworkImage(imageUrl: path),
         ),
       ),
     );
