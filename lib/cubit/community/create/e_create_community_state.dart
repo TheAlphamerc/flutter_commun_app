@@ -1,6 +1,17 @@
 part of 'create_community_cubit.dart';
 
-enum ECreateCommunityState { initial, loading, loaded, error, saving, saved }
+enum ECreateCommunityState {
+  initial,
+  loading,
+  loaded,
+  error,
+  saving,
+  saved,
+  addTopic,
+  removeTpoic,
+  addLink,
+  removeLink
+}
 
 extension EAppStateHelper on ECreateCommunityState {
   T when<T>({

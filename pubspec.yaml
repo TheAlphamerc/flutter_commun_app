@@ -87,6 +87,7 @@ flutter:
     - assets/font/
     - assets/icon/
     - assets/icon/signup/
+    - assets/icon/social/
     - assets/image/
     - assets/image/onboard/
 #   - images/a_dot_burr.jpeg

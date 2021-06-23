@@ -2,7 +2,7 @@ analyzer:
   strong-mode:
     # Will become the default once non-nullable types land
     # https://github.com/dart-lang/sdk/issues/31410#issuecomment-510683629
-    implicit-casts: false
+    implicit-casts: true
   errors:
     # treat missing required parameters as a warning (not a hint)
     missing_required_param: warning

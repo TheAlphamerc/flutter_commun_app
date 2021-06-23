@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_commun_app/ui/widget/form/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
@@ -12,6 +13,7 @@ class KTextField2 extends StatelessWidget {
     this.maxLines = 1,
     this.height = 70,
     this.readOnly = false,
+    this.containerDecoration,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -20,6 +22,7 @@ class KTextField2 extends StatelessWidget {
   final int maxLines;
   final double height;
   final bool readOnly;
+  final Decoration containerDecoration;
 
   Widget field(BuildContext context, Option<bool> val) {
     return TextFormField(
@@ -34,7 +37,7 @@ class KTextField2 extends StatelessWidget {
         isValid: val,
       ),
       readOnly: readOnly,
-      // validator: KValidator.buildValidators(context, type),
+      validator: validators(type, context),
       textInputAction: TextInputAction.next,
     );
   }
@@ -42,8 +45,8 @@ class KTextField2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecorations.outlineBorder(context, radius: 10, width: 1)
-          .copyWith(
+      decoration: containerDecoration ??
+          BoxDecorations.outlineBorder(context, radius: 10, width: 1).copyWith(
               color: !readOnly
                   ? context.onPrimary
                   : context.disabledColor.withOpacity(.07)),
@@ -67,5 +70,26 @@ class KTextField2 extends StatelessWidget {
       border: InputBorder.none,
       suffixIcon: suffixIcon,
     );
+  }
+
+  String Function(String) validators(FieldType choice, BuildContext context) {
+    switch (choice) {
+      case FieldType.name:
+        return KValidator.buildValidators(context, choice);
+      case FieldType.email:
+        return KValidator.buildValidators(context, choice);
+      case FieldType.password:
+        return KValidator.buildValidators(context, choice);
+      case FieldType.phone:
+        return KValidator.buildValidators(context, choice);
+      case FieldType.confirmPassword:
+        return KValidator.buildValidators(context, choice);
+      case FieldType.reset:
+        return KValidator.buildValidators(context, choice);
+      case FieldType.optional:
+        return KValidator.buildValidators(context, choice);
+      default:
+        return KValidator.buildValidators(context, choice);
+    }
   }
 }

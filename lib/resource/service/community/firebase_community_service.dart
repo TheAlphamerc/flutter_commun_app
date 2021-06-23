@@ -11,7 +11,7 @@ class FirebaseCommunityService {
 
   Future<Either<String, DocumentReference>> createCommunity(
       CommunityModel model) async {
-    final json = model.getJson;
+    final json = model.toJson();
     final doc =
         await firestore.collection(CollectionsConstants.community).add(json);
     joinCommunity(
@@ -20,7 +20,7 @@ class FirebaseCommunityService {
   }
 
   Future<Either<String, bool>> updateCommunity(CommunityModel model) async {
-    final json = model.getJson;
+    final json = model.toJson();
     firestore
         .collection(CollectionsConstants.community)
         .doc(model.id)

@@ -9,7 +9,15 @@ enum ESocialLinkType {
   github,
   other,
 }
-const _$ESocialLinkTypeTypeMap = {ESocialLinkType.twitter: 'twitter'};
+const _$ESocialLinkTypeTypeMap = {
+  ESocialLinkType.twitter: 'Twitter',
+  ESocialLinkType.facebook: 'Facebook',
+  ESocialLinkType.github: 'Github',
+  ESocialLinkType.instagram: 'Instagram',
+  ESocialLinkType.linkedin: 'LinkedIn',
+  ESocialLinkType.youtube: 'Youtube',
+  ESocialLinkType.other: 'Website',
+};
 
 extension ESocialLinkTypeHelper on ESocialLinkType {
   String encode() => _$ESocialLinkTypeTypeMap[this];

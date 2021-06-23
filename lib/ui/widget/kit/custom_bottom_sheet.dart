@@ -70,10 +70,16 @@ class CustomBottomSheetImpl implements CustomBottomSheet {
 
 class PrimarySheetButton extends StatelessWidget {
   const PrimarySheetButton(
-      {Key key, this.title, this.icon, this.onPressed, this.color})
+      {Key key,
+      this.title,
+      this.icon,
+      this.onPressed,
+      this.color,
+      this.prefixChild})
       : super(key: key);
   final String title;
   final IconData icon;
+  final Widget prefixChild;
   final VoidCallback onPressed;
   final Color color;
   @override
@@ -83,12 +89,14 @@ class PrimarySheetButton extends StatelessWidget {
             borderRadius: 10, offset: const Offset(0, 0), blurRadius: 0),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            if (prefixChild != null) prefixChild,
             Text(title,
-                style: TextStyles.headline14(context)
-                    .copyWith(color: color ?? context.bodyTextColor)),
-            Icon(icon, color: color ?? context.bodyTextColor)
+                    style: TextStyles.headline14(context)
+                        .copyWith(color: color ?? context.bodyTextColor))
+                .extended,
+            if (icon != null) Icon(icon, color: color ?? context.bodyTextColor)
           ],
         )).ripple(onPressed, radius: 10).pV(10);
   }
