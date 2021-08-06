@@ -9,6 +9,7 @@ import 'package:flutter_commun_app/ui/pages/home/post/widget/post_image.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
+export 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 
 typedef OnPostAction = void Function(PostAction action, PostModel model);
 

@@ -53,6 +53,24 @@ class FirebaseCommunityService {
     }
   }
 
+  Future<Either<String, CommunityModel>> getCommunityById(
+      String id, String userId) async {
+    final docSnapshot = await firestore
+        .collection(CollectionsConstants.community)
+        .doc(id)
+        .get();
+    if (docSnapshot.exists) {
+      final data = docSnapshot.data();
+      var community = CommunityModel.fromJson(data);
+      final role = await getMyRole(community.id, userId);
+      community = community.copyWith.call(myRole: role);
+
+      return Right(community);
+    } else {
+      return const Left("No Community found");
+    }
+  }
+
   Future<String> getMyRole(String communityId, String userId) async {
     final querySnapshot = await firestore
         .collection(CollectionsConstants.community)

@@ -23,7 +23,7 @@ class AppCubit extends Cubit<AppState> {
     response.fold(
       (l) {
         emit(AppState.response(
-            estate: EAppState.loggedIn,
+            estate: EAppState.loggedOut,
             message: Utility.encodeStateMessage(l)));
       },
       (r) async {

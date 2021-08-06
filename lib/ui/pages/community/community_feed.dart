@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/community/feed/community_feed_cubit.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
+import 'package:flutter_commun_app/ui/pages/community/detail/community_profile_page.dart';
 import 'package:flutter_commun_app/ui/pages/community/widget/community_feed_app_bar.dart';
 import 'package:flutter_commun_app/ui/pages/community/widget/community_tile.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -119,12 +120,20 @@ class CommunityFeed extends StatelessWidget {
                                   delegate: SliverChildListDelegate(
                                     list
                                         .map((e) => CommunityTile(
-                                            model: e,
-                                            onJoinButtonPressed: () {
-                                              context
-                                                  .read<CommunityFeedCubit>()
-                                                  .joinCommunity(e.id);
-                                            }))
+                                              model: e,
+                                              onJoinButtonPressed: () {
+                                                context
+                                                    .read<CommunityFeedCubit>()
+                                                    .joinCommunity(e.id);
+                                              },
+                                              onTilePressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  CommunityProfilePage.getRoute(
+                                                      community: e),
+                                                );
+                                              },
+                                            ))
                                         .toList(),
                                   ),
                                 ),

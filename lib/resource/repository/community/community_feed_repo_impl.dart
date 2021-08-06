@@ -30,6 +30,12 @@ class CommunityFeedRepoImpl implements CommunityFeedRepo {
   }
 
   @override
+  Future<Either<String, CommunityModel>> getCommunityById(String id) {
+    final userId = getIt<Session>().user.id;
+    return communService.getCommunityById(id, userId);
+  }
+
+  @override
   Future<Either<String, bool>> joinCommunity(
       {String communityId, String userId, MemberRole role}) async {
     return communService.joinCommunity(

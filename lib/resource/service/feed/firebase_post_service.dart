@@ -72,6 +72,33 @@ class FirebasePostService {
     }
   }
 
+  Future<Either<String, List<PostModel>>> getCommunityPosts(
+      String communityId) async {
+    final List<PostModel> _feedlist = [];
+    final querySnapshot = await firestore
+        .collection(CollectionsConstants.feed)
+        .where("communityId", isEqualTo: communityId)
+        .get();
+    final data = querySnapshot.docs;
+    if (data != null && data.isNotEmpty) {
+      for (var i = 0; i < data.length; i++) {
+        var model = PostModel.fromJson(querySnapshot.docs[i].data());
+        model = model.copyWith.call(id: querySnapshot.docs[i].id);
+        final statics = await getPostStatics(model);
+        statics.fold((l) => null, (r) => model = r);
+        _feedlist.add(model);
+      }
+
+      /// Sort Post by time
+      /// It helps to display newest post first.
+      _feedlist.sort((x, y) =>
+          DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
+      return Right(_feedlist);
+    } else {
+      return const Left("No Post found");
+    }
+  }
+
   Future<Either<String, PostModel>> getPostStatics(PostModel post) async {
     final querySnapshot = await firestore
         .collection(CollectionsConstants.feed)

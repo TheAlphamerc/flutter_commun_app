@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
+import 'package:flutter_commun_app/ui/pages/community/detail/community_profile_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/circular_image.dart';
 
@@ -40,7 +41,13 @@ class CommunityTile extends StatelessWidget {
                     .copyWith(color: KColors.dark_gray),
               ),
             ],
-          ).extended,
+          ).ripple(() {
+            Navigator.push(
+              context,
+              CommunityProfilePage.getRoute(
+                  community: model, communityId: model.id),
+            );
+          }).extended,
           if (onJoinButtonPressed != null)
             Chip(
                     label: Text(isJoined ? "Joined" : "Join",
@@ -50,7 +57,7 @@ class CommunityTile extends StatelessWidget {
                                 : context.primaryColor)),
                     backgroundColor:
                         isJoined ? KColors.light_gray : context.primaryColor)
-                .ripple(onJoinButtonPressed, radius: 40)
+                .ripple(onJoinButtonPressed, radius: 40),
         ],
       ),
     );

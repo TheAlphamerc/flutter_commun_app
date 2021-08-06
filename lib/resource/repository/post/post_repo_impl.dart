@@ -42,6 +42,12 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
+  Future<Either<String, List<PostModel>>> getCommunityPosts(
+      String communityId) {
+    return postService.getCommunityPosts(communityId);
+  }
+
+  @override
   Stream<QuerySnapshot> listenToPostChange() {
     return postService.listenPostToChange();
   }
