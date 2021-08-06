@@ -198,7 +198,11 @@ class FirebaseAuthService {
   Future<Either<String, User>> getFirebaseUser() async {
     try {
       final user = auth.currentUser;
-      return Right(user);
+      if (user != null) {
+        return Right(user);
+      } else {
+        return const Left("Not-Found");
+      }
     } on FirebaseAuthException catch (error) {
       return Left(error.message);
     }
