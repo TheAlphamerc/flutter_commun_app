@@ -8,6 +8,7 @@ import 'package:flutter_commun_app/cubit/post/base/post_base_actions.dart';
 import 'package:flutter_commun_app/helper/constant.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
@@ -57,6 +58,9 @@ class PostDetailCubit extends Cubit<PostDetailState>
     files.remove(file);
     updatePostState(state.post, message: "File Removed");
   }
+
+  @override
+  PageInfo pageInfo = PageInfo(limit: 5);
 
   @override
   ProfileModel get myUser => getIt<Session>().user;

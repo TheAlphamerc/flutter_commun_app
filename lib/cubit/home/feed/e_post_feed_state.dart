@@ -1,8 +1,10 @@
 part of 'post_feed_cubit.dart';
 
 enum EPostFeedState {
+  initial,
   loading,
   loaded,
+  loadingMore,
   erorr,
 }
 const _$EAppStateTypeMap = {EPostFeedState.loading: 'loading'};
@@ -19,11 +21,17 @@ extension EAppStateHelper on EPostFeedState {
   }
 
   T when<T>({
+    @required T Function() initial,
     @required T Function() loading,
     @required T Function() loaded,
     @required T Function() erorr,
   }) {
     switch (this) {
+      case EPostFeedState.initial:
+        if (initial != null) {
+          return initial.call();
+        }
+        break;
       case EPostFeedState.loading:
         if (loading != null) {
           return loading.call();
@@ -46,14 +54,23 @@ extension EAppStateHelper on EPostFeedState {
 
   T mayBeWhen<T>({
     @required T Function() elseMaybe,
+    T Function() initial,
     T Function() loading,
     T Function() loaded,
+    T Function() loadingMore,
     T Function() erorr,
   }) {
     switch (this) {
       case EPostFeedState.loading:
         if (loading != null) {
           return loading.call();
+        } else {
+          return elseMaybe();
+        }
+        break;
+      case EPostFeedState.initial:
+        if (initial != null) {
+          return initial.call();
         } else {
           return elseMaybe();
         }
@@ -68,6 +85,13 @@ extension EAppStateHelper on EPostFeedState {
       case EPostFeedState.erorr:
         if (erorr != null) {
           return erorr.call();
+        } else {
+          return elseMaybe();
+        }
+        break;
+      case EPostFeedState.loadingMore:
+        if (loadingMore != null) {
+          return loadingMore.call();
         } else {
           return elseMaybe();
         }

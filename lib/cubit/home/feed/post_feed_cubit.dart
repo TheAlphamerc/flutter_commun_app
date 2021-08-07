@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_commun_app/cubit/post/base/post_base_actions.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
@@ -17,10 +18,14 @@ part 'post_feed_cubit.freezed.dart';
 
 class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   final PostRepo postrepo;
-  PostFeedCubit(this.postrepo) : super(const PostFeedState.initial()) {
+  PostFeedCubit(this.postrepo)
+      : super(const PostFeedState.response(estate: EPostFeedState.initial)) {
     listenPostToChange = postrepo.listenToPostChange();
     postSubscription = listenPostToChange.listen(postChangeListener);
   }
+
+  @override
+  PageInfo pageInfo = PageInfo(limit: 5);
 
   @override
   Stream<QuerySnapshot> listenPostToChange;
@@ -32,14 +37,36 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   @override
   ProfileModel get myUser => getIt<Session>().user;
 
+  Future getMorePosts() async {
+    if (pageInfo.hasMorePosts) {
+      updatePostState(state.list, estate: EPostFeedState.loadingMore);
+      await getPosts();
+    }
+  }
+
   /// Fetch posts from firebase firestore
   Future getPosts() async {
-    final response = await postrepo.getPostLists("");
+    final response = await postrepo.getPostLists("", pageInfo);
     response.fold(
-      (l) => updatePostState(null,
-          error: "Post not available", estate: EPostFeedState.erorr),
-      (r) => updatePostState(r),
-    );
+        (l) => updatePostState(null,
+            error: "Post not available", estate: EPostFeedState.erorr), (r) {
+      var postList = state.list;
+      pageInfo = pageInfo.copyWith(lastSnapshot: r.value2);
+      if (postList == null) {
+        /// Initilised post list for the first time
+        postList = r.value1;
+      } else {
+        /// Add posts in existing post list
+        postList.addAll(r.value1);
+      }
+
+      /// Check if all posts are fetched
+      if (!(r.value1.notNullAndEmpty && r.value1.length == pageInfo.limit)) {
+        pageInfo = pageInfo.copyWith(hasMorePosts: false);
+        logger.i("All posts Fetched");
+      }
+      updatePostState(postList);
+    });
   }
 
   /// Delete posts from firestore
@@ -149,7 +176,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   /// Trigger when some post added to firestore
   void onPostAdded(PostModel model) {
-    final list = stateFeedList ?? <PostModel>[];
+    final list = state.list ?? <PostModel>[];
     list.insert(0, model);
     updatePostState(list);
   }
@@ -157,7 +184,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   /// Trigger when some post updated
   @override
   void onPostUpdate(PostModel model) {
-    final list = stateFeedList;
+    final list = state.list;
     if (!list.any((element) => element.id == model.id)) {
       return;
     }
@@ -173,7 +200,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   /// Trigger when some posts deleted
   @override
   void onPostDelete(PostModel model) {
-    final list = List<PostModel>.from(stateFeedList);
+    final list = List<PostModel>.from(state.list);
     if (list.any((element) => element.id == model.id)) {
       list.removeWhere((element) => element.id == model.id);
       updatePostState(list);
@@ -181,10 +208,9 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   }
 
   void updatePost(PostModel model) {
-    final list = stateFeedList;
-    if (stateFeedList.any((element) => element.id == model.id)) {
-      final index =
-          stateFeedList.indexWhere((element) => element.id == model.id);
+    final list = state.list;
+    if (state.list.any((element) => element.id == model.id)) {
+      final index = state.list.indexWhere((element) => element.id == model.id);
       list[index] = model;
       updatePostState(list);
     }
@@ -193,19 +219,10 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   void updatePostState(List<PostModel> list,
       {String error, EPostFeedState estate = EPostFeedState.loaded}) {
     emit(PostFeedState.response(
-      estate: StateResponse(estate: estate, list: list),
-      message: Utility.encodeStateMessage(error),
+      estate: estate ?? state.estate,
+      list: list ?? state.list,
+      message: Utility.encodeStateMessage(error ?? ""),
     ));
-  }
-
-  /// Retrieve posts from state
-  List<PostModel> get stateFeedList {
-    return state.when(
-      initial: () => null,
-      response: (estate, message) {
-        return estate.list;
-      },
-    );
   }
 
   @override

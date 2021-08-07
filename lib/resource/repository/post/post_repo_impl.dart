@@ -37,8 +37,9 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
-  Future<Either<String, List<PostModel>>> getPostLists(String userId) {
-    return postService.getPostLists(userId);
+  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
+      getPostLists(String userId, PageInfo pageinfo) {
+    return postService.getPostLists(userId, pageinfo);
   }
 
   @override

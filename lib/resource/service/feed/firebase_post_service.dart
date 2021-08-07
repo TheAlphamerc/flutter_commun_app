@@ -49,10 +49,16 @@ class FirebasePostService {
     }
   }
 
-  Future<Either<String, List<PostModel>>> getPostLists(String userId) async {
+  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
+      getPostLists(String userId, PageInfo pageInfo) async {
     final List<PostModel> _feedlist = [];
-    final querySnapshot =
-        await firestore.collection(CollectionsConstants.feed).get();
+    QueryDocumentSnapshot lastSnapshot;
+    var query = firestore
+        .collection(CollectionsConstants.feed)
+        .orderBy("createdAt", descending: true);
+    ;
+    query = _prepareQuery(query, pageInfo);
+    final querySnapshot = await query.get();
     final data = querySnapshot.docs;
     if (data != null && data.isNotEmpty) {
       for (var i = 0; i < data.length; i++) {
@@ -63,11 +69,11 @@ class FirebasePostService {
         _feedlist.add(model);
       }
 
-      /// Sort Tweet by time
-      /// It helps to display newest Tweet first.
+      lastSnapshot = querySnapshot.docs.last;
+
       _feedlist.sort((x, y) =>
           DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
-      return Right(_feedlist);
+      return Right(Tuple2(_feedlist, lastSnapshot));
     } else {
       return const Left("No Post found");
     }
@@ -81,14 +87,8 @@ class FirebasePostService {
         .collection(CollectionsConstants.feed)
         .where("communityId", isEqualTo: communityId)
         .orderBy("createdAt", descending: true);
-    if (option != null) {
-      if (option.lastSnapshot != null) {
-        query = query.startAfterDocument(option.lastSnapshot);
-      }
-      if (option.limit != null) {
-        query = query.limit(option.limit);
-      }
-    }
+    query = _prepareQuery(query, option);
+
     final querySnapshot = await query.get();
     final data = querySnapshot.docs;
     if (data != null && data.isNotEmpty) {
@@ -102,10 +102,6 @@ class FirebasePostService {
       }
       lastSnapshot = querySnapshot.docs.last;
 
-      /// Sort Post by time
-      /// It helps to display newest post first.
-      // _feedlist.sort((x, y) =>
-      //     DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
       return Right(Tuple2(_feedlist, lastSnapshot));
     } else {
       return const Left("No Post found");
@@ -215,5 +211,20 @@ class FirebasePostService {
     } else {
       return const Left("No Post found");
     }
+  }
+
+  Query _prepareQuery(Query query, PageInfo pageInfo) {
+    if (option != null) {
+      if (pageInfo.lastSnapshot != null) {
+        // ignore: parameter_assignments
+        query = query.startAfterDocument(pageInfo.lastSnapshot);
+      }
+      if (pageInfo.limit != null) {
+        // ignore: parameter_assignments
+        query = query.limit(pageInfo.limit);
+      }
+    }
+
+    return query;
   }
 }

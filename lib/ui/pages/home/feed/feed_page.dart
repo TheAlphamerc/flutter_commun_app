@@ -9,6 +9,7 @@ import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/whats_new_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
+import 'package:flutter_commun_app/ui/widget/lazy_load_scrollview.dart';
 
 class Feedpage extends StatelessWidget {
   const Feedpage({Key key}) : super(key: key);
@@ -16,16 +17,27 @@ class Feedpage extends StatelessWidget {
   Widget _postList(BuildContext context, List<PostModel> list) {
     return SliverList(
       delegate: SliverChildListDelegate(
-        list
-            .map(
-              (post) => Post(
-                post: post,
-                onPostAction: (action, model) =>
-                    onPostAction(context, action, model),
-                myUser: getIt<Session>().user,
-              ),
-            )
-            .toList(),
+        [
+          ...list
+              .map(
+                (post) => Post(
+                  post: post,
+                  onPostAction: (action, model) =>
+                      onPostAction(context, action, model),
+                  myUser: getIt<Session>().user,
+                ),
+              )
+              .toList(),
+          BlocBuilder<PostFeedCubit, PostFeedState>(
+            builder: (context, state) {
+              return state.estate.mayBeWhen(
+                elseMaybe: () => const SizedBox(),
+                loadingMore: () => const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2)),
+              );
+            },
+          ),
+        ],
         addAutomaticKeepAlives: false,
       ),
     );
@@ -87,8 +99,6 @@ class Feedpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: const FeedAppBar(),
-      // bottomNavigationBar: const BottomNavigationMenu(),
       body: Container(
         height: context.height,
         width: context.width,
@@ -97,26 +107,29 @@ class Feedpage extends StatelessWidget {
           onRefresh: () async {
             await context.read<PostFeedCubit>().getPosts();
           },
-          child: CustomScrollView(
-            slivers: [
-              _appbar(context),
-              BlocBuilder<PostFeedCubit, PostFeedState>(
-                builder: (BuildContext context, PostFeedState state) {
-                  return state.when(
-                    initial: () => const SliverToBoxAdapter(
-                        child: Center(child: CircularProgressIndicator())),
-                    response: (estate, message) {
-                      return estate.estate.mayBeWhen(
-                        elseMaybe: () =>
-                            const SliverToBoxAdapter(child: SizedBox()),
-                        erorr: () => _noPosts(context),
-                        loaded: () => _postList(context, estate.list),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
+          child: LazyLoadScrollView(
+            onEndOfPage: () async {
+              await context.read<PostFeedCubit>().getMorePosts();
+            },
+            child: CustomScrollView(
+              slivers: [
+                _appbar(context),
+                BlocBuilder<PostFeedCubit, PostFeedState>(
+                  builder: (BuildContext context, PostFeedState state) {
+                    return state.estate.mayBeWhen(
+                      elseMaybe: () => const SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      loaded: () => _postList(context, state.list),
+                      erorr: () => _noPosts(context),
+                      loadingMore: () => _postList(context, state.list),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

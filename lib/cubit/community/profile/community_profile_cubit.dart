@@ -43,7 +43,6 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
       postRepo: postRepo,
     );
   }
-  PageInfo option = PageInfo(limit: 5);
 
   Future getCommunityById(String communityId) async {
     final response = await communRepo.getCommunityById(communityId);
@@ -57,7 +56,7 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
   }
 
   Future getMorePosts() async {
-    if (option.hasMorePosts) {
+    if (pageInfo.hasMorePosts) {
       updateState(estate: EcommunityProfileState.loadingMore);
       await getCommunityPost(state.community.id);
     }
@@ -65,24 +64,22 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
 
   Future getCommunityPost(String communityId) async {
     final response =
-        await postRepo.getCommunityPosts(communityId, option: option);
+        await postRepo.getCommunityPosts(communityId, option: pageInfo);
     response.fold(
       (l) => updateState(posts: []),
       (r) {
-        option = option.copyWith(lastSnapshot: r.value2);
-        var oldPOsts = state.posts;
-        if (oldPOsts.notNullAndEmpty) {
-          oldPOsts.addAll(r.value1);
-          logger.i("Posts fetched");
+        pageInfo = pageInfo.copyWith(lastSnapshot: r.value2);
+        var postList = state.posts;
+        if (postList.notNullAndEmpty) {
+          postList.addAll(r.value1);
         } else {
-          oldPOsts = r.value1;
-          logger.i("Posts fetched");
+          postList = r.value1;
         }
-        if (!(r.value1.notNullAndEmpty && r.value1.length == option.limit)) {
-          option = option.copyWith(hasMorePosts: false);
+        if (!(r.value1.notNullAndEmpty && r.value1.length == pageInfo.limit)) {
+          pageInfo = pageInfo.copyWith(hasMorePosts: false);
           logger.i("All posts Fetched");
         }
-        updateState(posts: oldPOsts);
+        updateState(posts: postList);
       },
     );
   }
@@ -157,6 +154,9 @@ class PostOperationMixin implements PostBaseActions {
     this.onPostDeleted = onPostDeleted;
     this.onPostAdded = onPostAdded;
   }
+
+  @override
+  PageInfo pageInfo = PageInfo(limit: 5);
 
   @override
   Stream<QuerySnapshot> listenPostToChange;
