@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_commun_app/helper/collections_constants.dart';
+import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 
 class FirebasePostService {
@@ -72,28 +73,40 @@ class FirebasePostService {
     }
   }
 
-  Future<Either<String, List<PostModel>>> getCommunityPosts(
-      String communityId) async {
+  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
+      getCommunityPosts(String communityId, {PageInfo option}) async {
     final List<PostModel> _feedlist = [];
-    final querySnapshot = await firestore
+    QueryDocumentSnapshot lastSnapshot;
+    var query = firestore
         .collection(CollectionsConstants.feed)
         .where("communityId", isEqualTo: communityId)
-        .get();
+        .orderBy("createdAt", descending: true);
+    if (option != null) {
+      if (option.lastSnapshot != null) {
+        query = query.startAfterDocument(option.lastSnapshot);
+      }
+      if (option.limit != null) {
+        query = query.limit(option.limit);
+      }
+    }
+    final querySnapshot = await query.get();
     final data = querySnapshot.docs;
     if (data != null && data.isNotEmpty) {
       for (var i = 0; i < data.length; i++) {
         var model = PostModel.fromJson(querySnapshot.docs[i].data());
+
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
         final statics = await getPostStatics(model);
         statics.fold((l) => null, (r) => model = r);
         _feedlist.add(model);
       }
+      lastSnapshot = querySnapshot.docs.last;
 
       /// Sort Post by time
       /// It helps to display newest post first.
-      _feedlist.sort((x, y) =>
-          DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
-      return Right(_feedlist);
+      // _feedlist.sort((x, y) =>
+      //     DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
+      return Right(Tuple2(_feedlist, lastSnapshot));
     } else {
       return const Left("No Post found");
     }

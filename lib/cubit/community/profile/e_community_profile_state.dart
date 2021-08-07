@@ -1,6 +1,6 @@
 part of 'community_profile_cubit.dart';
 
-enum EcommunityProfileState { initial, loaded }
+enum EcommunityProfileState { initial, loaded, loadingMore }
 const _$EcommunityProfileStateTypeMap = {
   EcommunityProfileState.initial: 'initial'
 };
@@ -33,6 +33,7 @@ extension EcommunityProfileStateHelper on EcommunityProfileState {
     @required T Function() elseMaybe,
     T Function() initial,
     T Function() loaded,
+    T Function() loadingMore,
   }) {
     switch (this) {
       case EcommunityProfileState.initial:
@@ -45,6 +46,13 @@ extension EcommunityProfileStateHelper on EcommunityProfileState {
       case EcommunityProfileState.loaded:
         if (loaded != null) {
           return loaded.call();
+        } else {
+          return elseMaybe();
+        }
+        break;
+      case EcommunityProfileState.loadingMore:
+        if (loadingMore != null) {
+          return loadingMore.call();
         } else {
           return elseMaybe();
         }

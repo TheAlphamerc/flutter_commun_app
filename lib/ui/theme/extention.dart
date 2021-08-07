@@ -228,7 +228,22 @@ extension ListHelper<T> on List<T> {
     }
   }
 
+  /// Check if list is not null and not empty
   bool get notNullAndEmpty => this != null && isNotEmpty;
+
+  Widget on({
+    Widget Function() ifNull,
+    Widget Function() ifEmpty,
+    Widget Function() ifValue,
+  }) {
+    if (this == null) {
+      return ifNull();
+    } else if (isEmpty) {
+      return ifEmpty();
+    } else {
+      return ifValue();
+    }
+  }
 }
 
 extension ApplocalisationHelper on BuildContext {

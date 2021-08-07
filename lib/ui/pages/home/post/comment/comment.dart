@@ -45,6 +45,7 @@ class Comment extends StatelessWidget {
         Icons.more_vert,
         color: context.theme.iconTheme.color,
       ),
+      alignment: Alignment.topCenter,
       onPressed: () {
         FocusManager.instance.primaryFocus.unfocus();
         sheet.displayBottomSheet(
@@ -109,39 +110,49 @@ class Comment extends StatelessWidget {
       color: context.onPrimary,
       margin: margin,
       child: ListTile(
-        leading: const CircularImage(),
-        title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-              color: KColors.light_gray,
-              borderRadius: BorderRadius.circular(8)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: "Posted by ",
-                        style: TextStyles.headline16(context)),
-                    TextSpan(
-                        text: post.description,
-                        style: TextStyles.bodyText15(context)),
-                  ],
-                ),
-              ),
+        visualDensity: VisualDensity.compact,
+        contentPadding: EdgeInsets.zero,
+        horizontalTitleGap: 0,
+        minLeadingWidth: 50,
+        isThreeLine: true,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CircularImage().hP8,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              decoration: BoxDecoration(
+                  color: KColors.light_gray,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "Posted by ",
+                            style: TextStyles.headline16(context)),
+                        TextSpan(
+                            text: post.description,
+                            style: TextStyles.bodyText15(context)),
+                      ],
+                    ),
+                  ),
 
-              /// Post Images
-              PostImages(list: post.images),
-            ],
-          ),
+                  /// Post Images
+                  PostImages(list: post.images),
+                ],
+              ),
+            ).extended,
+            _trailing(context),
+          ],
         ),
         subtitle: CommentBottomControl(
           model: post,
           myUser: myUser,
           onPostAction: (PostAction action, PostModel model) {},
-        ),
-        trailing: _trailing(context),
+        ).pL(40),
       ),
     );
   }

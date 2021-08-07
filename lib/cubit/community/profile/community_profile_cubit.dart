@@ -6,6 +6,7 @@ import 'package:flutter_commun_app/cubit/post/base/post_base_actions.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
+import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
@@ -13,9 +14,9 @@ import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'community_profile_cubit.freezed.dart';
 part 'community_profile_state.dart';
 part 'e_community_profile_state.dart';
-part 'community_profile_cubit.freezed.dart';
 
 class CommunityProfileCubit extends Cubit<CommunityProfileState>
     with PostOperationMixin {
@@ -27,7 +28,7 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
             EcommunityProfileState.initial)) {
     if (community != null) {
       updateState(community: community);
-      getCommunityPost(communityId).then((value) => null);
+      getCommunityPost(community.id).then((value) => null);
     } else {
       getCommunityById(communityId).then((value) => null);
     }
@@ -35,13 +36,14 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
     listenPostToChange = postRepo.listenToPostChange();
     postSubscription = listenPostToChange.listen(postChangeListener);
 
-    init(
+    initPostMixin(
       onPostAdded: _onPostAdded,
       onPostDeleted: _onPostDelete,
       onPostUpdated: updatePost,
       postRepo: postRepo,
     );
   }
+  PageInfo option = PageInfo(limit: 5);
 
   Future getCommunityById(String communityId) async {
     final response = await communRepo.getCommunityById(communityId);
@@ -49,43 +51,51 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
       (l) => null,
       (r) async {
         updateState(community: r);
-        await getCommunityPost(communityId);
+        await getCommunityPost(state.community.id);
       },
     );
   }
 
+  Future getMorePosts() async {
+    if (option.hasMorePosts) {
+      updateState(estate: EcommunityProfileState.loadingMore);
+      await getCommunityPost(state.community.id);
+    }
+  }
+
   Future getCommunityPost(String communityId) async {
-    final response = await postRepo.getCommunityPosts(communityId);
+    final response =
+        await postRepo.getCommunityPosts(communityId, option: option);
     response.fold(
-      (l) => null,
+      (l) => updateState(posts: []),
       (r) {
-        updateState(posts: r);
+        option = option.copyWith(lastSnapshot: r.value2);
+        var oldPOsts = state.posts;
+        if (oldPOsts.notNullAndEmpty) {
+          oldPOsts.addAll(r.value1);
+          logger.i("Posts fetched");
+        } else {
+          oldPOsts = r.value1;
+          logger.i("Posts fetched");
+        }
+        if (!(r.value1.notNullAndEmpty && r.value1.length == option.limit)) {
+          option = option.copyWith(hasMorePosts: false);
+          logger.i("All posts Fetched");
+        }
+        updateState(posts: oldPOsts);
       },
     );
   }
 
   /// Trigger when some post added to firestore
   void _onPostAdded(PostModel model) {
+    if (model.communityId != state.community.id) {
+      return;
+    }
     final list = state.posts ?? <PostModel>[];
     list.insert(0, model);
     updateState(posts: list);
   }
-
-  /// Trigger when some post updated
-
-  // void _onPostUpdate(PostModel model) {
-  //   final list = state.posts;
-  //   if (!list.any((element) => element.id == model.id)) {
-  //     return;
-  //   }
-  //   final oldModel = list.firstWhere((element) => element.id == model.id);
-  //   // ignore: parameter_assignments
-  //   model = model.copyWith.call(
-  //       upVotes: oldModel.upVotes,
-  //       downVotes: oldModel.downVotes,
-  //       shareList: oldModel.shareList);
-  //   updatePost(model);
-  // }
 
   /// Trigger when some posts deleted
   void _onPostDelete(PostModel model) {
@@ -131,12 +141,12 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
 
 class PostOperationMixin implements PostBaseActions {
   PostRepo _postRepo;
-  Function(PostModel model) onPostUpdated;
-  Function(PostModel model) onPostDeleted;
-  Function(PostModel model) onPostAdded;
+  void Function(PostModel model) onPostUpdated;
+  void Function(PostModel model) onPostDeleted;
+  void Function(PostModel model) onPostAdded;
 
   /// Initilise mixin parameters
-  void init({
+  void initPostMixin({
     PostRepo postRepo,
     Function(PostModel model) onPostUpdated,
     Function(PostModel model) onPostDeleted,

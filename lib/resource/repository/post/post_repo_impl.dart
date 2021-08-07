@@ -42,9 +42,9 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
-  Future<Either<String, List<PostModel>>> getCommunityPosts(
-      String communityId) {
-    return postService.getCommunityPosts(communityId);
+  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
+      getCommunityPosts(String communityId, {PageInfo option}) {
+    return postService.getCommunityPosts(communityId, option: option);
   }
 
   @override

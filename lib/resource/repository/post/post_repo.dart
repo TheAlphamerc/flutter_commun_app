@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
@@ -19,7 +20,8 @@ abstract class PostRepo {
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
       {void Function(FileUploadTaskResponse response) onFileUpload});
   Future<Either<String, List<PostModel>>> getPostLists(String userId);
-  Future<Either<String, List<PostModel>>> getCommunityPosts(String communityId);
+  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
+      getCommunityPosts(String communityId, {PageInfo option});
   Stream<QuerySnapshot> listenToPostChange();
   Stream<QuerySnapshot> listenToCommentChange(String parentPostId);
 }
