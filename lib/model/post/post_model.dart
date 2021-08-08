@@ -1,3 +1,4 @@
+import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'post_model.freezed.dart';
 part 'post_model.g.dart';
@@ -24,7 +25,8 @@ abstract class PostModel with _$PostModel {
       String createdAt,
       String communityId,
       String communityName,
-      String communityAvatar}) = _PostModel;
+      String communityAvatar,
+      ProfileModel user}) = _PostModel;
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 }

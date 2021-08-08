@@ -61,7 +61,14 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
         images: imagePath,
         communityId: state.community.id,
         communityAvatar: state.community.avatar,
-        communityName: state.community.name);
+        communityName: state.community.name,
+        user: ProfileModel(
+          id: user.id,
+          name: user.name,
+          photoURL: user.photoURL,
+          isVerified: user.isVerified,
+          username: user.username,
+        ));
 
     updateState(ECreatePostState.saving);
 

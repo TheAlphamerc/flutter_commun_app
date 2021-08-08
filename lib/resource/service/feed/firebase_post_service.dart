@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_commun_app/helper/collections_constants.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 
@@ -10,7 +11,7 @@ class FirebasePostService {
   FirebasePostService(this.firestore);
 
   Future<Either<String, bool>> createPost(PostModel model) async {
-    final json = model.toJson();
+    final json = Utility.getMap(model.toJson(), removeNullValue: true);
     await firestore.collection(CollectionsConstants.feed).add(json);
     return Future.value(const Right(true));
   }
@@ -56,7 +57,7 @@ class FirebasePostService {
     var query = firestore
         .collection(CollectionsConstants.feed)
         .orderBy("createdAt", descending: true);
-    ;
+
     query = _prepareQuery(query, pageInfo);
     final querySnapshot = await query.get();
     final data = querySnapshot.docs;

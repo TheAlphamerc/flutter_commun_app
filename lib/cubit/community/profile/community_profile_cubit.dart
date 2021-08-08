@@ -282,6 +282,6 @@ class PostOperationMixin implements PostBaseActions {
   /// Trigger when some posts deleted
   @override
   void onPostDelete(PostModel model) {
-    onPostDelete(model);
+    onPostDeleted(model);
   }
 }

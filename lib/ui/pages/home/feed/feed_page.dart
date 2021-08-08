@@ -9,6 +9,7 @@ import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/whats_new_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
+import 'package:flutter_commun_app/ui/widget/kit/alert.dart';
 import 'package:flutter_commun_app/ui/widget/lazy_load_scrollview.dart';
 
 class Feedpage extends StatelessWidget {
@@ -25,6 +26,7 @@ class Feedpage extends StatelessWidget {
                   onPostAction: (action, model) =>
                       onPostAction(context, action, model),
                   myUser: getIt<Session>().user,
+                  isFeedPost: true,
                 ),
               )
               .toList(),
@@ -47,7 +49,13 @@ class Feedpage extends StatelessWidget {
     action.when(elseMaybe: () {
       Utility.cprint("${action.toString()} is in development");
     }, delete: () async {
-      await context.read<PostFeedCubit>().deletePost(model);
+      Alert.confirmDialog(
+        context,
+        message: "Are you sure you want to delete this post ?",
+        onConfirm: () async {
+          await context.read<PostFeedCubit>().deletePost(model);
+        },
+      );
     }, upVote: () async {
       await context.read<PostFeedCubit>().handleVote(model, isUpVote: true);
     }, downVote: () async {

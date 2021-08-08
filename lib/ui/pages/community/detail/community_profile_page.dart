@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/cubit/community/profile/community_profile_cubit.dart';
 import 'package:flutter_commun_app/ui/widget/circular_image.dart';
 import 'package:flutter_commun_app/ui/widget/image_viewer.dart';
+import 'package:flutter_commun_app/ui/widget/kit/alert.dart';
 import 'package:flutter_commun_app/ui/widget/lazy_load_scrollview.dart';
 
 class CommunityProfilePage extends StatelessWidget {
@@ -146,6 +148,33 @@ class CommunityProfilePage extends StatelessWidget {
 class CommunityPostsList extends StatelessWidget {
   const CommunityPostsList({Key key, this.posts}) : super(key: key);
   final List<PostModel> posts;
+
+  void onPostAction(BuildContext context, PostAction action, PostModel model) {
+    action.when(elseMaybe: () {
+      Utility.cprint("${action.toString()} is in development");
+    }, delete: () async {
+      Alert.confirmDialog(
+        context,
+        message: "Are you sure you want to delete this post ?",
+        onConfirm: () async {
+          await context.read<CommunityProfileCubit>().deletePost(model);
+        },
+      );
+    }, upVote: () async {
+      await context
+          .read<CommunityProfileCubit>()
+          .handleVote(model, isUpVote: true);
+    }, downVote: () async {
+      await context
+          .read<CommunityProfileCubit>()
+          .handleVote(model, isUpVote: false);
+    }, modify: () {
+      context.read<CommunityProfileCubit>().updatePost(model);
+    }, report: () {
+      context.read<CommunityProfileCubit>().reportPost(model);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return posts.on(
@@ -163,26 +192,8 @@ class CommunityPostsList extends StatelessWidget {
               .map((post) => SizedBox(
                     child: Post(
                       post: post,
-                      onPostAction: (action, model) {
-                        final state = context.read<CommunityProfileCubit>();
-                        action.when(
-                          upVote: () {
-                            state.handleVote(model, isUpVote: true);
-                          },
-                          downVote: () {
-                            state.handleVote(model, isUpVote: false);
-                          },
-                          like: () {},
-                          modify: () {
-                            state.updatePost(model);
-                          },
-                          favourite: () {},
-                          share: () {},
-                          report: () {},
-                          edit: () {},
-                          delete: () {},
-                        );
-                      },
+                      onPostAction: (action, model) =>
+                          onPostAction(context, action, model),
                       myUser: getIt<Session>().user,
                     ),
                   ))

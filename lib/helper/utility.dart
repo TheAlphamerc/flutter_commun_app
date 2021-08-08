@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/locator.dart';
@@ -53,5 +56,17 @@ class Utility {
         }
       }
     }
+  }
+
+  static Map<String, dynamic> getMap(Map<String, dynamic> map,
+      {bool removeNullValue = false}) {
+    assert(map != null);
+    final jsonString = jsonEncode(map);
+    final json2 = jsonDecode(jsonString);
+    final dd = cast<Map<String, dynamic>>(json2);
+    if (removeNullValue) {
+      dd.removeWhere((key, value) => value == null);
+    }
+    return dd;
   }
 }

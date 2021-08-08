@@ -31,13 +31,19 @@ class Post extends StatelessWidget {
   /// Determine the type of post
   final PostType type;
 
+  ///If [isFeedPost] is set to `true`, the community info will be displayed on the post header
+  ///
+  ///If [isFeedPost] is set to `false`, the user info will be displayed  the post header
+  final bool isFeedPost;
+
   const Post({
     Key key,
     this.type = PostType.post,
-    this.margin = const EdgeInsets.symmetric(vertical: 8),
     @required this.post,
     @required this.onPostAction,
     @required this.myUser,
+    this.isFeedPost = false,
+    this.margin = const EdgeInsets.symmetric(vertical: 8),
   }) : super(key: key);
 
   Widget _trailing(BuildContext context) {
@@ -50,7 +56,11 @@ class Post extends StatelessWidget {
       onPressed: () {
         sheet.displayBottomSheet(
           context,
-          headerChild: PostHeader(post: post, contentPadding: EdgeInsets.zero),
+          headerChild: PostHeader(
+            post: post,
+            contentPadding: EdgeInsets.zero,
+            isFeedPost: isFeedPost,
+          ),
           sheetButton: [
             PrimarySheetButton(
               icon: MdiIcons.shareAllOutline,
@@ -82,8 +92,8 @@ class Post extends StatelessWidget {
               PrimarySheetButton(
                 icon: Icons.delete,
                 onPressed: () {
-                  onPostAction(PostAction.delete, post);
                   Navigator.pop(context);
+                  onPostAction(PostAction.delete, post);
                 },
                 title: "Delete",
                 color: KColors.red,
@@ -128,8 +138,11 @@ class Post extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// User tile
-
-          PostHeader(post: post, trailing: _trailing(context)),
+          PostHeader(
+            post: post,
+            trailing: _trailing(context),
+            isFeedPost: isFeedPost,
+          ),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
