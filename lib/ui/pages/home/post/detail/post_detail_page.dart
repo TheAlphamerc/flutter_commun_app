@@ -104,8 +104,8 @@ class PostDetailPage extends StatelessWidget {
                 slivers: [
                   SliverAppBar(
                     backgroundColor: context.onPrimary,
-                    title:
-                        Text("Thread", style: TextStyles.headline20(context)),
+                    title: Text(context.locale.thread,
+                        style: TextStyles.headline20(context)),
                     leading: IconButton(
                       icon: Icon(CupertinoIcons.chevron_back,
                           color: context.theme.iconTheme.color),
@@ -146,7 +146,7 @@ class PostDetailPage extends StatelessWidget {
                       color: context.onPrimary,
                       child: Row(
                         children: [
-                          Text("Comments",
+                          Text(context.locale.comments,
                               style: TextStyles.headline20(context)),
                           const Spacer(),
                           TextButton(
@@ -154,8 +154,8 @@ class PostDetailPage extends StatelessWidget {
                             style: ButtonStyle(
                                 foregroundColor: MaterialStateProperty.all(
                                     context.primaryColor)),
-                            child: const Text(
-                              "Newest first",
+                            child: Text(
+                              context.locale.newest_first,
                             ),
                           ),
                           const Icon(Icons.keyboard_arrow_down, size: 20)

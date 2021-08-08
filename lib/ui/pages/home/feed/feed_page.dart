@@ -47,11 +47,12 @@ class Feedpage extends StatelessWidget {
 
   void onPostAction(BuildContext context, PostAction action, PostModel model) {
     action.when(elseMaybe: () {
-      Utility.cprint("${action.toString()} is in development");
+      Utility.cprint(
+          "${action.toString()} ${context.locale.is_in_development}");
     }, delete: () async {
       Alert.confirmDialog(
         context,
-        message: "Are you sure you want to delete this post ?",
+        message: context.locale.confirm_delete_post,
         onConfirm: () async {
           await context.read<PostFeedCubit>().deletePost(model);
         },
@@ -96,8 +97,9 @@ class Feedpage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("No post avalilable", style: TextStyles.headline16(context)),
-          Text("Wanna see some posts ? Join Community",
+          Text(context.locale.no_post_available,
+              style: TextStyles.headline16(context)),
+          Text(context.locale.wanna_see_post,
               style: TextStyles.subtitle14(context)),
         ],
       ),

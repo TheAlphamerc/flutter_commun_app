@@ -82,7 +82,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("You will post in",
+                  Text(context.locale.you_will_post_in,
                       style: TextStyles.subtitle14(context)
                           .copyWith(fontSize: 10, fontWeight: FontWeight.w500)),
                   const SizedBox(height: 0),
@@ -132,11 +132,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("You will post in",
+                Text(context.locale.you_will_post_in,
                     style: TextStyles.subtitle14(context)
                         .copyWith(fontSize: 10, fontWeight: FontWeight.w500)),
                 const SizedBox(height: 0),
-                Text("Timeline", style: TextStyles.headline16(context)),
+                Text(context.locale.timeline,
+                    style: TextStyles.headline16(context)),
               ],
             ),
             const Spacer(),
@@ -174,7 +175,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           onSaved: (d) {},
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Enter text",
+            hintText: context.locale.enter_text,
             hintStyle: TextStyles.subtitle16(context).normal,
           ),
         ),
@@ -237,7 +238,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     Row(
                       children: [
                         const Spacer(),
-                        Text("Communities",
+                        Text(context.locale.communities,
                             style: TextStyles.headline16(context)),
                         const Spacer(),
                         CircleAvatar(
@@ -322,7 +323,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 Navigator.pop(context);
               },
             ),
-            title: Text("Create Post", style: TextStyles.headline16(context)),
+            title: Text(context.locale.create_post,
+                style: TextStyles.headline16(context)),
             centerTitle: true,
             elevation: 0,
           ),

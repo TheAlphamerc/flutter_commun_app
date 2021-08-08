@@ -57,7 +57,7 @@ class CreateCommunityWidget extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Text("Create Community",
+                                  Text(context.locale.create_community,
                                       style: TextStyles.headline16(context)),
                                   const Spacer(),
                                   CircleAvatar(
@@ -79,16 +79,17 @@ class CreateCommunityWidget extends StatelessWidget {
                                 ],
                               ).pB(40),
                               KTextField2(
-                                type: FieldType.name,
-                                controller:
-                                    context.watch<CreateCommunityCubit>().name,
-                                label: "Community Name",
-                              ).pB(16),
+                                      type: FieldType.name,
+                                      controller: context
+                                          .watch<CreateCommunityCubit>()
+                                          .name,
+                                      label: context.locale.community_name)
+                                  .pB(16),
                               KTextField2(
                                 controller: context
                                     .watch<CreateCommunityCubit>()
                                     .description,
-                                label: "Description",
+                                label: context.locale.description,
                                 type: FieldType.optional,
                                 maxLines: 4,
                               ).pB(40),
@@ -100,7 +101,8 @@ class CreateCommunityWidget extends StatelessWidget {
                         listener: (context, state) {
                           if (state.estate == ECreateCommunityState.saved) {
                             Utility.displaySnackbar(context,
-                                msg: "Community Created successfully");
+                                msg: context
+                                    .locale.community_created_sucessfully);
                             onCommunityCreated(state.community);
 
                             Navigator.pop(context);

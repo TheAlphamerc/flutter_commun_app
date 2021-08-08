@@ -84,7 +84,8 @@ class CreatePostBottomMenu extends StatelessWidget {
               _wrap(Row(
                 children: [
                   const Icon(MdiIcons.fileDocument, size: 18).pR(6),
-                  Text("Article", style: TextStyles.subtitle14(context)),
+                  Text(context.locale.article,
+                      style: TextStyles.subtitle14(context)),
                 ],
               )),
               const Spacer(),
@@ -96,7 +97,7 @@ class CreatePostBottomMenu extends StatelessWidget {
                   label: isLoading
                       ? _loader(context)
                       : Text(
-                          "Post",
+                          context.locale.post,
                           style:
                               TextStyles.headline16(context).onPrimary(context),
                         ),

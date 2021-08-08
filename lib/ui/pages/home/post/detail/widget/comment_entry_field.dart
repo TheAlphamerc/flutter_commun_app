@@ -94,7 +94,7 @@ class CommentEntryField extends StatelessWidget {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 10),
                         alignLabelWithHint: true,
-                        hintText: 'Add a comment',
+                        hintText: context.locale.add_a_comment,
                         hintStyle: TextStyles.subtitle16(context),
                         border: InputBorder.none,
                       ),

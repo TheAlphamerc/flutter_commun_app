@@ -68,7 +68,7 @@ class Post extends StatelessWidget {
                 onPostAction(PostAction.share, post);
                 Navigator.pop(context);
               },
-              title: "Share",
+              title: context.locale.share,
             ),
             PrimarySheetButton(
               icon: Icons.bookmark_border_rounded,
@@ -76,7 +76,7 @@ class Post extends StatelessWidget {
                 onPostAction(PostAction.favourite, post);
                 Navigator.pop(context);
               },
-              title: "Add to Favourite",
+              title: context.locale.add_to_favourite,
             ),
 
             /// Post can be edit or delete by post owner only
@@ -87,7 +87,7 @@ class Post extends StatelessWidget {
                   onPostAction(PostAction.edit, post);
                   Navigator.pop(context);
                 },
-                title: "Edit",
+                title: context.locale.edit,
               ),
               PrimarySheetButton(
                 icon: Icons.delete,
@@ -95,7 +95,7 @@ class Post extends StatelessWidget {
                   Navigator.pop(context);
                   onPostAction(PostAction.delete, post);
                 },
-                title: "Delete",
+                title: context.locale.delete,
                 color: KColors.red,
               ),
             ],
@@ -106,7 +106,7 @@ class Post extends StatelessWidget {
                   onPostAction(PostAction.report, post);
                   Navigator.pop(context);
                 },
-                title: "Report",
+                title: context.locale.report,
               ),
           ],
         );

@@ -151,11 +151,12 @@ class CommunityPostsList extends StatelessWidget {
 
   void onPostAction(BuildContext context, PostAction action, PostModel model) {
     action.when(elseMaybe: () {
-      Utility.cprint("${action.toString()} is in development");
+      Utility.cprint(
+          "${action.toString()} ${context.locale.is_in_development}");
     }, delete: () async {
       Alert.confirmDialog(
         context,
-        message: "Are you sure you want to delete this post ?",
+        message: context.locale.confirm_delete_post,
         onConfirm: () async {
           await context.read<CommunityProfileCubit>().deletePost(model);
         },

@@ -32,7 +32,7 @@ class SelectCommunityTopicSheet extends StatelessWidget {
         KTextField2(
           type: FieldType.text,
           controller: controller,
-          label: "Topic Name",
+          label: context.locale.topic_name,
         ),
         // if (index != 0)
         CircleAvatar(
@@ -91,13 +91,13 @@ class SelectCommunityTopicSheet extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text("Select community tpoics",
+                            Text(context.locale.select_community_topic,
                                 style: TextStyles.headline16(context)),
                             const Spacer(),
                           ],
                         ).pB(40),
                         Image.asset(Images.onBoardPicTwo, height: 100).pV(20),
-                        Text("Topics are needed for recommendation service. In that way, for users, interested in your community will by much easier to find it in list",
+                        Text(context.locale.topic_description_in_community,
                                 style: TextStyles.bodyText15(context),
                                 textAlign: TextAlign.center)
                             .pV(20),
@@ -113,7 +113,7 @@ class SelectCommunityTopicSheet extends StatelessWidget {
                           alignment: Alignment.center,
                           color: context.onPrimary,
                           child: Text(
-                            "+ Add new Topic",
+                            "+ ${context.locale.add_new_topic}",
                             style:
                                 TextStyles.headline16(context).primary(context),
                           ),

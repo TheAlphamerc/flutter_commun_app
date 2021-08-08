@@ -63,7 +63,7 @@ class Comment extends StatelessWidget {
                   context.read<PostDetailCubit>().reportPost(post);
                   Navigator.pop(context);
                 },
-                title: "Report",
+                title: context.locale.report,
               ),
 
             /// Comment can be edit or delete by post owner only
@@ -74,7 +74,7 @@ class Comment extends StatelessWidget {
                   // onPostAction(PostAction.edit, post);
                   Navigator.pop(context);
                 },
-                title: "Edit",
+                title: context.locale.edit,
               ),
               PrimarySheetButton(
                 icon: Icons.delete,
@@ -83,7 +83,7 @@ class Comment extends StatelessWidget {
                   context.read<PostDetailCubit>().deletePost(post);
                   Navigator.pop(context);
                 },
-                title: "Delete",
+                title: context.locale.delete,
                 color: KColors.red,
               ),
             ]

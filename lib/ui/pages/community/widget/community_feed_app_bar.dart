@@ -45,7 +45,7 @@ class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10) +
                       const EdgeInsets.only(bottom: 10),
                   alignLabelWithHint: true,
-                  hintText: 'Search',
+                  hintText: context.locale.search,
                   hintStyle: TextStyles.subtitle16(context),
                   border: InputBorder.none,
                 ),
@@ -65,7 +65,7 @@ class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
           mini: true,
           elevation: 0,
           heroTag: "Create_Community",
-          tooltip: "Create Community",
+          tooltip: context.locale.create_community,
           child: const Icon(Icons.add),
         ))
       ],

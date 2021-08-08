@@ -18,12 +18,12 @@ class FeedAppBar extends StatelessWidget with PreferredSizeWidget {
             Title(
               color: Colors.white,
               child: Text(
-                "My Feed",
+                context.locale.my_feed,
                 style: TextStyles.headline30(context).onPrimary(context),
               ),
             ).pR(15),
             Text(
-              "Trending",
+              context.locale.trending,
               style: TextStyles.headline20(context)
                   .onPrimary(context)
                   .withOpacity(.5),
@@ -44,7 +44,7 @@ class FeedAppBar extends StatelessWidget with PreferredSizeWidget {
               padding: MaterialStateProperty.all(EdgeInsets.zero),
             ),
             child: Text(
-              "Logout",
+              context.locale.logout,
               style: TextStyles.headline14(context).onPrimary(context),
             ),
           ),

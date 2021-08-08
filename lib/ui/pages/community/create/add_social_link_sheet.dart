@@ -58,7 +58,7 @@ class AddSocialLinkSheet extends StatelessWidget {
           KTextField2(
             type: FieldType.url,
             controller: links.controller,
-            label: "Weblink",
+            label: context.locale.weblink,
             containerDecoration: BoxDecoration(
               color: context.onPrimary,
               border: Border(
@@ -103,7 +103,8 @@ class AddSocialLinkSheet extends StatelessWidget {
   void addLinkSheet(BuildContext context) {
     sheet.displayBottomSheet(
       context,
-      headerChild: Text("Add link", style: TextStyles.headline16(context)),
+      headerChild:
+          Text(context.locale.add_link, style: TextStyles.headline16(context)),
       sheetButton: [
         PrimarySheetButton(
           title: "Instagram",
@@ -169,13 +170,13 @@ class AddSocialLinkSheet extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text("Add  Social Links",
+                          Text(context.locale.add_social_links,
                               style: TextStyles.headline16(context)),
                           const Spacer(),
                         ],
                       ).pB(40),
                       Image.asset(Images.onBoardPicTwo, height: 100).pV(20),
-                      Text("You can add a social links for your community, your personal website or any other link you think will give more info about community",
+                      Text(context.locale.social_link_description_in_community,
                               style: TextStyles.bodyText15(context),
                               textAlign: TextAlign.center)
                           .pV(20),
@@ -191,7 +192,7 @@ class AddSocialLinkSheet extends StatelessWidget {
                         alignment: Alignment.center,
                         color: context.onPrimary,
                         child: Text(
-                          "+ Add New Link",
+                          "+ ${context.locale.add_new_link}",
                           style:
                               TextStyles.headline16(context).primary(context),
                         ),
@@ -211,7 +212,7 @@ class AddSocialLinkSheet extends StatelessWidget {
                             currentPage: 2,
                             pageCount: 3,
                             onNextPressed: () => nextPressed(context),
-                            nextButtonText: "Create")
+                            nextButtonText: context.locale.create)
                         .pB(30))
                 .alignBottomCenter,
           ],

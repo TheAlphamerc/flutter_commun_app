@@ -22,7 +22,7 @@ class WhatsNewWidget extends StatelessWidget {
             path: user.photoURL,
           ).pR(12),
           Text(
-            "What's new?",
+            context.locale.whats_new,
             style: TextStyles.subtitle16(context),
           )
         ],

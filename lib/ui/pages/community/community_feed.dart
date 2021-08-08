@@ -23,10 +23,10 @@ class CommunityFeed extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("No Joined community found",
+          Text(context.locale.no_joined_community_found,
               style: TextStyles.headline16(context)),
           Text(
-            "Looks like you haven't joined any community yet",
+            context.locale.havent_joined_community,
             style: TextStyles.subtitle14(context),
             textAlign: TextAlign.center,
           ),
@@ -45,7 +45,7 @@ class CommunityFeed extends StatelessWidget {
     } else {
       Alert.confirmDialog(
         context,
-        message: "Are you sure you want to leave community ?",
+        message: context.locale.confirm_leave_community,
         onConfirm: () {
           context.read<CommunityFeedCubit>().leaveCommunity(model.id);
         },
@@ -79,7 +79,7 @@ class CommunityFeed extends StatelessWidget {
                         slivers: [
                           SliverToBoxAdapter(
                             child: Text(
-                              "My Communities",
+                              context.locale.my_communties,
                               style: TextStyles.headline20(context),
                             ).p16,
                           ),
@@ -105,7 +105,7 @@ class CommunityFeed extends StatelessWidget {
                               ),
                           SliverToBoxAdapter(
                             child: Text(
-                              "Trending",
+                              context.locale.trending,
                               style: TextStyles.headline20(context),
                             ).p16,
                           ),

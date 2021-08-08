@@ -66,15 +66,16 @@ class NavSliderPanel extends StatelessWidget {
             Visibility(
               visible: !hideBackButton,
               replacement: const SizedBox(width: 50),
-              child: _button(context, title: "Back", isPrimary: false,
-                  onPressed: () {
+              child: _button(context,
+                  title: context.locale.back, isPrimary: false, onPressed: () {
                 Navigator.pop(context);
               }),
             ),
             _indicator(context).extended,
             // const Spacer(),
             _button(context,
-                title: nextButtonText ?? "Next", onPressed: onNextPressed),
+                title: nextButtonText ?? context.locale.next,
+                onPressed: onNextPressed),
           ],
         ),
       ),
