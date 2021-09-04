@@ -94,30 +94,67 @@ class FirebaseCommunityService {
 
   Future<Either<String, bool>> joinCommunity(
       {String communityId, String userId, MemberRole role}) async {
+    /// Add user to the commmunity member list
     await firestore
         .collection(CollectionsConstants.community)
         .doc(communityId)
         .collection(CollectionsConstants.statics)
-        .add({"user": userId, "role": role.encode()});
+        .doc(userId)
+        .set({
+      "user": userId,
+      "role": role.encode(),
+      "joinedAt": DateTime.now().toIso8601String()
+    });
+
+    /// Add community id to user communities list
+    await firestore
+        .collection(CollectionsConstants.profile)
+        .doc(userId)
+        .collection(CollectionsConstants.community)
+        .doc(communityId)
+        .set({
+      "communityId": communityId,
+      "role": role.encode(),
+      "joinedAt": DateTime.now().toIso8601String()
+    });
+
+    /// Increase community member count by 1
+    final community = await getCommunityById(communityId, userId);
+    community.fold(
+      (l) => null,
+      (model) =>
+          updateCommunity(model.copyWith(membersCount: model.membersCount + 1)),
+    );
+
     return const Right(true);
   }
 
   Future<Either<String, bool>> leaveCommunity(
       {String communityId, String userId}) async {
-    final snapshot = await firestore
-        .collection(CollectionsConstants.community)
-        .doc(communityId)
-        .collection(CollectionsConstants.statics)
-        .where("user", isEqualTo: userId)
-        .get();
-    final docId = snapshot.docs.first.id;
-
+    /// Remove user from the commmunity member list
     await firestore
         .collection(CollectionsConstants.community)
         .doc(communityId)
         .collection(CollectionsConstants.statics)
-        .doc(docId)
+        .doc(userId)
         .delete();
+
+    /// Remove community id from user communities list
+    await firestore
+        .collection(CollectionsConstants.profile)
+        .doc(userId)
+        .collection(CollectionsConstants.community)
+        .doc(communityId)
+        .delete();
+
+    /// Decrease community members count by 1
+    final community = await getCommunityById(communityId, userId);
+    community.fold(
+      (l) => null,
+      (model) =>
+          updateCommunity(model.copyWith(membersCount: model.membersCount - 1)),
+    );
+
     return const Right(true);
   }
 }

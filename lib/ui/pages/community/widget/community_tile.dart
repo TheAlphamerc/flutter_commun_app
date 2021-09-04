@@ -12,6 +12,11 @@ class CommunityTile extends StatelessWidget {
       {Key key, this.model, this.onJoinButtonPressed, this.onTilePressed})
       : super(key: key);
 
+  int get membersCount {
+    if (model.membersCount == null || model.membersCount == -1) return 0;
+    return model.membersCount;
+  }
+
   Widget _rippleWrapper(BuildContext context, Widget child) {
     if (onJoinButtonPressed == null && onTilePressed != null) {
       return child.ripple(onTilePressed);
@@ -36,7 +41,7 @@ class CommunityTile extends StatelessWidget {
             children: [
               Text(model.name, style: TextStyles.headline16(context)),
               Text(
-                "1000 Followers",
+                "$membersCount Followers",
                 style: TextStyles.bodyText14(context)
                     .copyWith(color: KColors.dark_gray),
               ),

@@ -36,8 +36,9 @@ class PostHeader extends StatelessWidget {
   }) : super(key: key);
 
   String get profileImage =>
-      isFeedPost ? post.communityAvatar : post.user.photoURL;
-  String get profileName => isFeedPost ? post.communityName : post.user.name;
+      isFeedPost ? post.communityAvatar : post.user?.photoURL;
+  String get profileName =>
+      isFeedPost ? post.communityName : post.user?.name ?? "N/A";
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class PostHeader extends StatelessWidget {
                 style: TextStyles.bodyText14(context).size(12)),
             if (type != PostType.reply && isFeedPost)
               TextSpan(
-                text: " ${post.user.name}",
+                text: " ${post.user?.name ?? "N/A"}",
                 style: TextStyles.bodyText14(context).primary(context).size(12),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {

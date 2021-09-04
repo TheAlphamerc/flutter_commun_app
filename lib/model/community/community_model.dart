@@ -55,20 +55,20 @@ class Topic {
 }
 
 class CommunityModel {
-  CommunityModel({
-    this.id,
-    this.name,
-    this.avatar,
-    this.banner,
-    this.topics,
-    this.description,
-    this.socialLinks,
-    this.coverImage,
-    this.modifyAt,
-    this.createdAt,
-    this.myRole,
-    this.createdBy,
-  });
+  CommunityModel(
+      {this.id,
+      this.name,
+      this.avatar,
+      this.banner,
+      this.topics,
+      this.description,
+      this.socialLinks,
+      this.coverImage,
+      this.modifyAt,
+      this.createdAt,
+      this.myRole,
+      this.createdBy,
+      this.membersCount = 0});
 
   final String id;
   final String name;
@@ -80,6 +80,7 @@ class CommunityModel {
   final String createdAt;
   final String myRole;
   final String createdBy;
+  final int membersCount;
   final List<SocialLinkModel> socialLinks;
   final List<CoverImage> coverImage;
 
@@ -93,6 +94,7 @@ class CommunityModel {
     List<SocialLinkModel> socialLinks,
     List<CoverImage> coverImage,
     String modifyAt,
+    int membersCount,
     String myRole,
     String createdAt,
     String createdBy,
@@ -107,6 +109,7 @@ class CommunityModel {
         socialLinks: socialLinks ?? this.socialLinks,
         coverImage: coverImage ?? this.coverImage,
         modifyAt: modifyAt ?? this.modifyAt,
+        membersCount: membersCount ?? this.membersCount,
         createdAt: createdAt ?? this.createdAt,
         myRole: myRole ?? this.myRole,
         createdBy: createdBy ?? this.createdBy,
@@ -135,6 +138,7 @@ class CommunityModel {
             : List<CoverImage>.from(
                 json["coverImage"].map((e) => CoverImage.fromJson(e))),
         description: json["description"],
+        membersCount: json["membersCount"] ?? 0,
         modifyAt: json["modifyAt"],
         createdAt: json["createdAt"],
         myRole: json["myRole"],
@@ -157,6 +161,7 @@ class CommunityModel {
           : List<dynamic>.from(coverImage.map((x) => x.toJson())),
       "description": description,
       "modifyAt": modifyAt,
+      "membersCount": membersCount,
       "createdAt": createdAt,
       "myRole": myRole,
       "createdBy": createdBy,
