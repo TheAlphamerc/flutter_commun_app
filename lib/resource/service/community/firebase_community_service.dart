@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_commun_app/helper/collections_constants.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 
 class FirebaseCommunityService {
@@ -31,14 +32,28 @@ class FirebaseCommunityService {
   Future<Either<String, List<CommunityModel>>> getCommunitiesList(
       String userId) async {
     final List<CommunityModel> _feedlist = [];
+
+    List<CommunityModel> _myCommunityList = [];
+    final reponse = await getCommunitiesByUserId(userId);
+
+    reponse.fold((l) => Future.value(Left(l)), (r) {
+      _myCommunityList = r;
+    });
     final querySnapshot =
         await firestore.collection(CollectionsConstants.community).get();
     final data = querySnapshot.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.notNullAndEmpty) {
       for (var i = 0; i < data.length; i++) {
         var model = CommunityModel.fromJson(querySnapshot.docs[i].data());
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
-        final role = await getMyRole(model.id, userId);
+        String role = '';
+
+        if (_myCommunityList.notNullAndEmpty &&
+            _myCommunityList.any((element) => element.id == model.id)) {
+          role = _myCommunityList
+              .firstWhere((element) => element.id == model.id)
+              .myRole;
+        }
         model = model.copyWith.call(myRole: role);
         _feedlist.add(model);
       }
@@ -48,6 +63,29 @@ class FirebaseCommunityService {
       // _feedlist.sort((x, y) =>
       //     DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
       return Right(_feedlist);
+    } else {
+      return const Left("No Community found");
+    }
+  }
+
+  Future<Either<String, List<CommunityModel>>> getCommunitiesByUserId(
+      String userId) async {
+    final List<CommunityModel> list = [];
+    final querySnapshot = await firestore
+        .collection(CollectionsConstants.profile)
+        .doc(userId)
+        .collection(CollectionsConstants.community)
+        .get();
+
+    final data = querySnapshot.docs;
+    if (data.notNullAndEmpty) {
+      for (var i = 0; i < data.length; i++) {
+        final map = querySnapshot.docs[i].data();
+        final model = CommunityModel.fromJson(map);
+        list.add(model);
+      }
+
+      return Right(list);
     } else {
       return const Left("No Community found");
     }
@@ -106,16 +144,16 @@ class FirebaseCommunityService {
       "joinedAt": DateTime.now().toIso8601String()
     });
 
-    /// Add community id to user communities list
+    /// Add community id to user's communities list
     await firestore
         .collection(CollectionsConstants.profile)
         .doc(userId)
         .collection(CollectionsConstants.community)
         .doc(communityId)
         .set({
-      "communityId": communityId,
-      "role": role.encode(),
-      "joinedAt": DateTime.now().toIso8601String()
+      "id": communityId,
+      "myRole": role.encode(),
+      "createdAt": DateTime.now().toIso8601String()
     });
 
     /// Increase community member count by 1
