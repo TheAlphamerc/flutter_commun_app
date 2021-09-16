@@ -219,6 +219,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   Future onPostSubmit() async {
+    final selectedCommunity = context.read<CreatePostCubit>().state.community;
+
+    if (selectedCommunity == null) {
+      Utility.displaySnackbar(context,
+          msg: "Choose a community before creating first");
+      return;
+    }
     await context.read<CreatePostCubit>().createPost(context);
   }
 
