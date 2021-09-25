@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class KFlatButton extends StatelessWidget {
   const KFlatButton({
-    Key key,
+    Key? key,
     this.onPressed,
-    this.label,
+    required this.label,
     this.isLoading,
     this.color,
     this.labelStyle,
@@ -13,14 +13,14 @@ class KFlatButton extends StatelessWidget {
     this.isColored = true,
     this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String label;
-  final TextStyle labelStyle;
-  final ValueNotifier<bool> isLoading;
+  final TextStyle? labelStyle;
+  final ValueNotifier<bool>? isLoading;
   final bool isWraped;
   final bool isColored;
-  final Color color;
-  final double borderRadius;
+  final Color? color;
+  final double? borderRadius;
   final EdgeInsetsGeometry padding;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class KFlatButton extends StatelessWidget {
       width: isWraped ? null : double.infinity,
       child: ValueListenableBuilder<bool>(
         valueListenable: isLoading ?? ValueNotifier(false),
-        builder: (context, loading, child) {
+        builder: (context, loading, Widget? child) {
           return TextButton(
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(padding),
@@ -54,15 +54,14 @@ class KFlatButton extends StatelessWidget {
                       ),
                     ),
                   )
-                : child,
+                : child!,
           );
         },
-        child: Text(label,
-            style: labelStyle ??
-                Theme.of(context)
-                    .textTheme
-                    .button
-                    .copyWith(color: Colors.white)),
+        child: Text(
+          label,
+          style: labelStyle ??
+              Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
+        ),
       ),
     );
   }

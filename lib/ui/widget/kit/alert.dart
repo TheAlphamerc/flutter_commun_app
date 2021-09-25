@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class Alert {
   static void confirmDialog(
     BuildContext context, {
-    String title,
-    @required String message,
+    String? title,
+    required String message,
     String cancelText = "Cancel",
     String confirmText = "Confirm",
-    VoidCallback onCancel,
-    VoidCallback onConfirm,
+    VoidCallback? onCancel,
+    VoidCallback? onConfirm,
   }) {
     showDialog(
       context: context,
@@ -62,7 +63,7 @@ class Alert {
   }
 
   static void displayDialog(BuildContext context,
-      {String title, @required String message, Widget child}) {
+      {String? title, required String message, required Widget child}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

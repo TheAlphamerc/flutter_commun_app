@@ -13,7 +13,7 @@ import 'package:flutter_commun_app/ui/widget/kit/alert.dart';
 import 'package:flutter_commun_app/ui/widget/lazy_load_scrollview.dart';
 
 class Feedpage extends StatelessWidget {
-  const Feedpage({Key key}) : super(key: key);
+  const Feedpage({Key? key}) : super(key: key);
 
   Widget _postList(BuildContext context, List<PostModel> list) {
     return SliverList(
@@ -25,7 +25,7 @@ class Feedpage extends StatelessWidget {
                   post: post,
                   onPostAction: (action, model) =>
                       onPostAction(context, action, model),
-                  myUser: getIt<Session>().user,
+                  myUser: getIt<Session>().user!,
                   isFeedPost: true,
                 ),
               )
@@ -132,9 +132,9 @@ class Feedpage extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         ),
                       ),
-                      loaded: () => _postList(context, state.list),
+                      loaded: () => _postList(context, state.list!),
                       erorr: () => _noPosts(context),
-                      loadingMore: () => _postList(context, state.list),
+                      loadingMore: () => _postList(context, state.list!),
                     );
                   },
                 ),

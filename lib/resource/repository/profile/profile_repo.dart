@@ -12,5 +12,5 @@ abstract class ProfileRepo {
   Future<Either<String, bool>> updateUserProfile(ProfileModel model);
   Future<Either<String, ProfileModel>> getUserProfile(String userId);
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
-      {void Function(FileUploadTaskResponse response) onFileUpload});
+      {required void Function(FileUploadTaskResponse response) onFileUpload});
 }

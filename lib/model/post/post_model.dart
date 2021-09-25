@@ -7,26 +7,27 @@ part 'e_attachment_type.dart';
 
 @freezed
 abstract class PostModel with _$PostModel {
-  const factory PostModel(
-      {String id,
-      String title,
-      String description,
-      String createdBy,
-      String articleUrl,
-      String parentPostId,
-      List<String> comments,
-      List<String> images,
-      List<String> videos,
-      List<String> shareList,
-      List<String> upVotes,
-      List<String> downVotes,
-      List<String> attachments,
-      String modifiedAt,
-      String createdAt,
-      String communityId,
-      String communityName,
-      String communityAvatar,
-      ProfileModel user}) = _PostModel;
+  const factory PostModel({
+    String? id,
+    String? title,
+    String? description,
+    String? createdBy,
+    String? articleUrl,
+    String? parentPostId,
+    List<String>? comments,
+    List<String>? images,
+    List<String>? videos,
+    List<String>? shareList,
+    List<String>? upVotes,
+    List<String>? downVotes,
+    List<String>? attachments,
+    String? modifiedAt,
+    String? createdAt,
+    String? communityId,
+    String? communityName,
+    String? communityAvatar,
+    ProfileModel? user,
+  }) = _PostModel;
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 }
@@ -34,39 +35,39 @@ abstract class PostModel with _$PostModel {
 extension PostModelHelper on PostModel {
   int get vote {
     if (upVotes != null && downVotes != null) {
-      return upVotes.length - downVotes.length;
+      return upVotes!.length - downVotes!.length;
     }
     if (upVotes != null) {
-      return upVotes.length;
+      return upVotes!.length;
     }
     if (downVotes != null) {
-      return downVotes.length;
+      return downVotes!.length;
     }
     return 0;
   }
 
   String get commentsCount {
-    if (comments != null && comments.isNotEmpty) {
-      return "${comments.length}";
+    if (comments != null && comments!.isNotEmpty) {
+      return "${comments!.length}";
     } else {
       return "";
     }
   }
 
   String get shareCount {
-    if (shareList != null && shareList.isNotEmpty) {
-      return "${shareList.length}";
+    if (shareList != null && shareList!.isNotEmpty) {
+      return "${shareList!.length}";
     } else {
       return "";
     }
   }
 
   PostVoteStatus myVoteStatus(String myuserId) {
-    if (upVotes != null && upVotes.isNotEmpty && upVotes.contains(myuserId)) {
+    if (upVotes != null && upVotes!.isNotEmpty && upVotes!.contains(myuserId)) {
       return PostVoteStatus.upVote;
     } else if (downVotes != null &&
-        downVotes.isNotEmpty &&
-        downVotes.contains(myuserId)) {
+        downVotes!.isNotEmpty &&
+        downVotes!.contains(myuserId)) {
       return PostVoteStatus.downVote;
     } else {
       return PostVoteStatus.noVote;

@@ -11,16 +11,16 @@ part 'auth_repo_impl.dart';
 
 abstract class AuthRepo {
   Future<void> verifyPhoneNumber(String phone,
-      {Function(VerifyPhoneResponse response) onResponse});
+      {required Function(VerifyPhoneResponse response) onResponse});
 
   Future<Either<String, UserCredential>> verifyOTP(
-      {String verificationId, String smsCode});
+      {required String verificationId, required String smsCode});
 
   Future<Either<String, UserCredential>> signupWithEmail(
-      {String email, String password});
+      {required String email, required String password});
 
   Future<Either<String, UserCredential>> signInWithEmail(
-      {String email, String password});
+      {required String email, required String password});
 
   Future<Either<String, bool>> checkUserNameAvailability(String userName);
   Future<Either<String, bool>> checkMobileAvailability(String mobile);

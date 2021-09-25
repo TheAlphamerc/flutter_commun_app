@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,16 +10,15 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
 import 'package:image_picker/image_picker.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class FileUtility {
   /// Pick image from device
   static Future<Option<File>> pickImage() async {
-    final FilePickerResult result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowCompression: true,
-    );
+    final FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
       final PlatformFile file = result.files.first;
-      return some(File(file.path));
+      return some(File(file.path!));
     }
     return none();
   }
@@ -57,7 +58,7 @@ class FileUtility {
       case ImageSource.gallery:
         ImagePicker()
             .getImage(source: ImageSource.gallery, imageQuality: 20)
-            .then((PickedFile file) {
+            .then((PickedFile? file) {
           if (file != null) {
             onSelected(some(File(file.path)));
           } else {
@@ -68,7 +69,7 @@ class FileUtility {
       default:
         ImagePicker()
             .getImage(source: ImageSource.camera, imageQuality: 20)
-            .then((PickedFile file) {
+            .then((PickedFile? file) {
           if (file != null) {
             onSelected(some(File(file.path)));
           } else {

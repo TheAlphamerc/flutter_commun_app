@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
@@ -6,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/helper/constant.dart';
 import 'package:flutter_commun_app/helper/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
+import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/model/community/cover_image_model.dart';
 import 'package:flutter_commun_app/model/community/social_link_model.dart';
+import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter_commun_app/model/community/community_model.dart';
-import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
 
+part 'create_community_cubit.freezed.dart';
 part 'create_community_state.dart';
 part 'e_create_community_state.dart';
-part 'create_community_cubit.freezed.dart';
 
 class CreateCommunityCubit extends Cubit<CreateCommunityState>
     with CreateCommunityMixin, SelectCommunityTopicMxin, SocialLinksTopicMxin {
@@ -33,7 +34,7 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState>
     ];
   }
 
-  void updateImage({Option<File> file, bool isBanner = false}) {
+  void updateImage({required Option<File> file, bool isBanner = false}) {
     if (isBanner) {
       banner = file;
     } else {
@@ -65,12 +66,12 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState>
   }
 
   Future createCommunity(BuildContext context) async {
-    final bool isValid = formKey.currentState.validate();
+    final bool isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
-    List<String> topics;
-    List<SocialLinkModel> links;
+    List<String>? topics;
+    List<SocialLinkModel>? links;
     if (topicControllers.isNotEmpty) {
       topicControllers.removeWhere((element) => element.text.isEmpty);
       topics = [];
@@ -95,7 +96,7 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState>
     var model = CommunityModel(
       name: name.text,
       description: description.text,
-      createdBy: getIt<Session>().user.id,
+      createdBy: getIt<Session>().user!.id,
       socialLinks: links,
       createdAt: DateTime.now().toUtc().toIso8601String(),
       topics: topics,
@@ -148,18 +149,18 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState>
   }
 
   /// upload files to firebase storage and get downloadable files path
-  Future<String> _uploadImages(
-      BuildContext context, Option<File> image, String communityId,
-      {String path}) async {
-    final file = image.getOrElse(() => null);
+  Future<String?> _uploadImages(
+      BuildContext context, Option<File?> image, String communityId,
+      {required String path}) async {
+    // final file = image.valueOrDefault;
     return image.fold(
       () => null,
-      (a) async {
+      (file) async {
         loader.showLoader(context, message: "Saving $path");
 
         /// Upload files to firebase 1 by 1
         final response = await communRepo.uploadFile(
-            file,
+            file!,
             Constants.createFilePath(file.path,
                 folderName: "${Constants.community}/$communityId/$path"),
             onFileUpload: onFileUpload);
@@ -187,11 +188,11 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState>
   }
 
   void updateState(ECreateCommunityState estate,
-      {String message, CommunityModel community}) {
+      {String? message, CommunityModel? community}) {
     emit(
       CreateCommunityState.response(
         estate,
-        message: Utility.encodeStateMessage(message),
+        message: Utility.encodeStateMessage(message ?? ""),
         community: community ?? state.community,
       ),
     );
@@ -214,18 +215,18 @@ class CreateCommunityCubit extends Cubit<CreateCommunityState>
 mixin CreateCommunityMixin {
   Option<File> image = none();
   Option<File> banner = none();
-  TextEditingController name;
-  TextEditingController description;
+  late TextEditingController name;
+  late TextEditingController description;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 }
 
 mixin SelectCommunityTopicMxin {
-  List<TextEditingController> topicControllers;
+  late List<TextEditingController> topicControllers;
   GlobalKey<FormState> topicsFormKey = GlobalKey<FormState>();
 }
 
 mixin SocialLinksTopicMxin {
-  List<CommunityLinks> socialLinksControllers;
+  late List<CommunityLinks> socialLinksControllers;
   GlobalKey<FormState> linksFormKey = GlobalKey<FormState>();
 }
 
@@ -233,7 +234,7 @@ class CommunityLinks {
   final ESocialLinkType type;
   final TextEditingController controller;
 
-  CommunityLinks({this.type, this.controller});
+  CommunityLinks({required this.type, required this.controller});
 
   void dispose() {
     controller.dispose();

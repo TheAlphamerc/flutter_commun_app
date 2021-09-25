@@ -5,7 +5,8 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class OTPVerificationPAge extends StatefulWidget {
   final Function(String otp) onSubmit;
-  const OTPVerificationPAge({Key key, this.onSubmit}) : super(key: key);
+  const OTPVerificationPAge({Key? key, required this.onSubmit})
+      : super(key: key);
   static MaterialPageRoute getRoute(Function(String otp) onSubmit) {
     return MaterialPageRoute(
         builder: (BuildContext context) =>
@@ -17,18 +18,18 @@ class OTPVerificationPAge extends StatefulWidget {
 }
 
 class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
-  FocusNode node1;
-  FocusNode node2;
-  FocusNode node3;
-  FocusNode node4;
-  FocusNode node5;
-  FocusNode node6;
-  TextEditingController otp1;
-  TextEditingController otp2;
-  TextEditingController otp3;
-  TextEditingController otp4;
-  TextEditingController otp5;
-  TextEditingController otp6;
+  late FocusNode node1;
+  late FocusNode node2;
+  late FocusNode node3;
+  late FocusNode node4;
+  late FocusNode node5;
+  late FocusNode node6;
+  late TextEditingController otp1;
+  late TextEditingController otp2;
+  late TextEditingController otp3;
+  late TextEditingController otp4;
+  late TextEditingController otp5;
+  late TextEditingController otp6;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -66,7 +67,8 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
     super.dispose();
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context,
+      {required String title, Color? backgroundColor}) {
     return IntrinsicWidth(
       stepWidth: context.width - 32,
       child: TextButton(
@@ -90,9 +92,9 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
   }
 
   Widget _otp(
-      {TextEditingController controller,
-      FocusNode node,
-      Function(String) onChanged}) {
+      {required TextEditingController controller,
+      required FocusNode node,
+      required Function(String) onChanged}) {
     return SizedBox(
       width: 40,
       child: CustomOTPTextField(
@@ -120,7 +122,7 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
       Utility.cprint("Invalid OTP");
       return;
     }
-    FocusManager.instance.primaryFocus.unfocus();
+    FocusManager.instance.primaryFocus!.unfocus();
     widget.onSubmit(otp);
   }
 
@@ -248,17 +250,17 @@ class _OTPVerificationPAgeState extends State<OTPVerificationPAge> {
 
 class CustomOTPTextField extends StatelessWidget {
   const CustomOTPTextField({
-    Key key,
+    Key? key,
     this.controller,
     this.focusNode,
     this.onChanged,
     this.textInputAction,
   }) : super(key: key);
 
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final ValueChanged<String> onChanged;
-  final TextInputAction textInputAction;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
+  final TextInputAction? textInputAction;
 
   @override
   Widget build(BuildContext context) {

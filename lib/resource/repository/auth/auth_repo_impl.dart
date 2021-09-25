@@ -6,13 +6,13 @@ class AuthRepoImpl implements AuthRepo {
   AuthRepoImpl(this.authService);
   @override
   Future<void> verifyPhoneNumber(String phone,
-      {Function(VerifyPhoneResponse response) onResponse}) {
+      {required Function(VerifyPhoneResponse response) onResponse}) {
     return authService.verifyPhoneNumber(phone, onResponse: onResponse);
   }
 
   @override
   Future<Either<String, UserCredential>> verifyOTP(
-      {String verificationId, String smsCode}) {
+      {required String verificationId, required String smsCode}) {
     return authService.verifyOTP(
         verificationId: verificationId, smsCode: smsCode);
   }
@@ -34,13 +34,13 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<Either<String, UserCredential>> signupWithEmail(
-      {String email, String password}) {
+      {required String email, required String password}) {
     return authService.createAcountWithEmailAndPassword(email, password);
   }
 
   @override
   Future<Either<String, UserCredential>> signInWithEmail(
-      {String email, String password}) {
+      {required String email, required String password}) {
     return authService.signInWithEmail(email, password);
   }
 

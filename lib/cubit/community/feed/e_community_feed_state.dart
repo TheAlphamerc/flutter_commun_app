@@ -11,10 +11,10 @@ enum ECommunityFeedState {
 
 extension EAppStateHelper on ECommunityFeedState {
   T when<T>({
-    @required T Function() loading,
-    @required T Function() loaded,
-    @required T Function() erorr,
-    @required T Function() delete,
+    required T Function() loading,
+    required T Function() loaded,
+    required T Function() erorr,
+    required T Function() delete,
   }) {
     switch (this) {
       case ECommunityFeedState.loading:
@@ -39,18 +39,18 @@ extension EAppStateHelper on ECommunityFeedState {
         break;
       default:
     }
-    return null;
+    throw Exception('Invalid ECommunityFeedState');
   }
 
   T mayBeWhen<T>({
-    @required T Function() elseMaybe,
-    T Function() loading,
-    T Function() loaded,
-    T Function() erorr,
-    T Function() delete,
-    T Function() savingComment,
-    T Function() saved,
-    T Function() initial,
+    required T Function() elseMaybe,
+    T Function()? loading,
+    T Function()? loaded,
+    T Function()? erorr,
+    T Function()? delete,
+    T Function()? savingComment,
+    T Function()? saved,
+    T Function()? initial,
   }) {
     switch (this) {
       case ECommunityFeedState.initial:

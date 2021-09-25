@@ -5,10 +5,11 @@ enum EUsernameState { AlreadyExists, Available, Error }
 
 extension EUsernameStateHelpers on EUsernameState {
   T when<T>({
-    T Function() alreadyExists,
-    @required T Function() elseMaybe,
-    T Function() available,
-    T Function() accountCreated,
+    /// TODO: Remove [elseMethod] method
+    required T Function() elseMaybe,
+    required T Function() alreadyExists,
+    required T Function() available,
+    required T Function() accountCreated,
   }) {
     switch (this) {
       case EUsernameState.AlreadyExists:
@@ -28,6 +29,6 @@ extension EUsernameStateHelpers on EUsernameState {
       default:
         return elseMaybe();
     }
-    return null;
+    throw Exception('Invalid EUsernameState');
   }
 }

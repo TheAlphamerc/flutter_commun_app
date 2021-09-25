@@ -4,5 +4,5 @@ part of 'app_cubit.dart';
 abstract class AppState with _$AppState {
   const factory AppState.initial() = _Initial;
   const factory AppState.response(
-      {@required EAppState estate, @required String message}) = _Response;
+      {required EAppState estate, required String message}) = _Response;
 }

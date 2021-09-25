@@ -12,13 +12,17 @@ abstract class CustomBottomSheet {
   static CustomBottomSheet get I => _instance;
 
   void displayBottomSheet(BuildContext context,
-      {List<PrimarySheetButton> sheetButton, Widget headerChild, Widget body});
+      {List<PrimarySheetButton>? sheetButton,
+      Widget? headerChild,
+      Widget? body});
 }
 
 class CustomBottomSheetImpl implements CustomBottomSheet {
   @override
   void displayBottomSheet(BuildContext context,
-      {List<PrimarySheetButton> sheetButton, Widget headerChild, Widget body}) {
+      {List<PrimarySheetButton>? sheetButton,
+      Widget? headerChild,
+      Widget? body}) {
     showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext _) {
@@ -70,18 +74,18 @@ class CustomBottomSheetImpl implements CustomBottomSheet {
 
 class PrimarySheetButton extends StatelessWidget {
   const PrimarySheetButton(
-      {Key key,
-      this.title,
+      {Key? key,
+      required this.title,
       this.icon,
-      this.onPressed,
+      required this.onPressed,
       this.color,
       this.prefixChild})
       : super(key: key);
   final String title;
-  final IconData icon;
-  final Widget prefixChild;
+  final IconData? icon;
+  final Widget? prefixChild;
   final VoidCallback onPressed;
-  final Color color;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -91,7 +95,7 @@ class PrimarySheetButton extends StatelessWidget {
         child: Row(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (prefixChild != null) prefixChild,
+            if (prefixChild != null) prefixChild!,
             Text(title,
                     style: TextStyles.headline14(context)
                         .copyWith(color: color ?? context.bodyTextColor))

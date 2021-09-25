@@ -13,7 +13,7 @@ part 'social_signup_state.dart';
 class SocialSignupCubit extends Cubit<SocialSignupState> {
   final AuthRepo authRepo;
   SocialSignupCubit(this.authRepo) : super(const SocialSignupState.initial());
-  UserCredential userCredential;
+  UserCredential? userCredential;
 
   Future signupWithGoogle(BuildContext context) async {
     loader.showLoader(context);
@@ -31,12 +31,12 @@ class SocialSignupCubit extends Cubit<SocialSignupState> {
   Future checkEmailAvailability(BuildContext context) async {
     loader.showLoader(context, message: context.locale.verifying);
     final response =
-        await authRepo.checkEmailAvailability(userCredential.user.email);
+        await authRepo.checkEmailAvailability(userCredential!.user!.email!);
     loader.hideLoader();
     response.fold(
         (l) => emit(SocialSignupState.response(
             ESocialSignupState.AccountAlreadyExists,
             Utility.encodeStateMessage("Account Already exists"))),
-        (r) => emit(SocialSignupState.created(userCredential)));
+        (r) => emit(SocialSignupState.created(userCredential!)));
   }
 }

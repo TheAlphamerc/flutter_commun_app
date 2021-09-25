@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/model/community/cover_image_model.dart';
 import 'package:flutter_commun_app/model/community/social_link_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'e_social_link_type.dart';
 part 'e_user_role.dart';
@@ -48,8 +46,8 @@ part 'e_user_role.dart';
 // }
 
 class Topic {
-  final String id;
-  final String name;
+  final String? id;
+  final String? name;
 
   Topic({this.id, this.name});
 }
@@ -70,34 +68,34 @@ class CommunityModel {
       this.createdBy,
       this.membersCount = 0});
 
-  final String id;
-  final String name;
-  final String avatar;
-  final String banner;
-  final List<String> topics;
-  final String description;
-  final String modifyAt;
-  final String createdAt;
-  final String myRole;
-  final String createdBy;
-  final int membersCount;
-  final List<SocialLinkModel> socialLinks;
-  final List<CoverImage> coverImage;
+  final String? id;
+  final String? name;
+  final String? avatar;
+  final String? banner;
+  final List<String>? topics;
+  final String? description;
+  final String? modifyAt;
+  final String? createdAt;
+  final String? myRole;
+  final String? createdBy;
+  final int? membersCount;
+  final List<SocialLinkModel>? socialLinks;
+  final List<CoverImage>? coverImage;
 
   CommunityModel copyWith({
-    String id,
-    String name,
-    String avatar,
-    String banner,
-    List<String> topics,
-    String description,
-    List<SocialLinkModel> socialLinks,
-    List<CoverImage> coverImage,
-    String modifyAt,
-    int membersCount,
-    String myRole,
-    String createdAt,
-    String createdBy,
+    String? id,
+    String? name,
+    String? avatar,
+    String? banner,
+    List<String>? topics,
+    String? description,
+    List<SocialLinkModel>? socialLinks,
+    List<CoverImage>? coverImage,
+    String? modifyAt,
+    int? membersCount,
+    String? myRole,
+    String? createdAt,
+    String? createdBy,
   }) =>
       CommunityModel(
         id: id ?? this.id,
@@ -152,13 +150,13 @@ class CommunityModel {
       "avatar": avatar,
       "banner": banner,
       "topics":
-          topics == null ? null : List<dynamic>.from(topics.map((x) => x)),
+          topics == null ? null : List<dynamic>.from(topics!.map((x) => x)),
       "socialLinks": socialLinks == null
           ? null
-          : List<dynamic>.from(socialLinks.map((e) => e.toJson())),
+          : List<dynamic>.from(socialLinks!.map((e) => e.toJson())),
       "coverImage": coverImage == null
           ? null
-          : List<dynamic>.from(coverImage.map((x) => x.toJson())),
+          : List<dynamic>.from(coverImage!.map((x) => x.toJson())),
       "description": description,
       "modifyAt": modifyAt,
       "membersCount": membersCount,

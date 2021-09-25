@@ -1,12 +1,14 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 part of 'theme.dart';
 
 class TextStyles {
   static TextStyle nameStyle(BuildContext context) =>
-      context.textTheme.headline6
+      context.textTheme.headline6!
           .copyWith(fontWeight: FontWeight.w700, fontSize: 18);
 
   static TextStyle bodyText14(BuildContext context) =>
-      context.textTheme.bodyText1.copyWith(
+      context.textTheme.bodyText1!.copyWith(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: context.themeType == ThemeType.LIGHT

@@ -13,9 +13,10 @@ import 'package:flutter_commun_app/ui/widget/form/k_textfield2.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
 
 class AddSocialLinkSheet extends StatelessWidget {
-  final Function(CommunityModel model) onCommunityCreated;
+  final Function(CommunityModel model)? onCommunityCreated;
   final CreateCommunityCubit cubit;
-  const AddSocialLinkSheet({Key key, this.onCommunityCreated, this.cubit})
+  const AddSocialLinkSheet(
+      {Key? key, this.onCommunityCreated, required this.cubit})
       : super(key: key);
   static Route<T> getRoute<T>(CreateCommunityCubit cubit) {
     return FadeRoute(
@@ -41,7 +42,8 @@ class AddSocialLinkSheet extends StatelessWidget {
               children: [
                 Image.asset(Images.getSocialCircleImage(links.type), height: 30)
                     .pR(10),
-                Text(links.type.encode(), style: TextStyles.headline16(context))
+                Text(links.type.encode()!,
+                        style: TextStyles.headline16(context))
                     .extended,
                 // if (index != 0)
                 CircleAvatar(
@@ -86,7 +88,7 @@ class AddSocialLinkSheet extends StatelessWidget {
     final isValid = context
         .read<CreateCommunityCubit>()
         .linksFormKey
-        .currentState
+        .currentState!
         .validate();
     if (!isValid) {
       /// Returns if any of the provided social is invlid
@@ -197,7 +199,7 @@ class AddSocialLinkSheet extends StatelessWidget {
                               TextStyles.headline16(context).primary(context),
                         ),
                       ).cornerRadius(8).ripple(() {
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
 
                         addLinkSheet(context);
                       }, radius: 8),

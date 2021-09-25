@@ -8,14 +8,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 abstract class PostBaseActions {
   ProfileModel get myUser;
-  Stream<QuerySnapshot> listenPostToChange;
-  StreamSubscription<QuerySnapshot> postSubscription;
-  PageInfo pageInfo;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> listenPostToChange;
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> postSubscription;
+  PageInfo? pageInfo;
   Future deletePost(PostModel model);
-  Future handleVote(PostModel model, {@required bool isUpVote});
+  Future handleVote(PostModel model, {required bool isUpVote});
 
   void onPostUpdate(PostModel model);
   void reportPost(PostModel model);
   void onPostDelete(PostModel model);
-  void postChangeListener(QuerySnapshot snapshot);
+  void postChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot);
 }

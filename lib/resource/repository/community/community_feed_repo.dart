@@ -16,13 +16,15 @@ abstract class CommunityFeedRepo {
       CommunityModel model);
   Future<Either<String, bool>> updateCommunity(CommunityModel model);
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
-      {Function(FileUploadTaskResponse response) onFileUpload});
+      {required Function(FileUploadTaskResponse response) onFileUpload});
   Future<Either<String, List<CommunityModel>>> getCommunitiesList(
       String userId);
   Future<Either<String, CommunityModel>> getCommunityById(String id);
   Future<Either<String, bool>> joinCommunity(
-      {String communityId, String userId, MemberRole role});
+      {required String communityId,
+      required String userId,
+      required MemberRole role});
 
   Future<Either<String, bool>> leaveCommunity(
-      {String communityId, String userId});
+      {required String communityId, required String userId});
 }

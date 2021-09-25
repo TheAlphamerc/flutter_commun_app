@@ -13,34 +13,37 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class PostDetailPage extends StatelessWidget {
   final OnPostAction onPostAction;
-  const PostDetailPage({Key key, this.onPostAction}) : super(key: key);
+  const PostDetailPage({Key? key, required this.onPostAction})
+      : super(key: key);
 
-  static Route<T> getRoute<T>(String postId) {
+  static Route<T> getRoute<T>(String postId,
+      {required OnPostAction onPostAction}) {
     return MaterialPageRoute(builder: (_) {
       return BlocProvider(
         create: (context) => PostDetailCubit(getIt<PostRepo>(), postId: postId),
-        child: const PostDetailPage(),
+        child: PostDetailPage(onPostAction: onPostAction),
       );
     });
   }
 
-  Widget _comments(BuildContext context, List<PostModel> list) {
+  Widget _comments(BuildContext context, List<PostModel>? list) {
     return list.value.fold(
-        () => const SliverToBoxAdapter(
-              child: SizedBox(),
-            ),
-        (a) => SliverPadding(
-              padding: const EdgeInsets.only(bottom: 70),
-              sliver: SliverList(
-                  delegate: SliverChildListDelegate(list
-                      .map((e) => Comment(
-                            post: e,
-                            type: PostType.reply,
-                            myUser: context.watch<PostDetailCubit>().myUser,
-                            margin: EdgeInsets.zero,
-                          ))
-                      .toList())),
-            ));
+      () => const SliverToBoxAdapter(
+        child: SizedBox(),
+      ),
+      (a) => SliverPadding(
+        padding: const EdgeInsets.only(bottom: 70),
+        sliver: SliverList(
+            delegate: SliverChildListDelegate(list!
+                .map((e) => Comment(
+                      post: e,
+                      type: PostType.reply,
+                      myUser: context.watch<PostDetailCubit>().myUser,
+                      margin: EdgeInsets.zero,
+                    ))
+                .toList())),
+      ),
+    );
   }
 
   Widget _post(BuildContext context, PostModel model) {
@@ -134,8 +137,8 @@ class PostDetailPage extends StatelessWidget {
                       builder: (context, state) {
                         return state.estate.when(
                           loading: () => _loader(context),
-                          loaded: () => _post(context, state.post),
-                          erorr: () => Column(children: [Text(state.message)]),
+                          loaded: () => _post(context, state.post!),
+                          erorr: () => Column(children: [Text(state.message!)]),
                           delete: () => const SizedBox.shrink(),
                         );
                       },

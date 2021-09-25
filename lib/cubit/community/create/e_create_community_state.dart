@@ -15,10 +15,10 @@ enum ECreateCommunityState {
 
 extension EAppStateHelper on ECreateCommunityState {
   T when<T>({
-    @required T Function() loading,
-    @required T Function() loaded,
-    @required T Function() erorr,
-    @required T Function() delete,
+    required T Function() loading,
+    required T Function() loaded,
+    required T Function() erorr,
+    required T Function() delete,
   }) {
     switch (this) {
       case ECreateCommunityState.loading:
@@ -39,17 +39,17 @@ extension EAppStateHelper on ECreateCommunityState {
 
       default:
     }
-    return null;
+    throw Exception('Invalid ECreateCommunityState');
   }
 
   T mayBeWhen<T>({
-    @required T Function() elseMaybe,
-    T Function() loading,
-    T Function() loaded,
-    T Function() erorr,
-    T Function() delete,
-    T Function() saving,
-    T Function() saved,
+    required T Function() elseMaybe,
+    T Function()? loading,
+    T Function()? loaded,
+    T Function()? erorr,
+    T Function()? delete,
+    T Function()? saving,
+    T Function()? saved,
   }) {
     switch (this) {
       case ECreateCommunityState.loading:

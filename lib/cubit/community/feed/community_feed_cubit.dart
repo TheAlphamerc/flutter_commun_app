@@ -6,8 +6,9 @@ import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/community/community_feed_repo.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_commun_app/ui/theme/index.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'community_feed_cubit.freezed.dart';
 part 'community_feed_state.dart';
 part 'e_community_feed_state.dart';
@@ -19,14 +20,14 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
     getCommunitiesList().then((value) => null);
   }
 
-  ProfileModel get user => getIt<Session>().user;
+  ProfileModel get user => getIt<Session>().user!;
 
   /// Communities joined by user
-  List<CommunityModel> get myCommunity {
+  List<CommunityModel>? get myCommunity {
     if (state.list.notNullAndEmpty) {
-      if (state.list
+      if (state.list!
           .any((element) => element.myRole != MemberRole.notDefine.encode())) {
-        return state.list
+        return state.list!
             .where((element) => element.myRole != MemberRole.notDefine.encode())
             .toList();
       }
@@ -35,11 +36,11 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
   }
 
   /// Communities which is not joined by user
-  List<CommunityModel> get otheCommunity {
+  List<CommunityModel>? get otheCommunity {
     if (state.list.notNullAndEmpty) {
-      if (state.list
+      if (state.list!
           .any((element) => element.myRole == MemberRole.notDefine.encode())) {
-        return state.list
+        return state.list!
             .where((element) => element.myRole == MemberRole.notDefine.encode())
             .toList();
       }
@@ -51,7 +52,7 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
   Future getCommunitiesList() async {
     Utility.cprint("Fetching Communities from firestore", enableLogger: true);
     final response =
-        await communRepo.getCommunitiesList(getIt<Session>().user.id);
+        await communRepo.getCommunitiesList(getIt<Session>().user!.id!);
     response.fold(
       (l) => updateState(ECommunityFeedState.loaded,
           message:
@@ -66,13 +67,14 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
   /// Jpin community
   Future joinCommunity(String communityId) async {
     final response = await communRepo.joinCommunity(
-        communityId: communityId, userId: user.id, role: MemberRole.user);
+        communityId: communityId, userId: user.id!, role: MemberRole.user);
     response.fold(
         (l) => updateState(ECommunityFeedState.loaded,
             message:
                 Utility.encodeStateMessage("Error file fetching communities")),
         (r) {
-      var model = state.list.firstWhere((element) => element.id == communityId);
+      var model =
+          state.list!.firstWhere((element) => element.id == communityId);
       model = model.copyWith.call(myRole: MemberRole.user.encode());
       onCommunityupdate(model);
     });
@@ -81,14 +83,14 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
   /// Leave community
   Future leaveCommunity(String communityId) async {
     final response = await communRepo.leaveCommunity(
-        communityId: communityId, userId: user.id);
+        communityId: communityId, userId: user.id!);
     response.fold(
       (l) => updateState(ECommunityFeedState.loaded,
           message:
               Utility.encodeStateMessage("Error file fetching communities")),
       (r) {
         var model =
-            state.list.firstWhere((element) => element.id == communityId);
+            state.list!.firstWhere((element) => element.id == communityId);
         model = model.copyWith.call(myRole: MemberRole.notDefine.encode());
         onCommunityupdate(model);
       },
@@ -111,10 +113,10 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
   }
 
   void updateState(ECommunityFeedState estate,
-      {String message, List<CommunityModel> list}) {
+      {String? message, List<CommunityModel>? list}) {
     emit(
       CommunityFeedState.response(estate,
-          message: Utility.encodeStateMessage(message),
+          message: Utility.encodeStateMessage(message ?? ""),
           list: list ?? state.list),
     );
   }

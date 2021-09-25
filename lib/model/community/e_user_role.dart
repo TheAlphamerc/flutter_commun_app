@@ -16,8 +16,8 @@ const _$GroupMemberRoleTypeName = {
 };
 
 extension GroupMemberRoleEnumHelper on MemberRole {
-  String encode() => _$GroupMemberRoleTypeMap[this];
-  String name() {
+  String? encode() => _$GroupMemberRoleTypeMap[this];
+  String? name() {
     return _$GroupMemberRoleTypeName[this];
   }
 
@@ -25,15 +25,15 @@ extension GroupMemberRoleEnumHelper on MemberRole {
 
   MemberRole decodeGroupMemberRole(String value) {
     return _$GroupMemberRoleTypeMap.entries
-        .singleWhere((element) => element.value == value, orElse: () => null)
-        ?.key;
+        .singleWhere((element) => element.value == value)
+        .key;
   }
 
   T when<T>({
-    T Function() admin,
-    T Function() user,
-    T Function() moderator,
-    T Function() notDefine,
+    required T Function() admin,
+    required T Function() user,
+    required T Function() moderator,
+    required T Function() notDefine,
   }) {
     switch (this) {
       case MemberRole.admin:
@@ -58,15 +58,15 @@ extension GroupMemberRoleEnumHelper on MemberRole {
         break;
       default:
     }
-    return null;
+    throw Exception("Unknown value: $this");
   }
 
   T mayBeWhen<T>({
-    @required T Function() elseMaybe,
-    T Function() admin,
-    T Function() user,
-    T Function() moderator,
-    T Function() notDefine,
+    required T Function() elseMaybe,
+    T Function()? admin,
+    T Function()? user,
+    T Function()? moderator,
+    T Function()? notDefine,
   }) {
     switch (this) {
       case MemberRole.admin:

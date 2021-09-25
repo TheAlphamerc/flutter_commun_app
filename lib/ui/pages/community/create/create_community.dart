@@ -17,12 +17,12 @@ import 'package:flutter_commun_app/ui/widget/painter/circle_border_painter.dart'
 
 class CreateCommunityWidget extends StatelessWidget {
   final Function(CommunityModel model) onCommunityCreated;
-  const CreateCommunityWidget({Key key, this.onCommunityCreated})
+  const CreateCommunityWidget({Key? key, required this.onCommunityCreated})
       : super(key: key);
 
   void nextPressed(BuildContext context) {
     final isValid =
-        context.read<CreateCommunityCubit>().formKey.currentState.validate();
+        context.read<CreateCommunityCubit>().formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
@@ -103,7 +103,7 @@ class CreateCommunityWidget extends StatelessWidget {
                             Utility.displaySnackbar(context,
                                 msg: context
                                     .locale.community_created_sucessfully);
-                            onCommunityCreated(state.community);
+                            onCommunityCreated(state.community!);
 
                             Navigator.pop(context);
                             Navigator.pop(context);
@@ -131,7 +131,7 @@ class CreateCommunityWidget extends StatelessWidget {
 
 class _UserAvatar extends StatelessWidget {
   const _UserAvatar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   void pickImage(BuildContext context) {
@@ -210,7 +210,7 @@ class _UserAvatar extends StatelessWidget {
 
 class _BannerImage extends StatelessWidget {
   const _BannerImage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   void pickImage(BuildContext context) {

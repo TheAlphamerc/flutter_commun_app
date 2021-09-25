@@ -18,7 +18,7 @@ class CommunityFeedRepoImpl implements CommunityFeedRepo {
 
   @override
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
-      {Function(FileUploadTaskResponse response) onFileUpload}) {
+      {required Function(FileUploadTaskResponse response) onFileUpload}) {
     return storageService.uploadFile(file, uploadPath,
         onFileUpload: onFileUpload);
   }
@@ -31,20 +31,22 @@ class CommunityFeedRepoImpl implements CommunityFeedRepo {
 
   @override
   Future<Either<String, CommunityModel>> getCommunityById(String id) {
-    final userId = getIt<Session>().user.id;
-    return communService.getCommunityById(id, userId);
+    final userId = getIt<Session>().user!.id;
+    return communService.getCommunityById(id, userId!);
   }
 
   @override
   Future<Either<String, bool>> joinCommunity(
-      {String communityId, String userId, MemberRole role}) async {
+      {required String communityId,
+      required String userId,
+      required MemberRole role}) async {
     return communService.joinCommunity(
         communityId: communityId, userId: userId, role: role);
   }
 
   @override
   Future<Either<String, bool>> leaveCommunity(
-      {String communityId, String userId}) {
+      {required String communityId, required String userId}) {
     return communService.leaveCommunity(
         communityId: communityId, userId: userId);
   }

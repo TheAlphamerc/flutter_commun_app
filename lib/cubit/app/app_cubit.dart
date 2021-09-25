@@ -16,7 +16,7 @@ class AppCubit extends Cubit<AppState> {
   final ProfileRepo profileRepo;
   AppCubit(this.authRepo, this.profileRepo) : super(const AppState.initial());
 
-  ProfileModel user;
+  ProfileModel? user;
   // ignore: avoid_void_async
   void checkAuthentication() async {
     final response = await authRepo.getFirebaseUser();

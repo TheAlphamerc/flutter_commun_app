@@ -3,14 +3,14 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class AuthButton extends StatelessWidget {
   const AuthButton({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.backgroundColor,
-    this.onPressed,
+    required this.onPressed,
     this.margin = const EdgeInsets.fromLTRB(30, 0, 30, 20),
   }) : super(key: key);
   final String title;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final VoidCallback onPressed;
   final EdgeInsetsGeometry margin;
 
@@ -22,7 +22,7 @@ class AuthButton extends StatelessWidget {
       child: TextButton(
         onPressed: () async {
           if (onPressed != null) {
-            FocusManager.instance.primaryFocus.unfocus();
+            FocusManager.instance.primaryFocus!.unfocus();
             onPressed.call();
           }
         },

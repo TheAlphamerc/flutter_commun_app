@@ -7,7 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CommunityFeedAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function(CommunityModel model) onCommunityCreated;
-  const CommunityFeedAppBar({Key key, this.onCommunityCreated})
+  const CommunityFeedAppBar({Key? key, required this.onCommunityCreated})
       : super(key: key);
 
   void createCommunity(BuildContext context) {

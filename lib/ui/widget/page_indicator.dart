@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 /// An indicator showing the currently selected page of a PageController
 class DotsIndicator extends AnimatedWidget {
   const DotsIndicator({
-    this.controller,
-    this.itemCount,
+    required this.controller,
+    required this.itemCount,
     this.onPageSelected,
     this.color = Colors.white,
   }) : super(listenable: controller);
@@ -18,7 +18,7 @@ class DotsIndicator extends AnimatedWidget {
   final int itemCount;
 
   /// Called when a dot is tapped
-  final ValueChanged<int> onPageSelected;
+  final ValueChanged<int>? onPageSelected;
 
   /// The color of the dots.
   ///
@@ -62,7 +62,7 @@ class DotsIndicator extends AnimatedWidget {
             width: _kDotSize * zoom + (width * selectedness),
             height: _kDotSize * zoom,
             child: InkWell(
-              onTap: () => onPageSelected(index),
+              onTap: () => onPageSelected!.call(index),
             ),
           ),
         ),

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class CreatePostImage extends StatelessWidget {
-  final File image;
-  final void Function(File) onImageRemove;
-  const CreatePostImage({Key key, this.image, this.onImageRemove})
+  final File? image;
+  final void Function(File)? onImageRemove;
+  const CreatePostImage({Key? key, this.image, this.onImageRemove})
       : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class CreatePostImage extends StatelessWidget {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                         image: DecorationImage(
-                            image: FileImage(image), fit: BoxFit.cover),
+                            image: FileImage(image!), fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -39,7 +39,7 @@ class CreatePostImage extends StatelessWidget {
                     child: IconButton(
                       padding: const EdgeInsets.all(0),
                       iconSize: 20,
-                      onPressed: () => onImageRemove(image),
+                      onPressed: () => onImageRemove!.call(image!),
                       icon: Icon(
                         Icons.close,
                         color: Theme.of(context).colorScheme.onPrimary,

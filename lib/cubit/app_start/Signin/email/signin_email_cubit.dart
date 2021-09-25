@@ -22,7 +22,7 @@ class SigninEmailCubit extends Cubit<SigninEmailState>
   set setDisplayPasswords(bool value) => displayPasswords.value = value;
 
   Future signinWithEmail(BuildContext context) async {
-    final isValid = formKey.currentState.validate();
+    final isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
@@ -49,8 +49,8 @@ class SigninEmailCubit extends Cubit<SigninEmailState>
 }
 
 mixin SigninEmailCubitMixin {
-  TextEditingController email;
-  TextEditingController password;
+  late TextEditingController email;
+  late TextEditingController password;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> displayPasswords = ValueNotifier<bool>(false);
 

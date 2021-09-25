@@ -27,7 +27,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
     bio = TextEditingController();
   }
 
-  void updateImage({Option<File> image, Option<File> banner}) {
+  void updateImage({Option<File>? image, Option<File>? banner}) {
     if (image != null) {
       this.image = image;
     } else if (banner != null) {
@@ -38,7 +38,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
   }
 
   Future submit(BuildContext context) async {
-    final isValid = formKey.currentState.validate();
+    final isValid = formKey.currentState!.validate();
     if (!isValid) {
       Utility.cprint("Please enter required information",
           label: "Submit Profile", error: "Validation Error");
@@ -90,7 +90,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
   }
 
   /// Upload profile picture to firebase storage
-  Future<String> uploadProfileImage(
+  Future<String?> uploadProfileImage(
       BuildContext context, File file, String path) async {
     /// Display loader
     loader.showLoader(context, message: "uploading $path");
@@ -132,10 +132,10 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
 mixin OnboardProfileCubitMixin {
   Option<File> image = none();
   Option<File> banner = none();
-  TextEditingController name;
-  TextEditingController username;
-  TextEditingController website;
-  TextEditingController bio;
+  late TextEditingController name;
+  late TextEditingController username;
+  late TextEditingController website;
+  late TextEditingController bio;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   void dispose() {
     name.dispose();

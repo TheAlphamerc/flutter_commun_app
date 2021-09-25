@@ -13,7 +13,7 @@ import 'package:flutter_commun_app/ui/pages/home/widget/feed_app_bar.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
   static Route<T> getRoute<T>() {
     return MaterialPageRoute(
       builder: (_) => MultiBlocProvider(
@@ -66,18 +66,15 @@ class _HomePageState extends State<HomePage> {
     switch (index) {
       case 0:
         return const FeedAppBar();
-        break;
       case 1:
         return const PreferredSize(
             preferredSize: Size(0, 0),
             child: SizedBox(
               height: 30,
             ));
-        // const CommunityFeedAppBar();
-        break;
+      // const CommunityFeedAppBar();
       default:
         return const FeedAppBar();
-        break;
     }
   }
 
@@ -85,13 +82,10 @@ class _HomePageState extends State<HomePage> {
     switch (index) {
       case 0:
         return const Feedpage();
-        break;
       case 1:
         return const CommunityFeed();
-        break;
       default:
         return const Feedpage();
-        break;
     }
   }
 

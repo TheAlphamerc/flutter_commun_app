@@ -5,12 +5,11 @@ import 'package:flutter_commun_app/ui/pages/app_start/sign_in/continue_with_page
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/k_button.dart';
 import 'package:flutter_commun_app/ui/widget/page_indicator.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GetStartedPage extends StatefulWidget {
-  const GetStartedPage({Key key}) : super(key: key);
+  const GetStartedPage({Key? key}) : super(key: key);
 
-  static MaterialPageRoute getRoute() {
+  static Route<T> getRoute<T>() {
     return MaterialPageRoute(
       builder: (_) => const GetStartedPage(),
     );
@@ -24,8 +23,8 @@ class _GetStartedPageState extends State<GetStartedPage> {
   final _formKey = GlobalKey<FormState>();
 
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-  PageController controller;
-  String buttonText;
+  late PageController controller;
+  String? buttonText;
   @override
   void initState() {
     controller = PageController();
@@ -39,7 +38,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
   }
 
   void _submit(BuildContext context) {
-    switch (controller.page.toInt()) {
+    switch (controller.page!.toInt()) {
       case 0:
         controller.nextPage(
             duration: const Duration(milliseconds: 500),
@@ -90,7 +89,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                       return const Slider2();
                     case 2:
                       return const Slider3();
-                      break;
+
                     default:
                       return const Slider1();
                   }
@@ -152,7 +151,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
 }
 
 class Slider1 extends StatelessWidget {
-  const Slider1({Key key}) : super(key: key);
+  const Slider1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +180,7 @@ class Slider1 extends StatelessWidget {
               ],
             ),
           ).pB(25),
-          Text(AppLocalizations.of(context).onboardWelcomeOne,
+          Text(context.locale.onboardWelcomeOne,
                   style: TextStyles.headline18(context),
                   textAlign: TextAlign.center)
               .pH(21)
@@ -192,7 +191,7 @@ class Slider1 extends StatelessWidget {
 }
 
 class Slider2 extends StatelessWidget {
-  const Slider2({Key key}) : super(key: key);
+  const Slider2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +230,7 @@ class Slider2 extends StatelessWidget {
 }
 
 class Slider3 extends StatelessWidget {
-  const Slider3({Key key}) : super(key: key);
+  const Slider3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

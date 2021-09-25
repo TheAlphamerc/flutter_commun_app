@@ -9,7 +9,7 @@ abstract class VerifyPhoneResponse with _$VerifyPhoneResponse {
   const factory VerifyPhoneResponse.verificationFailed(
       FirebaseAuthException e) = _VerificationFailed;
   const factory VerifyPhoneResponse.codeSent(
-      String verificationId, int resendToken) = _CodeSent;
+      String verificationId, int? resendToken) = _CodeSent;
   const factory VerifyPhoneResponse.codeAutoRetrievalTimeout(
       String verificationId) = _CodeAutoRetrievalTimeout;
 }

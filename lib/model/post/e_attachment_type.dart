@@ -37,50 +37,44 @@ const _$PostTypeFileUploadLabel = {
 
 AttachmentType decodePostType(String value) {
   return _$PostTypeMap.entries
-      .singleWhere((element) => element.value == value, orElse: () => null)
-      ?.key;
+      .singleWhere((element) => element.value == value)
+      .key;
 }
 
 AttachmentType decodeFileUploadKey(String value) {
   return _$PostTypeMap.entries
-      .singleWhere((element) => element.value == value, orElse: () => null)
-      ?.key;
+      .singleWhere((element) => element.value == value)
+      .key;
 }
 
 extension AttachmentTypeHelper on AttachmentType {
-  String encode() => _$PostTypeMap[this];
-  String get value => _$PostTypeMapLabel[this];
-  String get fileUploadKey => _$PostTypeFileUploadLabel[this];
+  String? encode() => _$PostTypeMap[this];
+  String? get value => _$PostTypeMapLabel[this];
+  String? get fileUploadKey => _$PostTypeFileUploadLabel[this];
   AttachmentType key(String value) => decodePostType(value);
   T map<T>({
-    @required T Function() image,
-    @required T Function() video,
-    @required T Function() poll,
-    @required T Function() quiz,
-    @required T Function() document,
-    @required T Function() question,
-    @required T Function() recording,
-    @required T Function() elseMaybe,
+    required T Function() image,
+    required T Function() video,
+    required T Function() poll,
+    required T Function() quiz,
+    required T Function() document,
+    required T Function() question,
+    required T Function() recording,
+    required T Function() elseMaybe,
   }) {
     switch (this) {
       case AttachmentType.Video:
         return video.call();
-        break;
       case AttachmentType.Image:
         return image.call();
-        break;
       case AttachmentType.Quiz:
         return quiz.call();
-        break;
       case AttachmentType.Poll:
         return poll.call();
-        break;
       case AttachmentType.Document:
         return document.call();
-        break;
       case AttachmentType.Question:
         return question.call();
-        break;
       default:
         return elseMaybe.call();
     }
@@ -102,42 +96,36 @@ extension AttachmentTypeHelper on AttachmentType {
   //       } else {
   //         if (elseMaybe != null) elseMaybe.call();
   //       }
-  //       break;
   //     case AttachmentType.Image:
   //       if (image != null) {
   //         image.call();
   //       } else {
   //         if (elseMaybe != null) elseMaybe.call();
   //       }
-  //       break;
   //     case AttachmentType.Quiz:
   //       if (quiz != null) {
   //         quiz.call();
   //       } else {
   //         if (elseMaybe != null) elseMaybe.call();
   //       }
-  //       break;
   //     case AttachmentType.Poll:
   //       if (poll != null) {
   //         poll.call();
   //       } else {
   //         if (elseMaybe != null) elseMaybe.call();
   //       }
-  //       break;
   //     case AttachmentType.Document:
   //       if (document != null) {
   //         document.call();
   //       } else {
   //         if (elseMaybe != null) elseMaybe.call();
   //       }
-  //       break;
   //     case AttachmentType.Question:
   //       if (question != null) {
   //         question.call();
   //       } else {
   //         if (elseMaybe != null) elseMaybe.call();
   //       }
-  //       break;
   //     default:
   //       if (elseMaybe != null) elseMaybe.call();
   //   }
@@ -145,12 +133,12 @@ extension AttachmentTypeHelper on AttachmentType {
 
   T whenMaybe<T>(
     T Function() elseMaybe, {
-    T Function() image,
-    T Function() video,
-    T Function() poll,
-    T Function() quiz,
-    T Function() document,
-    T Function() question,
+    T Function()? image,
+    T Function()? video,
+    T Function()? poll,
+    T Function()? quiz,
+    T Function()? document,
+    T Function()? question,
   }) {
     switch (this) {
       case AttachmentType.Video:
@@ -159,42 +147,36 @@ extension AttachmentTypeHelper on AttachmentType {
         } else {
           return elseMaybe.call();
         }
-        break;
       case AttachmentType.Image:
         if (image != null) {
           return image.call();
         } else {
           return elseMaybe.call();
         }
-        break;
       case AttachmentType.Quiz:
         if (quiz != null) {
           return quiz.call();
         } else {
           return elseMaybe.call();
         }
-        break;
       case AttachmentType.Poll:
         if (poll != null) {
           return poll.call();
         } else {
           return elseMaybe.call();
         }
-        break;
       case AttachmentType.Document:
         if (document != null) {
           return document.call();
         } else {
           return elseMaybe.call();
         }
-        break;
       case AttachmentType.Question:
         if (question != null) {
           return question.call();
         } else {
           return elseMaybe.call();
         }
-        break;
       default:
         return elseMaybe.call();
     }

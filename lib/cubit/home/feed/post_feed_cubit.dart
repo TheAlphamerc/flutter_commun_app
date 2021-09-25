@@ -25,20 +25,20 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   }
 
   @override
-  PageInfo pageInfo = PageInfo(limit: 5);
+  PageInfo? pageInfo = PageInfo(limit: 5);
 
   @override
-  Stream<QuerySnapshot> listenPostToChange;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> listenPostToChange;
 
   @override
-  StreamSubscription<QuerySnapshot> postSubscription;
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> postSubscription;
 
   /// Loggedin user's profile
   @override
-  ProfileModel get myUser => getIt<Session>().user;
+  ProfileModel get myUser => getIt<Session>().user!;
 
   Future getMorePosts() async {
-    if (pageInfo.hasMorePosts) {
+    if (pageInfo!.hasMorePosts!) {
       updatePostState(state.list, estate: EPostFeedState.loadingMore);
       await getPosts();
     }
@@ -46,12 +46,12 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   /// Fetch posts from firebase firestore
   Future getPosts() async {
-    final response = await postrepo.getPostLists("", pageInfo);
+    final response = await postrepo.getPostLists("", pageInfo!);
     response.fold(
         (l) => updatePostState(null,
             error: "Post not available", estate: EPostFeedState.erorr), (r) {
       var postList = state.list;
-      pageInfo = pageInfo.copyWith(lastSnapshot: r.value2);
+      pageInfo = pageInfo!.copyWith(lastSnapshot: r.value2);
       if (postList == null) {
         /// Initilised post list for the first time
         postList = r.value1;
@@ -61,8 +61,8 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
       }
 
       /// Check if all posts are fetched
-      if (!(r.value1.notNullAndEmpty && r.value1.length == pageInfo.limit)) {
-        pageInfo = pageInfo.copyWith(hasMorePosts: false);
+      if (!(r.value1.notNullAndEmpty && r.value1.length == pageInfo!.limit)) {
+        pageInfo = pageInfo!.copyWith(hasMorePosts: false);
         logger.i("All posts Fetched");
       }
       updatePostState(postList);
@@ -81,14 +81,14 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   }
 
   @override
-  Future handleVote(PostModel model, {@required bool isUpVote}) async {
+  Future handleVote(PostModel model, {required bool isUpVote}) async {
     /// List of all upvotes on post
     final upVotes = model.upVotes ?? <String>[];
 
     /// List of all downvotes on post
     final downVotes = model.downVotes ?? <String>[];
 
-    final String myUserId = myUser.id;
+    final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
@@ -153,7 +153,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   /// Listen to channge in posts collection
   @override
-  void postChangeListener(QuerySnapshot snapshot) {
+  void postChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot) {
     if (snapshot.docChanges.isEmpty) {
       return;
     }
@@ -162,15 +162,15 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
       return;
     }
     if (snapshot.docChanges.first.type == DocumentChangeType.added) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onPostAdded(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onPostDelete(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
-      onPostUpdate(PostModel.fromJson(map));
+      onPostUpdate(PostModel.fromJson(map!));
     }
   }
 
@@ -185,7 +185,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   @override
   void onPostUpdate(PostModel model) {
     final list = state.list;
-    if (!list.any((element) => element.id == model.id)) {
+    if (!list!.any((element) => element.id == model.id)) {
       return;
     }
     final oldModel = list.firstWhere((element) => element.id == model.id);
@@ -200,7 +200,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   /// Trigger when some posts deleted
   @override
   void onPostDelete(PostModel model) {
-    final list = List<PostModel>.from(state.list);
+    final list = List<PostModel>.from(state.list!);
     if (list.any((element) => element.id == model.id)) {
       list.removeWhere((element) => element.id == model.id);
       updatePostState(list);
@@ -209,15 +209,15 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   void updatePost(PostModel model) {
     final list = state.list;
-    if (state.list.any((element) => element.id == model.id)) {
-      final index = state.list.indexWhere((element) => element.id == model.id);
-      list[index] = model;
+    if (state.list!.any((element) => element.id == model.id)) {
+      final index = state.list!.indexWhere((element) => element.id == model.id);
+      list![index] = model;
       updatePostState(list);
     }
   }
 
-  void updatePostState(List<PostModel> list,
-      {String error, EPostFeedState estate = EPostFeedState.loaded}) {
+  void updatePostState(List<PostModel>? list,
+      {String? error, EPostFeedState? estate = EPostFeedState.loaded}) {
     emit(PostFeedState.response(
       estate: estate ?? state.estate,
       list: list ?? state.list,

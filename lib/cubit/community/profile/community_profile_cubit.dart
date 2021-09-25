@@ -23,14 +23,14 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
   final CommunityFeedRepo communRepo;
   final PostRepo postRepo;
   CommunityProfileCubit(this.communRepo, this.postRepo,
-      {CommunityModel community, String communityId})
+      {CommunityModel? community, String? communityId})
       : super(const CommunityProfileState.response(
             EcommunityProfileState.initial)) {
     if (community != null) {
-      updateState(community: community);
-      getCommunityPost(community.id).then((value) => null);
+      updateState(EcommunityProfileState.initial, community: community);
+      getCommunityPost(community.id!).then((value) => null);
     } else {
-      getCommunityById(communityId).then((value) => null);
+      getCommunityById(communityId!).then((value) => null);
     }
 
     listenPostToChange = postRepo.listenToPostChange();
@@ -49,74 +49,76 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
     response.fold(
       (l) => null,
       (r) async {
-        updateState(community: r);
-        await getCommunityPost(state.community.id);
+        updateState(EcommunityProfileState.loaded, community: r);
+        await getCommunityPost(state.community!.id!);
       },
     );
   }
 
   Future getMorePosts() async {
-    if (pageInfo.hasMorePosts) {
-      updateState(estate: EcommunityProfileState.loadingMore);
-      await getCommunityPost(state.community.id);
+    if (pageInfo!.hasMorePosts!) {
+      updateState(EcommunityProfileState.loadingMore);
+      await getCommunityPost(state.community!.id!);
     }
   }
 
   Future getCommunityPost(String communityId) async {
     final response =
-        await postRepo.getCommunityPosts(communityId, option: pageInfo);
+        await postRepo.getCommunityPosts(communityId, option: pageInfo!);
     response.fold(
-      (l) => updateState(posts: []),
+      (l) => updateState(EcommunityProfileState.loaded, posts: []),
       (r) {
-        pageInfo = pageInfo.copyWith(lastSnapshot: r.value2);
+        pageInfo = pageInfo!.copyWith(lastSnapshot: r.value2);
         var postList = state.posts;
         if (postList.notNullAndEmpty) {
-          postList.addAll(r.value1);
+          postList!.addAll(r.value1);
         } else {
           postList = r.value1;
         }
-        if (!(r.value1.notNullAndEmpty && r.value1.length == pageInfo.limit)) {
-          pageInfo = pageInfo.copyWith(hasMorePosts: false);
-          logger.i("All posts Fetched");
+        if (!(r.value1.notNullAndEmpty && r.value1.length == pageInfo!.limit)) {
+          pageInfo = pageInfo!.copyWith(hasMorePosts: false);
         }
-        updateState(posts: postList);
+
+        logger.i("All posts Fetched");
+        updateState(EcommunityProfileState.loaded, posts: postList);
       },
     );
   }
 
   /// Trigger when some post added to firestore
   void _onPostAdded(PostModel model) {
-    if (model.communityId != state.community.id) {
+    if (model.communityId != state.community!.id) {
       return;
     }
     final list = state.posts ?? <PostModel>[];
     list.insert(0, model);
-    updateState(posts: list);
+    updateState(EcommunityProfileState.loaded, posts: list);
   }
 
   /// Trigger when some posts deleted
   void _onPostDelete(PostModel model) {
-    final list = List<PostModel>.from(state.posts);
+    final list = List<PostModel>.from(state.posts!);
     if (list.any((element) => element.id == model.id)) {
       list.removeWhere((element) => element.id == model.id);
-      updateState(posts: list);
+      updateState(EcommunityProfileState.loaded, posts: list);
     }
   }
 
   void updatePost(PostModel model) {
     final list = state.posts;
-    if (state.posts.any((element) => element.id == model.id)) {
-      final index = state.posts.indexWhere((element) => element.id == model.id);
-      list[index] = model;
-      updateState(posts: list);
+    if (state.posts!.any((element) => element.id == model.id)) {
+      final index =
+          state.posts!.indexWhere((element) => element.id == model.id);
+      list![index] = model;
+      updateState(EcommunityProfileState.loaded, posts: list);
     }
   }
 
-  void updateState({
-    EcommunityProfileState estate = EcommunityProfileState.loaded,
-    CommunityModel community,
-    List<PostModel> posts,
-    String message,
+  void updateState(
+    EcommunityProfileState estate, {
+    CommunityModel? community,
+    List<PostModel>? posts,
+    String? message,
   }) {
     emit(
       CommunityProfileState.response(
@@ -137,17 +139,17 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
 }
 
 class PostOperationMixin implements PostBaseActions {
-  PostRepo _postRepo;
-  void Function(PostModel model) onPostUpdated;
-  void Function(PostModel model) onPostDeleted;
-  void Function(PostModel model) onPostAdded;
+  late PostRepo _postRepo;
+  late void Function(PostModel model) onPostUpdated;
+  late void Function(PostModel model) onPostDeleted;
+  late void Function(PostModel model) onPostAdded;
 
   /// Initilise mixin parameters
   void initPostMixin({
-    PostRepo postRepo,
-    Function(PostModel model) onPostUpdated,
-    Function(PostModel model) onPostDeleted,
-    Function(PostModel model) onPostAdded,
+    required PostRepo postRepo,
+    required Function(PostModel model) onPostUpdated,
+    required Function(PostModel model) onPostDeleted,
+    required Function(PostModel model) onPostAdded,
   }) {
     _postRepo = postRepo;
     this.onPostUpdated = onPostUpdated;
@@ -156,17 +158,17 @@ class PostOperationMixin implements PostBaseActions {
   }
 
   @override
-  PageInfo pageInfo = PageInfo(limit: 5);
+  PageInfo? pageInfo = PageInfo(limit: 5);
 
   @override
-  Stream<QuerySnapshot> listenPostToChange;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> listenPostToChange;
 
   @override
-  StreamSubscription<QuerySnapshot> postSubscription;
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> postSubscription;
 
   /// Loggedin user's profile
   @override
-  ProfileModel get myUser => getIt<Session>().user;
+  ProfileModel get myUser => getIt<Session>().user!;
 
   /// Delete posts from firestore
   @override
@@ -180,14 +182,14 @@ class PostOperationMixin implements PostBaseActions {
   }
 
   @override
-  Future handleVote(PostModel model, {@required bool isUpVote}) async {
+  Future handleVote(PostModel model, {required bool isUpVote}) async {
     /// List of all upvotes on post
     final upVotes = model.upVotes ?? <String>[];
 
     /// List of all downvotes on post
     final downVotes = model.downVotes ?? <String>[];
 
-    final String myUserId = myUser.id;
+    final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
@@ -252,7 +254,7 @@ class PostOperationMixin implements PostBaseActions {
 
   /// Listen to channge in posts collection
   @override
-  void postChangeListener(QuerySnapshot snapshot) {
+  void postChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot) {
     if (snapshot.docChanges.isEmpty) {
       return;
     }
@@ -261,15 +263,15 @@ class PostOperationMixin implements PostBaseActions {
       return;
     }
     if (snapshot.docChanges.first.type == DocumentChangeType.added) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onPostAdded(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onPostDelete(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
-      onPostUpdate(PostModel.fromJson(map));
+      onPostUpdate(PostModel.fromJson(map!));
     }
   }
 

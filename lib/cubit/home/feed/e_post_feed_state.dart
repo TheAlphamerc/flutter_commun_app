@@ -10,21 +10,21 @@ enum EPostFeedState {
 const _$EAppStateTypeMap = {EPostFeedState.loading: 'loading'};
 
 extension EAppStateHelper on EPostFeedState {
-  String encode() => _$EAppStateTypeMap[this];
+  String? encode() => _$EAppStateTypeMap[this];
 
   EPostFeedState key(String value) => decodeEAppState(value);
 
   EPostFeedState decodeEAppState(String value) {
     return _$EAppStateTypeMap.entries
-        .singleWhere((element) => element.value == value, orElse: () => null)
-        ?.key;
+        .singleWhere((element) => element.value == value)
+        .key;
   }
 
   T when<T>({
-    @required T Function() initial,
-    @required T Function() loading,
-    @required T Function() loaded,
-    @required T Function() erorr,
+    required T Function() initial,
+    required T Function() loading,
+    required T Function() loaded,
+    required T Function() erorr,
   }) {
     switch (this) {
       case EPostFeedState.initial:
@@ -49,16 +49,16 @@ extension EAppStateHelper on EPostFeedState {
         break;
       default:
     }
-    return null;
+    throw Exception("Unknown EPostFeedState");
   }
 
   T mayBeWhen<T>({
-    @required T Function() elseMaybe,
-    T Function() initial,
-    T Function() loading,
-    T Function() loaded,
-    T Function() loadingMore,
-    T Function() erorr,
+    required T Function() elseMaybe,
+    T Function()? initial,
+    T Function()? loading,
+    T Function()? loaded,
+    T Function()? loadingMore,
+    T Function()? erorr,
   }) {
     switch (this) {
       case EPostFeedState.loading:

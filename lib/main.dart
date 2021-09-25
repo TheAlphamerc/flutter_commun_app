@@ -15,9 +15,9 @@ Future main() async {
   const app = CommunApp(home: SplashPage());
 
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterError.onError = (details) {
-    logger.e(details.exceptionAsString(), null, details.stack);
-  };
+  // FlutterError.onError = (details) {
+  //   logger.e(details.exceptionAsString(), null, details.stack);
+  // };
 
   runZonedGuarded(
     () => runApp(app),

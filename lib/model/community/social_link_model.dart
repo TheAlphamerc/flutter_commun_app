@@ -7,18 +7,18 @@ class SocialLinkModel {
     this.url,
   });
 
-  final String id;
-  final String name;
-  final String type;
-  final String username;
-  final String url;
+  final String? id;
+  final String? name;
+  final String? type;
+  final String? username;
+  final String? url;
 
   SocialLinkModel copyWith({
-    String id,
-    String name,
-    String type,
-    String username,
-    String url,
+    String? id,
+    String? name,
+    String? type,
+    String? username,
+    String? url,
   }) =>
       SocialLinkModel(
         id: id ?? this.id,

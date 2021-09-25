@@ -10,7 +10,7 @@ class ImageViewer extends StatelessWidget {
     );
   }
 
-  const ImageViewer({Key key, this.path}) : super(key: key);
+  const ImageViewer({Key? key, required this.path}) : super(key: key);
   final String path;
 
   @override
@@ -30,11 +30,11 @@ class ImageViewer extends StatelessWidget {
 
 class CacheImage extends StatelessWidget {
   const CacheImage(
-      {Key key, this.path, this.onPressed, this.fit = BoxFit.contain})
+      {Key? key, required this.path, this.onPressed, this.fit = BoxFit.contain})
       : super(key: key);
   final String path;
   final BoxFit fit;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

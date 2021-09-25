@@ -19,21 +19,21 @@ class PostBottomControl extends StatelessWidget {
   final OnPostAction onPostAction;
 
   /// Determine the type of post
-  final PostType type;
+  final PostType? type;
   const PostBottomControl({
-    Key key,
+    Key? key,
     this.type,
-    @required this.model,
-    @required this.onPostAction,
-    @required this.myUser,
+    required this.model,
+    required this.onPostAction,
+    required this.myUser,
   }) : super(key: key);
 
   Widget _icon(BuildContext context,
-      {IconData icon,
-      String text,
+      {required IconData icon,
+      required String text,
       bool isColoredIcon = false,
-      VoidCallback onPressed}) {
-    final Color color = context.theme.iconTheme.color;
+      required VoidCallback onPressed}) {
+    final Color color = context.theme.iconTheme.color!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
@@ -56,7 +56,7 @@ class PostBottomControl extends StatelessWidget {
   }
 
   Widget _vote(BuildContext context) {
-    final Color color = context.theme.iconTheme.color;
+    final Color color = context.theme.iconTheme.color!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       margin: const EdgeInsets.only(left: 16),
@@ -92,20 +92,21 @@ class PostBottomControl extends StatelessWidget {
 
   /// Return true if loggedIn user already upVoted on post
   bool get isUpVote {
-    return model.myVoteStatus(myUser.id) == PostVoteStatus.upVote;
+    return model.myVoteStatus(myUser.id!) == PostVoteStatus.upVote;
   }
 
   /// Return true if loggedIn user already downVoted on post
   bool get isdownVote {
-    return model.myVoteStatus(myUser.id) == PostVoteStatus.downVote;
+    return model.myVoteStatus(myUser.id!) == PostVoteStatus.downVote;
   }
 
   Future openPostDetail(BuildContext context) async {
     if (type == PostType.detail) {
       return;
     }
-    final action =
-        await context.navigate.push(PostDetailPage.getRoute(model.id));
+    final action = await context.navigate.push(PostDetailPage.getRoute(
+        model.id!,
+        onPostAction: (PostAction action, PostModel model) {}));
     if (action != null && action is PostAction) {
       onPostAction(action, model);
     } else if (action != null && action is PostModel) {
@@ -137,7 +138,10 @@ class PostBottomControl extends StatelessWidget {
               onPressed: () => openPostDetail(context)),
 
           /// Share Icon
-          _icon(context, icon: MdiIcons.shareOutline, text: model.shareCount),
+          _icon(context,
+              icon: MdiIcons.shareOutline,
+              text: model.shareCount,
+              onPressed: () {}),
         ],
       ),
     );

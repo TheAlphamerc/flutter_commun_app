@@ -8,18 +8,15 @@ import 'package:flutter_commun_app/ui/pages/post/widget/create_post_images.dart'
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class CommentEntryField extends StatelessWidget {
-  const CommentEntryField({Key key}) : super(key: key);
+  const CommentEntryField({Key? key}) : super(key: key);
 
   Widget _bottomEntryField(BuildContext context) {
+    var state = context.watch<PostDetailCubit>();
     final col = SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          context
-              .watch<PostDetailCubit>()
-              .files
-              .value
-              .fold(() => const SizedBox(), (files) {
+          state.files!.value.fold(() => const SizedBox(), (files) {
             if (!files.notNullAndEmpty) {
               return const SizedBox();
             }
@@ -156,7 +153,7 @@ class CommentEntryField extends StatelessWidget {
       width: 35,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.theme.iconTheme.color, width: 2.4),
+        border: Border.all(color: context.theme.iconTheme.color!, width: 2.4),
       ),
       alignment: Alignment.center,
       child: Container(
@@ -164,7 +161,7 @@ class CommentEntryField extends StatelessWidget {
         width: 15,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: context.theme.iconTheme.color, width: 2.4),
+          border: Border.all(color: context.theme.iconTheme.color!, width: 2.4),
         ),
       ),
     ).ripple(() {

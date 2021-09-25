@@ -9,7 +9,7 @@ class PostHeader extends StatelessWidget {
   final PostModel post;
 
   /// Widget to be displayed on tailing part of header tile
-  final Widget trailing;
+  final Widget? trailing;
 
   /// The tile's internal padding.
 
@@ -19,7 +19,7 @@ class PostHeader extends StatelessWidget {
   final EdgeInsetsGeometry contentPadding;
 
   /// Determine the type of post
-  final PostType type;
+  final PostType? type;
 
   ///If [isFeedPost] is set to `true`, the community info will be displayed on the post header
   ///
@@ -27,18 +27,31 @@ class PostHeader extends StatelessWidget {
   final bool isFeedPost;
 
   const PostHeader({
-    Key key,
-    this.post,
+    Key? key,
+    required this.post,
     this.trailing,
     this.type,
     this.isFeedPost = false,
     this.contentPadding = const EdgeInsets.only(left: 16, right: 16),
   }) : super(key: key);
 
-  String get profileImage =>
-      isFeedPost ? post.communityAvatar : post.user?.photoURL;
-  String get profileName =>
-      isFeedPost ? post.communityName : post.user?.name ?? "N/A";
+  String? get profileImage {
+    if (isFeedPost) {
+      return post.communityAvatar;
+    } else if (post.user != null) {
+      return post.user!.photoURL!;
+    }
+    return null;
+  }
+
+  String? get profileName {
+    if (isFeedPost) {
+      return post.communityName;
+    } else if (post.user != null) {
+      return post.user!.name!;
+    }
+    return "N/A";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +59,14 @@ class PostHeader extends StatelessWidget {
       leading: CircularImage(path: profileImage),
       contentPadding: contentPadding,
       title: Text(
-        profileName,
+        profileName!,
         style: TextStyles.headline15(context),
       ),
       subtitle: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-                text: post.createdAt.toPostTime,
+                text: post.createdAt!.toPostTime,
                 style: TextStyles.bodyText14(context).size(12)),
             if (type != PostType.reply && isFeedPost)
               TextSpan(

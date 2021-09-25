@@ -4,7 +4,7 @@ import 'package:flutter_commun_app/ui/pages/app_start/sign_up/sign_up_with_page.
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class AlreadyHaveAccountWidget extends StatelessWidget {
-  const AlreadyHaveAccountWidget({Key key}) : super(key: key);
+  const AlreadyHaveAccountWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class AlreadyHaveAccountWidget extends StatelessWidget {
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyles.headline16(context)
-            .copyWith(color: context.theme.primaryTextTheme.subtitle1.color),
+            .copyWith(color: context.theme.primaryTextTheme.subtitle1!.color),
         children: [
           const TextSpan(text: "Don't have an account?"),
           TextSpan(

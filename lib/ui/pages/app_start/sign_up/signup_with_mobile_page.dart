@@ -12,7 +12,7 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 
 class SignupWithMobilePage extends StatelessWidget {
-  const SignupWithMobilePage({Key key}) : super(key: key);
+  const SignupWithMobilePage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
@@ -21,12 +21,13 @@ class SignupWithMobilePage extends StatelessWidget {
             ));
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context,
+      {required String title, Color? backgroundColor}) {
     return IntrinsicWidth(
       stepWidth: context.width - 32,
       child: TextButton(
         onPressed: () async {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
           await context.read<SignupMobileCubit>().continueWithPhone(context);
         },
         style: ButtonStyle(

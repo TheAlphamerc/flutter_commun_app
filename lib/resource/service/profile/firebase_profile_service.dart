@@ -10,17 +10,18 @@ class FirebaseProfileService {
 
   FirebaseProfileService(this.auth, this.firestore);
 
+  /// Update user profile
   Future<Either<String, bool>> updateUserProfile(ProfileModel model) async {
-    String errorMessage;
+    String? errorMessage;
     await firestore
         .collection(CollectionsConstants.profile)
-        .doc(model.id)
+        .doc(model.id!)
         .update(model.toJson())
         .onError((FirebaseException error, stackTrace) {
-      errorMessage = error.message;
+      errorMessage = error.message!;
     });
     if (errorMessage != null) {
-      return Left(errorMessage);
+      return Left(errorMessage!);
     }
     return Future.value(const Right(true));
   }
@@ -31,7 +32,7 @@ class FirebaseProfileService {
         .doc(userId)
         .get();
     if (ref != null) {
-      final user = ProfileModel.fromJson(ref.data());
+      final user = ProfileModel.fromJson(ref.data()!);
       return Right(user);
     } else {
       return const Left("User not found");

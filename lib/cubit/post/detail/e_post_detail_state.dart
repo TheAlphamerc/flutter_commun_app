@@ -4,10 +4,10 @@ enum EPostDetailState { loading, loaded, error, delete, savingComment, saved }
 
 extension EAppStateHelper on EPostDetailState {
   T when<T>({
-    @required T Function() loading,
-    @required T Function() loaded,
-    @required T Function() erorr,
-    @required T Function() delete,
+    required T Function() loading,
+    required T Function() loaded,
+    required T Function() erorr,
+    required T Function() delete,
   }) {
     switch (this) {
       case EPostDetailState.loading:
@@ -32,17 +32,17 @@ extension EAppStateHelper on EPostDetailState {
         break;
       default:
     }
-    return null;
+    throw Exception('Invalid EPostDetailState');
   }
 
   T mayBeWhen<T>({
-    @required T Function() elseMaybe,
-    T Function() loading,
-    T Function() loaded,
-    T Function() erorr,
-    T Function() delete,
-    T Function() savingComment,
-    T Function() saved,
+    required T Function() elseMaybe,
+    T Function()? loading,
+    T Function()? loaded,
+    T Function()? erorr,
+    T Function()? delete,
+    T Function()? savingComment,
+    T Function()? saved,
   }) {
     switch (this) {
       case EPostDetailState.loading:

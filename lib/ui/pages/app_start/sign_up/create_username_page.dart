@@ -12,7 +12,7 @@ import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 import '../../../../locator.dart';
 
 class CreateUserNamePage extends StatelessWidget {
-  const CreateUserNamePage({Key key}) : super(key: key);
+  const CreateUserNamePage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute(UserCredential userCredential) {
     return MaterialPageRoute(
       builder: (BuildContext context) => BlocProvider(
@@ -23,12 +23,13 @@ class CreateUserNamePage extends StatelessWidget {
     );
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context,
+      {required String title, Color? backgroundColor}) {
     return IntrinsicWidth(
       stepWidth: context.width - 32,
       child: TextButton(
         onPressed: () async {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
           context.read<UsernameCubit>().checkUserNameAvailability(context);
         },
         style: ButtonStyle(
@@ -67,6 +68,9 @@ class CreateUserNamePage extends StatelessWidget {
           },
           available: () {
             context.read<UsernameCubit>().createUserAccount(context);
+          },
+          accountCreated: () {
+            Utility.cprint("Account created");
           },
         );
       },

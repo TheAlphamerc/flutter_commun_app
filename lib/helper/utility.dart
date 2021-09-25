@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
@@ -9,16 +11,16 @@ import 'package:flutter_commun_app/locator.dart';
 class Utility {
   static void displaySnackbar(BuildContext context,
       {String msg = "Feature is under development",
-      GlobalKey<ScaffoldState> key}) {
+      GlobalKey<ScaffoldState>? key}) {
     final snackBar = SnackBar(content: Text(msg));
     if (key != null && key.currentState != null) {
       // key.currentState.hideCurrentSnackBar();
       // key.currentState.showSnackBar(snackBar);
-      ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar();
-      ScaffoldMessenger.maybeOf(context).showSnackBar(snackBar);
+      ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar();
+      ScaffoldMessenger.maybeOf(context)!.showSnackBar(snackBar);
     } else {
-      ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar();
-      ScaffoldMessenger.maybeOf(context).showSnackBar(snackBar);
+      ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar();
+      ScaffoldMessenger.maybeOf(context)!.showSnackBar(snackBar);
     }
   }
 
@@ -30,7 +32,7 @@ class Utility {
     return "";
   }
 
-  static String decodeStateMessage(String message) {
+  static String decodeStateMessage(String? message) {
     if (message != null && message.contains("##")) {
       return message.split("##")[0];
     }
@@ -39,8 +41,8 @@ class Utility {
 
   static void cprint(String message,
       {dynamic error,
-      String label,
-      StackTrace stackTrace,
+      String? label,
+      StackTrace? stackTrace,
       bool enableLogger = false}) {
     if (kDebugMode) {
       // ignore: avoid_print

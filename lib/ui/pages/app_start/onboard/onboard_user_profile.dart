@@ -15,8 +15,7 @@ import 'package:flutter_commun_app/ui/widget/form/validator.dart';
 import 'package:flutter_commun_app/ui/widget/painter/circle_border_painter.dart';
 
 class OnBoardUserProfilePage extends StatelessWidget {
-  const OnBoardUserProfilePage({Key key, this.model}) : super(key: key);
-  final ProfileModel model;
+  const OnBoardUserProfilePage({Key? key}) : super(key: key);
 
   static Route<T> getRoute<T>(ProfileModel model) {
     return MaterialPageRoute<T>(builder: (_) {
@@ -27,12 +26,13 @@ class OnBoardUserProfilePage extends StatelessWidget {
     });
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context,
+      {required String title, Color? backgroundColor}) {
     return IntrinsicWidth(
       stepWidth: context.width - 32,
       child: TextButton(
         onPressed: () async {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
           context.read<OnboardProfileCubit>().submit(context);
         },
         style: ButtonStyle(
@@ -153,7 +153,7 @@ class OnBoardUserProfilePage extends StatelessWidget {
 
 class _UserAvatar extends StatelessWidget {
   const _UserAvatar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   void pickImage(BuildContext context) {
@@ -227,7 +227,7 @@ class _UserAvatar extends StatelessWidget {
 
 class _ProfileBanner extends StatelessWidget {
   const _ProfileBanner({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   void pickImage(BuildContext context) {
@@ -304,10 +304,10 @@ class _ProfileBanner extends StatelessWidget {
 
 class _CustomInputField extends StatelessWidget {
   const _CustomInputField({
-    Key key,
-    this.controller,
-    this.label,
-    @required this.type,
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.type,
     this.maxLines = 1,
     this.height = 70,
     this.readOnly = false,
@@ -326,14 +326,17 @@ class _CustomInputField extends StatelessWidget {
       maxLines: maxLines,
       keyboardType: TextInputType.text,
       scrollPadding: EdgeInsets.zero,
-      controller: controller ?? TextEditingController(),
+      controller: controller,
       style: TextStyles.headline16(context),
       decoration: getInputDecotration(
         context,
-        isValid: val,
       ),
       readOnly: readOnly,
-      validator: KValidator.buildValidators(context, type),
+      validator: (val) => KValidator.buildValidators(
+        val,
+        context: context,
+        choice: type,
+      ),
       textInputAction: TextInputAction.next,
     );
   }
@@ -359,7 +362,7 @@ class _CustomInputField extends StatelessWidget {
   }
 
   InputDecoration getInputDecotration(BuildContext context,
-      {String hintText, Widget suffixIcon, dartz.Option<bool> isValid}) {
+      {String? hintText, Widget? suffixIcon}) {
     return InputDecoration(
       hintText: hintText,
       contentPadding: EdgeInsets.zero,

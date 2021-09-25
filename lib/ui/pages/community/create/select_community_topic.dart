@@ -13,7 +13,8 @@ import 'package:flutter_commun_app/ui/widget/form/k_textfield2.dart';
 
 class SelectCommunityTopicSheet extends StatelessWidget {
   final CreateCommunityCubit cubit;
-  const SelectCommunityTopicSheet({Key key, this.cubit}) : super(key: key);
+  const SelectCommunityTopicSheet({Key? key, required this.cubit})
+      : super(key: key);
   static Route<T> getRoute<T>(CreateCommunityCubit cubit) {
     return FadeRoute(
       builder: (BuildContext context) =>
@@ -60,7 +61,7 @@ class SelectCommunityTopicSheet extends StatelessWidget {
     final isValid = context
         .read<CreateCommunityCubit>()
         .topicsFormKey
-        .currentState
+        .currentState!
         .validate();
     if (!isValid) {
       return;
@@ -118,7 +119,7 @@ class SelectCommunityTopicSheet extends StatelessWidget {
                                 TextStyles.headline16(context).primary(context),
                           ),
                         ).cornerRadius(8).ripple(() {
-                          FocusManager.instance.primaryFocus.unfocus();
+                          FocusManager.instance.primaryFocus!.unfocus();
                           context.read<CreateCommunityCubit>().addTopic();
                         }, radius: 8)
                       ],

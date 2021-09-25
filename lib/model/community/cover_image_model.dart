@@ -8,16 +8,16 @@ class CoverImage {
     this.modifyAt,
   });
 
-  final String id;
-  final String path;
-  final String createdAt;
-  final String modifyAt;
+  final String? id;
+  final String? path;
+  final String? createdAt;
+  final String? modifyAt;
 
   CoverImage copyWith({
-    String id,
-    String path,
-    String createdAt,
-    String modifyAt,
+    String? id,
+    String? path,
+    String? createdAt,
+    String? modifyAt,
   }) =>
       CoverImage(
         id: id ?? this.id,

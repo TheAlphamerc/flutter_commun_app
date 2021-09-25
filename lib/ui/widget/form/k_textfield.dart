@@ -17,10 +17,10 @@ enum FieldType {
 
 class KTextField extends StatelessWidget {
   const KTextField(
-      {Key key,
+      {Key? key,
       this.controller,
       this.label,
-      @required this.type,
+      required this.type,
       this.maxLines = 1,
       this.hintText = '',
       this.height = 70,
@@ -34,20 +34,20 @@ class KTextField extends StatelessWidget {
       this.inputFormatters,
       this.backgroundColor})
       : super(key: key);
-  final TextEditingController controller;
-  final String label, hintText;
+  final TextEditingController? controller;
+  final String? label, hintText;
   final FieldType type;
   final int maxLines;
   final double height;
-  final Widget suffixIcon;
-  final bool obscureText;
-  final Function(String) onSubmit;
+  final Widget? suffixIcon;
+  final bool? obscureText;
+  final Function(String)? onSubmit;
   final EdgeInsetsGeometry padding;
   final TextCapitalization textCapitalization;
-  final Function(String) onChange;
-  final String Function(String) validator;
-  final Color backgroundColor;
-  final List<TextInputFormatter> inputFormatters;
+  final Function(String)? onChange;
+  final String? Function(String?)? validator;
+  final Color? backgroundColor;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -66,11 +66,11 @@ class KTextField extends StatelessWidget {
             },
             onFieldSubmitted: (val) {
               if (onSubmit != null) {
-                onSubmit(val);
+                onSubmit!.call(val);
               }
             },
             inputFormatters: inputFormatters,
-            obscureText: obscureText,
+            obscureText: obscureText!,
             maxLines: maxLines,
             onChanged: onChange,
             textCapitalization: textCapitalization,
@@ -83,7 +83,12 @@ class KTextField extends StatelessWidget {
                     type == FieldType.confirmPassword)
                 ? TextInputAction.done
                 : TextInputAction.next,
-            validator: validator ?? validators(type, context),
+            validator: validator ??
+                (String? val) => KValidator.buildValidators(
+                      val,
+                      context: context,
+                      choice: type,
+                    ),
           ),
         ),
       ],
@@ -91,7 +96,7 @@ class KTextField extends StatelessWidget {
   }
 
   InputDecoration getInputDecotration(BuildContext context,
-      {String hintText, Widget suffixIcon}) {
+      {String? hintText, Widget? suffixIcon}) {
     return InputDecoration(
         // helperText: '',
         hintText: hintText,
@@ -111,7 +116,7 @@ class KTextField extends StatelessWidget {
         suffixIcon: suffixIcon);
   }
 
-  TextInputType getKeyboardType(FieldType choice) {
+  TextInputType? getKeyboardType(FieldType choice) {
     switch (choice) {
       case FieldType.name:
         return TextInputType.text;
@@ -129,27 +134,6 @@ class KTextField extends StatelessWidget {
         return TextInputType.url;
       default:
         return TextInputType.text;
-    }
-  }
-
-  String Function(String) validators(FieldType choice, BuildContext context) {
-    switch (choice) {
-      case FieldType.name:
-        return KValidator.buildValidators(context, choice);
-      case FieldType.email:
-        return KValidator.buildValidators(context, choice);
-      case FieldType.password:
-        return KValidator.buildValidators(context, choice);
-      case FieldType.phone:
-        return KValidator.buildValidators(context, choice);
-      case FieldType.confirmPassword:
-        return KValidator.buildValidators(context, choice);
-      case FieldType.reset:
-        return KValidator.buildValidators(context, choice);
-      case FieldType.optional:
-        return KValidator.buildValidators(context, choice);
-      default:
-        return KValidator.buildValidators(context, choice);
     }
   }
 }

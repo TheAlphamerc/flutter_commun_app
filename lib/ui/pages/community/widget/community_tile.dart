@@ -6,20 +6,23 @@ import 'package:flutter_commun_app/ui/widget/circular_image.dart';
 
 class CommunityTile extends StatelessWidget {
   final CommunityModel model;
-  final VoidCallback onJoinButtonPressed;
-  final VoidCallback onTilePressed;
+  final VoidCallback? onJoinButtonPressed;
+  final VoidCallback? onTilePressed;
   const CommunityTile(
-      {Key key, this.model, this.onJoinButtonPressed, this.onTilePressed})
+      {Key? key,
+      required this.model,
+      this.onJoinButtonPressed,
+      this.onTilePressed})
       : super(key: key);
 
   int get membersCount {
     if (model.membersCount == null || model.membersCount == -1) return 0;
-    return model.membersCount;
+    return model.membersCount!;
   }
 
   Widget _rippleWrapper(BuildContext context, Widget child) {
     if (onJoinButtonPressed == null && onTilePressed != null) {
-      return child.ripple(onTilePressed);
+      return child.ripple(onTilePressed!);
     } else {
       return child;
     }
@@ -39,7 +42,7 @@ class CommunityTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(model.name, style: TextStyles.headline16(context)),
+              Text(model.name!, style: TextStyles.headline16(context)),
               Text(
                 "$membersCount Followers",
                 style: TextStyles.bodyText14(context)
@@ -62,7 +65,7 @@ class CommunityTile extends StatelessWidget {
                                 : context.primaryColor)),
                     backgroundColor:
                         isJoined ? KColors.light_gray : context.primaryColor)
-                .ripple(onJoinButtonPressed, radius: 40),
+                .ripple(onJoinButtonPressed!, radius: 40),
         ],
       ),
     );

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key key}) : super(key: key);
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();

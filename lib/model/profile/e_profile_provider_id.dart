@@ -9,50 +9,41 @@ const _$EProfileProviderIdTypeMap = {
 };
 
 extension EProfileProviderIdHelper on EProfileProviderId {
-  String encode() => _$EProfileProviderIdTypeMap[this];
+  String? encode() => _$EProfileProviderIdTypeMap[this];
 
-  EProfileProviderId key(String value) => _decodeEProfileProviderId(value);
+  EProfileProviderId key(String? value) => _decodeEProfileProviderId(value);
 
-  EProfileProviderId _decodeEProfileProviderId(String value) {
+  EProfileProviderId _decodeEProfileProviderId(String? value) {
     return _$EProfileProviderIdTypeMap.entries
-        .singleWhere((element) => element.value == value, orElse: () => null)
-        ?.key;
+        .singleWhere((element) => element.value == value)
+        .key;
   }
 
   T when<T>({
-    T Function() password,
-    T Function() google,
-    T Function() phone,
-    T Function() elseMaybe,
+    required T Function() password,
+    required T Function() google,
+    required T Function() phone,
+    required T Function() elseMaybe,
   }) {
     switch (this) {
       case EProfileProviderId.Password:
-        if (password != null) {
-          return password.call();
-        }
-        break;
+        return password.call();
       case EProfileProviderId.Google:
-        if (google != null) {
-          return google.call();
-        }
-        break;
+        return google.call();
       case EProfileProviderId.Phone:
-        if (phone != null) {
-          return phone.call();
-        }
-        break;
+        return phone.call();
       default:
     }
     if (elseMaybe != null) return elseMaybe.call();
 
-    return null;
+    throw Exception("Unknown value: $this");
   }
 
   T mayBeWhen<T>(
     T Function() elseMaybe, {
-    T Function() password,
-    T Function() google,
-    T Function() phone,
+    T Function()? password,
+    T Function()? google,
+    T Function()? phone,
   }) {
     switch (this) {
       case EProfileProviderId.Password:
@@ -61,21 +52,18 @@ extension EProfileProviderIdHelper on EProfileProviderId {
         } else {
           return elseMaybe();
         }
-        break;
       case EProfileProviderId.Google:
         if (google != null) {
           return google.call();
         } else {
           return elseMaybe();
         }
-        break;
       case EProfileProviderId.Phone:
         if (phone != null) {
           return phone.call();
         } else {
           return elseMaybe();
         }
-        break;
       default:
         return elseMaybe();
     }

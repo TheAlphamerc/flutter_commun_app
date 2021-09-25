@@ -17,14 +17,14 @@ class CommentBottomControl extends StatelessWidget {
   /// For ex. upVote, downVote, and share the post
   final OnPostAction onPostAction;
   const CommentBottomControl({
-    Key key,
-    @required this.model,
-    @required this.onPostAction,
-    @required this.myUser,
+    Key? key,
+    required this.model,
+    required this.onPostAction,
+    required this.myUser,
   }) : super(key: key);
 
   Widget _vote(BuildContext context) {
-    final Color color = context.theme.iconTheme.color;
+    final Color color = context.theme.iconTheme.color!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       margin: const EdgeInsets.only(left: 16),
@@ -60,12 +60,12 @@ class CommentBottomControl extends StatelessWidget {
 
   /// Return true if loggedIn user already upVoted on post
   bool get isUpVote {
-    return model.myVoteStatus(myUser.id) == PostVoteStatus.upVote;
+    return model.myVoteStatus(myUser.id!) == PostVoteStatus.upVote;
   }
 
   /// Return true if loggedIn user already downVoted on post
   bool get isdownVote {
-    return model.myVoteStatus(myUser.id) == PostVoteStatus.downVote;
+    return model.myVoteStatus(myUser.id!) == PostVoteStatus.downVote;
   }
 
   @override
@@ -88,7 +88,7 @@ class CommentBottomControl extends StatelessWidget {
             backgroundColor: KColors.light_gray_2,
           ),
           const SizedBox(width: 10),
-          Text(model.createdAt.toCommentTime,
+          Text(model.createdAt!.toCommentTime,
               style: TextStyles.bodyText14(context)),
         ],
       ),

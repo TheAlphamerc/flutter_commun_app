@@ -12,7 +12,7 @@ class ProfileRepoImpl extends ProfileRepo {
 
   @override
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
-      {Function(FileUploadTaskResponse response) onFileUpload}) async {
+      {required Function(FileUploadTaskResponse response) onFileUpload}) async {
     return storageService.uploadFile(file, uploadPath,
         onFileUpload: onFileUpload);
   }

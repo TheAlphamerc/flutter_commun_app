@@ -11,7 +11,7 @@ extension TextStyleHelpers on TextStyle {
   TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
   TextStyle size(double value) => copyWith(fontSize: value);
   TextStyle withOpacity(double value) =>
-      copyWith(color: color.withOpacity(value));
+      copyWith(color: color!.withOpacity(value));
 }
 
 extension PaddingHelper on Widget {
@@ -91,8 +91,8 @@ extension CornerRadius on Widget {
 extension OnPressed on Widget {
   Widget ripple(
     Function onPressed, {
-    double radius = 0,
-    BorderRadiusGeometry borderRadius =
+    double? radius,
+    BorderRadiusGeometry? borderRadius =
         const BorderRadius.all(Radius.circular(5)),
   }) =>
       Stack(
@@ -109,7 +109,7 @@ extension OnPressed on Widget {
                     RoundedRectangleBorder(
                       borderRadius: radius != null
                           ? BorderRadius.all(Radius.circular(radius))
-                          : borderRadius,
+                          : borderRadius!,
                     ),
                   ),
                 ),
@@ -157,41 +157,41 @@ extension ExAlignment on Widget {
       );
 }
 
-extension StringHelper on String {
-  String takeOnly(int value) {
-    if (this != null && length >= value) {
-      return substring(0, value);
+extension StringHelper on String? {
+  String? takeOnly(int value) {
+    if (this != null && this!.length >= value) {
+      return this!.substring(0, value);
     } else {
       return this;
     }
   }
 
-  bool get isNotNullEmpty => this != null && isNotEmpty;
+  bool get isNotNullEmpty => this != null && this!.isNotEmpty;
 
   String get toPostTime {
-    if (this == null || isEmpty) {
+    if (this == null || this!.isEmpty) {
       return '';
     }
-    final dt = DateTime.parse(this).toLocal();
+    final dt = DateTime.parse(this!).toLocal();
     final dat =
         '${DateFormat.jm().format(dt)} - ${DateFormat("dd MMM yy").format(dt)}';
     return dat;
   }
 
   String get toHMTime {
-    if (this == null || isEmpty) {
+    if (this == null || this!.isEmpty) {
       return '';
     }
-    final dt = DateTime.parse(this).toLocal();
+    final dt = DateTime.parse(this!).toLocal();
     final dat = DateFormat("hh:mm:ss").format(dt);
     return dat;
   }
 
   String get toCommentTime {
-    if (this == null || isEmpty) {
+    if (this == null || this!.isEmpty) {
       return '';
     }
-    final dt = DateTime.parse(this).toLocal();
+    final dt = DateTime.parse(this!).toLocal();
     final dat = DateFormat.jm().format(dt);
     return dat;
   }
@@ -202,7 +202,7 @@ extension ThemeHelper on BuildContext {
   Color get primaryColor => Theme.of(this).primaryColor;
   Color get onPrimary => Theme.of(this).colorScheme.onPrimary;
   TextTheme get textTheme => Theme.of(this).textTheme;
-  Color get bodyTextColor => Theme.of(this).textTheme.bodyText1.color;
+  Color get bodyTextColor => Theme.of(this).textTheme.bodyText1!.color!;
   Color get disabledColor => Theme.of(this).disabledColor;
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
   ThemeType get themeType => Theme.of(this).brightness == Brightness.light
@@ -219,33 +219,37 @@ extension SizeHelper on BuildContext {
   double get height => MediaQuery.of(this).size.height;
 }
 
-extension ListHelper<T> on List<T> {
+extension ListHelper<T> on List<T>? {
   Option<List<T>> get value {
-    if (this != null && isNotEmpty) {
-      return some(this);
+    if (this != null && this!.isNotEmpty) {
+      return some(this!);
     } else {
       return none();
     }
   }
 
   /// Check if list is not null and not empty
-  bool get notNullAndEmpty => this != null && isNotEmpty;
+  bool get notNullAndEmpty => this != null && this!.isNotEmpty;
 
   Widget on({
-    Widget Function() ifNull,
-    Widget Function() ifEmpty,
-    Widget Function() ifValue,
+    Widget Function()? nul,
+    Widget Function()? empty,
+    Widget Function()? value,
   }) {
     if (this == null) {
-      return ifNull();
-    } else if (isEmpty) {
-      return ifEmpty();
+      return nul!.call();
+    } else if (this!.isEmpty) {
+      return empty!.call();
     } else {
-      return ifValue();
+      return value!.call();
     }
   }
 }
 
+extension OptionHelper<T> on Option<T> {
+  T? get valueOrDefault => fold(() => null, (a) => a);
+}
+
 extension ApplocalisationHelper on BuildContext {
-  AppLocalizations get locale => AppLocalizations.of(this);
+  AppLocalizations get locale => AppLocalizations.of(this)!;
 }

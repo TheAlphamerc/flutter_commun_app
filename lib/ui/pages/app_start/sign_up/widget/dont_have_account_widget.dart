@@ -1,11 +1,10 @@
-// ignore: file_names
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/sign_up_with_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class DontHaveAccountWidget extends StatelessWidget {
-  const DontHaveAccountWidget({Key key}) : super(key: key);
+  const DontHaveAccountWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class DontHaveAccountWidget extends StatelessWidget {
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyles.headline16(context)
-            .copyWith(color: context.theme.primaryTextTheme.subtitle1.color),
+            .copyWith(color: context.theme.primaryTextTheme.subtitle1!.color),
         children: [
           const TextSpan(text: "Don't have an account?"),
           TextSpan(

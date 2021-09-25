@@ -18,7 +18,7 @@ class FirebaseAuthService {
   ///
   /// `onResponse` is a callback to return response recieved from firebase sdk
   Future<void> verifyPhoneNumber(String phone,
-      {Function(VerifyPhoneResponse response) onResponse}) async {
+      {required Function(VerifyPhoneResponse response) onResponse}) async {
     await auth.verifyPhoneNumber(
       phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) {
@@ -27,7 +27,7 @@ class FirebaseAuthService {
       verificationFailed: (FirebaseAuthException e) {
         onResponse(VerifyPhoneResponse.verificationFailed(e));
       },
-      codeSent: (String verificationId, int resendToken) {
+      codeSent: (String verificationId, int? resendToken) {
         onResponse(VerifyPhoneResponse.codeSent(verificationId, resendToken));
       },
       codeAutoRetrievalTimeout: (String verificationId) {
@@ -41,20 +41,22 @@ class FirebaseAuthService {
   /// If Otp is verfied successfully then new user will created in firebase.
   /// Creating new user doesn't mean its data is saved in firebase firestore/realtime database.
   Future<Either<String, UserCredential>> verifyOTP(
-      {String verificationId, String smsCode}) async {
-    final PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId, smsCode: smsCode);
-    String errorMessage;
-    // Sign the user in (or link) with the credential
-    final userCredential = await auth
-        .signInWithCredential(credential)
-        .onError((FirebaseAuthException error, stackTrace) {
-      log("VerifyOTP", error: error);
-      errorMessage = error.message;
-      return null;
-    });
+      {required String verificationId, required String smsCode}) async {
+    try {
+      final PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+      // Sign the user in (or link) with the credential
+      final UserCredential userCredential = await auth
+          .signInWithCredential(credential)
+          .onError((FirebaseAuthException error, StackTrace stackTrace) {
+        log("VerifyOTP", error: error);
+        throw error;
+      });
 
-    return userCredential == null ? Left(errorMessage) : Right(userCredential);
+      return Right(userCredential);
+    } on FirebaseAuthException catch (error) {
+      return Left(error.message!);
+    }
   }
 
   /// Check if username is already exists or not.
@@ -104,7 +106,7 @@ class FirebaseAuthService {
 
       return Right(userCredential);
     } on FirebaseAuthException catch (e) {
-      String errorMessage = e.message;
+      String? errorMessage = e.message;
       if (e.code == 'weak-password') {
         errorMessage = 'The password provided is too weak.';
         // print(errorMessage);
@@ -112,7 +114,7 @@ class FirebaseAuthService {
         errorMessage = "The account already exists for that email.";
         // print(errorMessage);
       }
-      return Left(errorMessage);
+      return Left(errorMessage!);
     } catch (e) {
       // print(e);
       return Left(e.toString());
@@ -158,11 +160,11 @@ class FirebaseAuthService {
     );
     try {
       // Trigger the authentication flow
-      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+          await googleUser!.authentication;
 
       // Create a new credential
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -171,14 +173,10 @@ class FirebaseAuthService {
       );
 
       // Once signed in, return the UserCredential
-      final userCredential = await FirebaseAuth.instance
+      final UserCredential userCredential = await FirebaseAuth.instance
           .signInWithCredential(credential)
-          .onError((error, stackTrace) => null);
-      if (userCredential != null) {
-        return Right(userCredential);
-      } else {
-        return const Left("Something went wrong");
-      }
+          .onError((error, stackTrace) => throw Exception("Unknown error"));
+      return Right(userCredential);
     } catch (error) {
       // print(error);
       return const Left("Something went wrong");
@@ -204,7 +202,7 @@ class FirebaseAuthService {
         return const Left("Not-Found");
       }
     } on FirebaseAuthException catch (error) {
-      return Left(error.message);
+      return Left(error.message!);
     }
   }
 

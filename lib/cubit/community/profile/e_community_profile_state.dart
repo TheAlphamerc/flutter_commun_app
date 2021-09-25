@@ -6,34 +6,33 @@ const _$EcommunityProfileStateTypeMap = {
 };
 
 extension EcommunityProfileStateHelper on EcommunityProfileState {
-  String encode() => _$EcommunityProfileStateTypeMap[this];
+  String? encode() => _$EcommunityProfileStateTypeMap[this];
 
   EcommunityProfileState key(String value) =>
       decodeEcommunityProfileState(value);
 
   EcommunityProfileState decodeEcommunityProfileState(String value) {
     return _$EcommunityProfileStateTypeMap.entries
-        .singleWhere((element) => element.value == value, orElse: () => null)
-        ?.key;
+        .singleWhere((element) => element.value == value)
+        .key;
   }
 
   T when<T>({
-    @required T Function() initial,
+    required T Function() initial,
   }) {
     switch (this) {
       case EcommunityProfileState.initial:
         return initial.call();
-        break;
       default:
     }
-    return null;
+    throw Exception('Invalid EcommunityProfileState');
   }
 
   T mayBeWhen<T>({
-    @required T Function() elseMaybe,
-    T Function() initial,
-    T Function() loaded,
-    T Function() loadingMore,
+    required T Function() elseMaybe,
+    T Function()? initial,
+    T Function()? loaded,
+    T Function()? loadingMore,
   }) {
     switch (this) {
       case EcommunityProfileState.initial:
@@ -42,21 +41,18 @@ extension EcommunityProfileStateHelper on EcommunityProfileState {
         } else {
           return elseMaybe();
         }
-        break;
       case EcommunityProfileState.loaded:
         if (loaded != null) {
           return loaded.call();
         } else {
           return elseMaybe();
         }
-        break;
       case EcommunityProfileState.loadingMore:
         if (loadingMore != null) {
           return loadingMore.call();
         } else {
           return elseMaybe();
         }
-        break;
       default:
         return elseMaybe();
     }

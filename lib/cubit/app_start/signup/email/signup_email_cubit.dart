@@ -26,7 +26,7 @@ class SignupEmailCubit extends Cubit<SignupEmailState>
       displayConfirmPasswords.value = value;
 
   Future signupWithEmail(BuildContext context) async {
-    final isValid = formKey.currentState.validate();
+    final isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
     } else if (password.text != confirmPassword.text) {
@@ -59,9 +59,9 @@ class SignupEmailCubit extends Cubit<SignupEmailState>
 }
 
 mixin SignupEmailCubitMixin {
-  TextEditingController email;
-  TextEditingController password;
-  TextEditingController confirmPassword;
+  late TextEditingController email;
+  late TextEditingController password;
+  late TextEditingController confirmPassword;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> displayPasswords = ValueNotifier<bool>(false);
   ValueNotifier<bool> displayConfirmPasswords = ValueNotifier<bool>(false);

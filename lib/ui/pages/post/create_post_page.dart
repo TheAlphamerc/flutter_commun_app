@@ -17,7 +17,7 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CreatePostPage extends StatefulWidget {
-  const CreatePostPage({Key key}) : super(key: key);
+  const CreatePostPage({Key? key}) : super(key: key);
   static Route<T> getRoute<T>(CommunityModel community) {
     return MaterialPageRoute(builder: (_) {
       return BlocProvider(
@@ -33,13 +33,12 @@ class CreatePostPage extends StatefulWidget {
   static Route<T> getRoute2<T>(CommunityFeedCubit cubit) {
     return MaterialPageRoute(builder: (_) {
       return BlocProvider.value(
-          value: cubit,
-          child: BlocProvider(
-            create: (context) => CreatePostCubit(
-                postRepo: getIt<PostRepo>(),
-                community: cubit?.myCommunity?.first),
-            child: const CreatePostPage(),
-          ));
+        value: cubit,
+        child: BlocProvider(
+          create: (context) => CreatePostCubit(postRepo: getIt<PostRepo>()),
+          child: const CreatePostPage(),
+        ),
+      );
     });
   }
 
@@ -48,7 +47,7 @@ class CreatePostPage extends StatefulWidget {
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
-  FocusNode node;
+  late FocusNode node;
 
   @override
   void initState() {
@@ -65,12 +64,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
           child: Row(
             children: [
               if (community.avatar != null &&
-                  !community.avatar.contains("object-not-found"))
+                  !community.avatar!.contains("object-not-found"))
                 CircleAvatar(
                   radius: 20,
                   key: const ValueKey("user-profile"),
                   backgroundColor: KColors.light_gray,
-                  backgroundImage: NetworkImage(community.avatar),
+                  backgroundImage: NetworkImage(community.avatar!),
                 )
               else
                 const CircleAvatar(
@@ -86,7 +85,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       style: TextStyles.subtitle14(context)
                           .copyWith(fontSize: 10, fontWeight: FontWeight.w500)),
                   const SizedBox(height: 0),
-                  Text(community.name, style: TextStyles.headline16(context)),
+                  Text(community.name!, style: TextStyles.headline16(context)),
                 ],
               ),
               const Spacer(),
@@ -115,12 +114,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
           children: [
             if (user != null &&
                 user.photoURL != null &&
-                !user.photoURL.contains("object-not-found"))
+                !user.photoURL!.contains("object-not-found"))
               CircleAvatar(
                 radius: 20,
                 key: const ValueKey("user-profile"),
                 backgroundColor: KColors.light_gray,
-                backgroundImage: NetworkImage(user.photoURL),
+                backgroundImage: NetworkImage(user.photoURL!),
               )
             else
               const CircleAvatar(
@@ -230,6 +229,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   void chooseCommunity(BuildContext context, CreatePostCubit postCubit) {
+    /// TODO: Fetch community list from server if not available in postcubit
     showMaterialModalBottomSheet(
       context: context,
       builder: (_) => Builder(
@@ -305,7 +305,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             break;
 
           case ECreatePostState.eror:
-            Utility.displaySnackbar(context, msg: messgae);
+            Utility.displaySnackbar(context, msg: messgae!);
             break;
 
           default:

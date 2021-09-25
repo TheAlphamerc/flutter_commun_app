@@ -17,7 +17,7 @@ class PostRepoImpl extends PostRepo {
 
   @override
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
-      {Function(FileUploadTaskResponse response) onFileUpload}) {
+      {required Function(FileUploadTaskResponse response) onFileUpload}) {
     return storageService.uploadFile(file, uploadPath,
         onFileUpload: onFileUpload);
   }
@@ -37,24 +37,33 @@ class PostRepoImpl extends PostRepo {
   }
 
   @override
-  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
-      getPostLists(String userId, PageInfo pageinfo) {
+  Future<
+      Either<
+          String,
+          Tuple2<List<PostModel>,
+              QueryDocumentSnapshot<Map<String, dynamic>>>>> getPostLists(
+      String userId, PageInfo pageinfo) {
     return postService.getPostLists(userId, pageinfo);
   }
 
   @override
-  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
-      getCommunityPosts(String communityId, {PageInfo option}) {
+  Future<
+          Either<
+              String,
+              Tuple2<List<PostModel>,
+                  QueryDocumentSnapshot<Map<String, dynamic>>>>>
+      getCommunityPosts(String communityId, {required PageInfo option}) {
     return postService.getCommunityPosts(communityId, option: option);
   }
 
   @override
-  Stream<QuerySnapshot> listenToPostChange() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenToPostChange() {
     return postService.listenPostToChange();
   }
 
   @override
-  Stream<QuerySnapshot> listenToCommentChange(String parentPostId) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenToCommentChange(
+      String parentPostId) {
     return postService.listenToCommentChange(parentPostId);
   }
 

@@ -29,7 +29,7 @@ class Post extends StatelessWidget {
   final EdgeInsetsGeometry margin;
 
   /// Determine the type of post
-  final PostType type;
+  final PostType? type;
 
   ///If [isFeedPost] is set to `true`, the community info will be displayed on the post header
   ///
@@ -37,11 +37,11 @@ class Post extends StatelessWidget {
   final bool isFeedPost;
 
   const Post({
-    Key key,
+    Key? key,
     this.type = PostType.post,
-    @required this.post,
-    @required this.onPostAction,
-    @required this.myUser,
+    required this.post,
+    required this.onPostAction,
+    required this.myUser,
     this.isFeedPost = false,
     this.margin = const EdgeInsets.symmetric(vertical: 8),
   }) : super(key: key);
@@ -58,6 +58,7 @@ class Post extends StatelessWidget {
           context,
           headerChild: PostHeader(
             post: post,
+            type: type!,
             contentPadding: EdgeInsets.zero,
             isFeedPost: isFeedPost,
           ),
@@ -119,8 +120,10 @@ class Post extends StatelessWidget {
     if (type == PostType.detail) {
       return;
     }
-    final action =
-        await context.navigate.push(PostDetailPage.getRoute(post.id));
+    final action = await context.navigate.push(PostDetailPage.getRoute(
+      post.id!,
+      onPostAction: (PostAction action, PostModel model) {},
+    ));
     if (action != null && action is PostAction) {
       onPostAction(action, post);
     } else if (action != null && action is PostModel) {

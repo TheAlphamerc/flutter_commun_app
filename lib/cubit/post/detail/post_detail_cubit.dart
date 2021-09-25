@@ -24,7 +24,7 @@ part 'post_detail_state.dart';
 class PostDetailCubit extends Cubit<PostDetailState>
     implements PostBaseActions {
   final PostRepo postRepo;
-  PostDetailCubit(this.postRepo, {@required String postId})
+  PostDetailCubit(this.postRepo, {required String postId})
       : super(
             const PostDetailState.response(estate: EPostDetailState.loading)) {
     commentController = TextEditingController();
@@ -39,40 +39,41 @@ class PostDetailCubit extends Cubit<PostDetailState>
     });
     progress = BehaviorSubject<String>();
   }
-  List<File> files = [];
+  List<File>? files = [];
   AttachmentType postType = AttachmentType.None;
-  TextEditingController commentController;
-  BehaviorSubject<String> progress;
+  late TextEditingController commentController;
+  late BehaviorSubject<String> progress;
 
   Future<void> selectFile(File file, AttachmentType type) async {
     if (postType != type) {
       files = [];
     }
     files = files ?? [];
-    files.add(file);
+    files!.add(file);
     postType = type;
-    updatePostState(state.post, message: "Image Added");
+    updatePostState(state.post!, message: "Image Added");
   }
 
   void removeFiles(File file) {
-    files.remove(file);
-    updatePostState(state.post, message: "File Removed");
+    files!.remove(file);
+    updatePostState(state.post!, message: "File Removed");
   }
 
   @override
-  PageInfo pageInfo = PageInfo(limit: 5);
+  PageInfo? pageInfo = PageInfo(limit: 5);
 
   @override
-  ProfileModel get myUser => getIt<Session>().user;
+  ProfileModel get myUser => getIt<Session>().user!;
 
-  Stream<QuerySnapshot> listenCommentsChange;
-  StreamSubscription<QuerySnapshot> commentsSubscription;
-
-  @override
-  Stream<QuerySnapshot> listenPostToChange;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> listenCommentsChange;
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>>
+      commentsSubscription;
 
   @override
-  StreamSubscription<QuerySnapshot> postSubscription;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> listenPostToChange;
+
+  @override
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> postSubscription;
 
   @override
   Future deletePost(PostModel model) async {
@@ -87,14 +88,14 @@ class PostDetailCubit extends Cubit<PostDetailState>
   }
 
   @override
-  Future handleVote(PostModel model, {bool isUpVote}) async {
+  Future handleVote(PostModel model, {required bool isUpVote}) async {
     /// List of all upvotes on post
     final upVotes = model.upVotes ?? <String>[];
 
     /// List of all downvotes on post
     final downVotes = model.downVotes ?? <String>[];
 
-    final String myUserId = myUser.id;
+    final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
@@ -167,14 +168,14 @@ class PostDetailCubit extends Cubit<PostDetailState>
     final oldModel = state.post;
     // ignore: parameter_assignments
     model = model.copyWith.call(
-        upVotes: oldModel.upVotes,
+        upVotes: oldModel!.upVotes,
         downVotes: oldModel.downVotes,
         shareList: oldModel.shareList);
     updatePostState(model);
   }
 
   @override
-  void postChangeListener(QuerySnapshot snapshot) {
+  void postChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot) {
     if (snapshot.docChanges.isEmpty) {
       return;
     }
@@ -183,16 +184,16 @@ class PostDetailCubit extends Cubit<PostDetailState>
       return;
     }
     if (snapshot.docChanges.first.type == DocumentChangeType.added) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
-      onPostDelete(PostModel.fromJson(map));
+      onPostDelete(PostModel.fromJson(map!));
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
-      onPostUpdate(PostModel.fromJson(map));
+      onPostUpdate(PostModel.fromJson(map!));
     }
   }
 
-  void commentChangeListener(QuerySnapshot snapshot) {
+  void commentChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot) {
     if (snapshot.docChanges.isEmpty) {
       return;
     }
@@ -201,32 +202,32 @@ class PostDetailCubit extends Cubit<PostDetailState>
       return;
     }
     if (snapshot.docChanges.first.type == DocumentChangeType.added) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onCommentAdd(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.removed) {
-      var model = PostModel.fromJson(map);
+      var model = PostModel.fromJson(map!);
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onCommentDelete(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
-      final model = PostModel.fromJson(map);
+      final model = PostModel.fromJson(map!);
       model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onPostUpdate(model);
     }
   }
 
   void onCommentDelete(PostModel model) {
-    final list = List<PostModel>.from(state.comments);
+    final list = List<PostModel>.from(state.comments!);
     if (list.any((element) => element.id == model.id)) {
       list.removeWhere((element) => element.id == model.id);
-      updatePostState(state.post, comments: list);
+      updatePostState(state.post!, comments: list);
     }
   }
 
   void onCommentAdd(PostModel model) {
     final list = state.comments ?? <PostModel>[];
     list.insert(0, model);
-    updatePostState(state.post, comments: list);
+    updatePostState(state.post!, comments: list);
   }
 
   void onCommentUpdate(PostModel model) {
@@ -240,7 +241,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
         upVotes: oldModel.upVotes,
         downVotes: oldModel.downVotes,
         shareList: oldModel.shareList);
-    updatePostState(state.post, comments: list);
+    updatePostState(state.post!, comments: list);
   }
 
   Future getPostDetail(String postId) async {
@@ -258,7 +259,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
     response.fold(
       (l) => updatePostState(null,
           estate: EPostDetailState.error, message: "Post not found"),
-      (r) => updatePostState(state.post, comments: r),
+      (r) => updatePostState(state.post!, comments: r),
     );
   }
 
@@ -273,7 +274,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
         createdBy: myUser.id,
         createdAt: DateTime.now().toUtc().toIso8601String(),
         images: imagePath,
-        parentPostId: state.post.id);
+        parentPostId: state.post!.id);
 
     updatePostState(state.post, estate: EPostDetailState.savingComment);
 
@@ -281,13 +282,13 @@ class PostDetailCubit extends Cubit<PostDetailState>
     final response = await postRepo.createComment(model);
     response.fold(
       (l) {
-        Utility.cprint(l ?? "Operation failed");
+        Utility.cprint(l);
         updatePostState(state.post,
             estate: EPostDetailState.error,
             message: Utility.encodeStateMessage(l));
       },
       (r) {
-        files = null;
+        files!.clear();
         commentController.text = "";
         updatePostState(state.post, estate: EPostDetailState.saved);
       },
@@ -295,17 +296,17 @@ class PostDetailCubit extends Cubit<PostDetailState>
   }
 
   /// upload files to firebase storage and get downloadable files path
-  Future<List<String>> _uploadImages(BuildContext context) async {
+  Future<List<String>?> _uploadImages(BuildContext context) async {
     final List<String> imagePathList = [];
     if (files != null) {
       // LoaderService loader = LoaderService.instance;
       loader.showLoader(context, message: "Uploading", progress: progress);
 
       /// Upload files to firebase 1 by 1
-      for (final file in files) {
-        progress.sink.add("${files.indexOf(file) + 1} file");
+      for (final file in files!) {
+        progress.sink.add("${files!.indexOf(file) + 1} file");
         final response = await postRepo.uploadFile(file,
-            Constants.createFilePath(file.path, folderName: state.post.id),
+            Constants.createFilePath(file.path, folderName: state.post!.id),
             onFileUpload: onFileUpload);
         progress.sink.add("");
         response.fold(
@@ -347,14 +348,14 @@ class PostDetailCubit extends Cubit<PostDetailState>
     );
   }
 
-  void updatePostState(PostModel model,
-      {String message,
+  void updatePostState(PostModel? model,
+      {String? message,
       EPostDetailState estate = EPostDetailState.loaded,
-      List<PostModel> comments}) {
+      List<PostModel>? comments}) {
     emit(PostDetailState.response(
         estate: estate,
-        message: Utility.encodeStateMessage(message),
-        post: model ?? state.post,
+        message: Utility.encodeStateMessage(message ?? ""),
+        post: model ?? state.post!,
         comments: comments ?? state.comments));
   }
 
@@ -366,10 +367,10 @@ class PostDetailCubit extends Cubit<PostDetailState>
     await listenPostToChange.drain();
     await postSubscription.cancel();
 
-    listenCommentsChange = null;
-    commentsSubscription = null;
-    postSubscription = null;
-    listenPostToChange = null;
+    // listenCommentsChange = null;
+    // commentsSubscription = null;
+    // postSubscription = null;
+    // listenPostToChange = null;
     return super.close();
   }
 }

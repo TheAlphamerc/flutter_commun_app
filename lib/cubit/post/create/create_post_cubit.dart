@@ -19,14 +19,17 @@ part 'create_post_state.dart';
 
 class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
   final PostRepo postRepo;
-  CreatePostCubit({this.postRepo, @required CommunityModel community})
+  CreatePostCubit({required this.postRepo, CommunityModel? community})
       : super(
             const CreatePostState.response(estate: ECreatePostState.initial)) {
     description = TextEditingController();
     progress = BehaviorSubject<String>();
     setCommunity(community);
   }
-  void setCommunity(CommunityModel community) {
+  void setCommunity(CommunityModel? community) {
+    if (community == null) {
+      return;
+    }
     updateState(ECreatePostState.fileAdded,
         message: "Community updated", model: community);
   }
@@ -34,14 +37,14 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
   /// Add file
   void addFiles(List<File> list) {
     files ??= <File>[];
-    files.addAll(list);
+    files!.addAll(list);
     updateState(ECreatePostState.fileAdded, message: "File Added");
   }
 
   /// Remove file
   void removeFile(File file) {
-    files.remove(file);
-    if (files.isEmpty) {
+    files!.remove(file);
+    if (files!.isEmpty) {
       files = null;
     }
 
@@ -59,9 +62,9 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
         createdBy: user.id,
         createdAt: DateTime.now().toUtc().toIso8601String(),
         images: imagePath,
-        communityId: state.community.id,
-        communityAvatar: state.community.avatar,
-        communityName: state.community.name,
+        communityId: state.community!.id,
+        communityAvatar: state.community!.avatar,
+        communityName: state.community!.name,
         user: ProfileModel(
           id: user.id,
           name: user.name,
@@ -76,7 +79,7 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
     final response = await postRepo.createPost(model);
     response.fold(
       (l) {
-        Utility.cprint(l ?? "Operation failed");
+        Utility.cprint(l);
         updateState(ECreatePostState.eror, message: "Post created failed");
       },
       (r) {
@@ -87,14 +90,14 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
   }
 
   /// upload files to firebase storage and get downloadable files path
-  Future<List<String>> _uploadImages(BuildContext context) async {
+  Future<List<String>?> _uploadImages(BuildContext context) async {
     final List<String> imagePathList = [];
     if (files != null) {
       loader.showLoader(context, message: "Uploading", progress: progress);
 
       /// Upload files to firebase 1 by 1
-      for (final file in files) {
-        progress.sink.add("${files.indexOf(file) + 1} file");
+      for (final file in files!) {
+        progress.sink.add("${files!.indexOf(file) + 1} file");
         final response = await postRepo.uploadFile(
             file,
             Constants.createFilePath(file.path,
@@ -129,11 +132,11 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
   }
 
   void updateState(ECreatePostState estate,
-      {String message, CommunityModel model}) {
+      {String? message, CommunityModel? model}) {
     emit(CreatePostState.response(
         estate: estate,
         community: model ?? state.community,
-        message: Utility.encodeStateMessage(message)));
+        message: Utility.encodeStateMessage(message ?? "")));
   }
 
   @override
@@ -144,10 +147,10 @@ class CreatePostCubit extends Cubit<CreatePostState> with CreatePostCubitMixin {
 }
 
 mixin CreatePostCubitMixin {
-  TextEditingController description;
-  List<File> files;
-  BehaviorSubject<String> progress;
-  ProfileModel get user => getIt<Session>().user;
+  late TextEditingController description;
+  List<File>? files;
+  late BehaviorSubject<String> progress;
+  ProfileModel get user => getIt<Session>().user!;
   void dispose() {
     progress.drain();
     description.dispose();

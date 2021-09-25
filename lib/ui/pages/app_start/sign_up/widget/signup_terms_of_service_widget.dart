@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SignupTermsOfServiceWidget extends StatelessWidget {
-  const SignupTermsOfServiceWidget({Key key}) : super(key: key);
+  const SignupTermsOfServiceWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class SignupTermsOfServiceWidget extends StatelessWidget {
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyles.bodyText14(context)
-            .copyWith(color: context.theme.primaryTextTheme.subtitle1.color),
+            .copyWith(color: context.theme.primaryTextTheme.subtitle1!.color),
         children: [
           TextSpan(text: context.locale.sign_up_description),
           TextSpan(

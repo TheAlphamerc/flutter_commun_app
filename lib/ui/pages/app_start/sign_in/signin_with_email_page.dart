@@ -10,7 +10,7 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 
 class SignInWithEmailPage extends StatelessWidget {
-  const SignInWithEmailPage({Key key}) : super(key: key);
+  const SignInWithEmailPage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
       builder: (BuildContext context) => BlocProvider(
@@ -20,7 +20,7 @@ class SignInWithEmailPage extends StatelessWidget {
     );
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context, {required String title}) {
     return AuthButton(
       title: title,
       onPressed: () async {
@@ -74,8 +74,7 @@ class SignInWithEmailPage extends StatelessWidget {
           ),
         ).circular,
       ),
-      bottomSheet: _button(context,
-          title: context.locale.next, backgroundColor: context.primaryColor),
+      bottomSheet: _button(context, title: context.locale.next),
       body: BlocListener<SigninEmailCubit, SigninEmailState>(
         listener: listener,
         child: Container(
@@ -105,8 +104,8 @@ class SignInWithEmailPage extends StatelessWidget {
                           valueListenable: context
                               .watch<SigninEmailCubit>()
                               .displayPasswords,
-                          builder:
-                              (BuildContext context, bool value, Widget child) {
+                          builder: (BuildContext context, bool value,
+                              Widget? child) {
                             return KTextField(
                               controller:
                                   context.watch<SigninEmailCubit>().password,

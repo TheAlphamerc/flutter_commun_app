@@ -15,8 +15,8 @@ class CommunApp extends StatefulWidget {
   final Widget home;
 
   const CommunApp({
-    Key key,
-    @required this.home,
+    Key? key,
+    required this.home,
   }) : super(key: key);
 
   @override
@@ -25,15 +25,17 @@ class CommunApp extends StatefulWidget {
 
 void listener(BuildContext context, AppState state) {
   state.maybeWhen(
-      orElse: () {},
-      response: (estate, message) {
-        estate.mayBeWhen(elseMaybe: () {
-          getIt<NavigationService>()
-              .pushAndRemoveUntil(GetStartedPage.getRoute());
-        }, loggedIn: () {
-          getIt<NavigationService>().pushAndRemoveUntil(HomePage.getRoute());
-        });
+    orElse: () {},
+    response: (estate, message) {
+      estate.mayBeWhen(elseMaybe: () {
+        getIt<NavigationService>()
+            .pushAndRemoveUntil<Route<void>>(GetStartedPage.getRoute());
+      }, loggedIn: () {
+        getIt<NavigationService>()
+            .pushAndRemoveUntil<Route<void>>(HomePage.getRoute());
       });
+    },
+  );
 }
 
 class _PensilAppState extends State<CommunApp> {

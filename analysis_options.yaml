@@ -14,7 +14,6 @@ analyzer:
   exclude:
   - 'lib/**.freezed.dart'
   - 'lib/**.g.dart'
-  - 'lib/ui/widget/form/validator.dart'
   - 'lib/ui/theme/color/light_colors.dart'
 
 

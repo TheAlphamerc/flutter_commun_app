@@ -14,12 +14,12 @@ part 'username_cubit.freezed.dart';
 class UsernameCubit extends Cubit<UsernameState> {
   final AuthRepo authRepo;
   final UserCredential userCredential;
-  UsernameCubit({this.authRepo, this.userCredential})
+  UsernameCubit({required this.authRepo, required this.userCredential})
       : super(const UsernameState.initial()) {
     username = TextEditingController();
   }
 
-  TextEditingController username;
+  late TextEditingController username;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Future checkUserNameAvailability(BuildContext context) async {
@@ -37,15 +37,16 @@ class UsernameCubit extends Cubit<UsernameState> {
 
   Future createUserAccount(BuildContext context) async {
     final model = ProfileModel(
-        createdAt: userCredential.user.metadata.creationTime.toIso8601String(),
-        email: userCredential.user.email,
-        isVerified: userCredential.user.emailVerified,
+        createdAt:
+            userCredential.user!.metadata.creationTime!.toIso8601String(),
+        email: userCredential.user!.email,
+        isVerified: userCredential.user!.emailVerified,
         username: username.text,
-        name: userCredential.user.displayName,
-        photoURL: userCredential.user.photoURL,
-        id: userCredential.user.uid,
-        providerId: userCredential.user.providerData.first.providerId,
-        phoneNumber: userCredential.user.phoneNumber);
+        name: userCredential.user!.displayName,
+        photoURL: userCredential.user!.photoURL,
+        id: userCredential.user!.uid,
+        providerId: userCredential.user!.providerData.first.providerId,
+        phoneNumber: userCredential.user!.phoneNumber);
 
     loader.showLoader(context, message: context.locale.creating);
     final response = await authRepo.createUserAccount(model);

@@ -5,17 +5,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionImpl implements Session {
   @override
-  ProfileModel user;
+  ProfileModel? user;
 
   @override
   Future<void> saveUserProfile(ProfileModel model) async {
     user = model;
-    return (await SharedPreferences.getInstance()).setString(
-        UserPreferenceKey.userProfile.toString(), json.encode(user.toJson()));
+    (await SharedPreferences.getInstance()).setString(
+        UserPreferenceKey.userProfile.toString(), json.encode(user!.toJson()));
   }
 
   @override
-  Future<ProfileModel> getUserProfile() async {
+  Future<ProfileModel?> getUserProfile() async {
     final instance = await SharedPreferences.getInstance();
     final jsonString =
         instance.getString(UserPreferenceKey.userProfile.toString());
@@ -23,7 +23,7 @@ class SessionImpl implements Session {
     // ignore: join_return_with_assignment
     user =
         ProfileModel.fromJson(json.decode(jsonString) as Map<String, dynamic>);
-    return user;
+    return user!;
   }
 
   @override

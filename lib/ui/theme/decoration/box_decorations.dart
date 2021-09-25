@@ -1,5 +1,6 @@
 part of '../theme.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class BoxDecorations {
   static BoxDecoration decoration(
     BuildContext context, {
@@ -19,7 +20,7 @@ class BoxDecorations {
       );
 
   static BoxDecoration outlineBorder(BuildContext context,
-          {double width = 2, Color color, double radius = 5}) =>
+          {double width = 2, Color? color, double radius = 5}) =>
       BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(

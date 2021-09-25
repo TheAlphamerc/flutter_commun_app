@@ -18,13 +18,13 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
   SignupMobileCubit(this.authRepo) : super(const SignupMobileState.initial()) {
     phone = TextEditingController();
   }
-  String verificationId;
-  TextEditingController phone;
+  String? verificationId;
+  late TextEditingController phone;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  UserCredential credential;
+  UserCredential? credential;
 
   Future continueWithPhone(BuildContext context) async {
-    final isValid = formKey.currentState.validate();
+    final isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
@@ -85,7 +85,7 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
     /// Display loader on screeen while verifying Otp
     loader.showLoader(context, message: context.locale.verifying);
     final user = await authRepo.verifyOTP(
-        smsCode: smsCode, verificationId: verificationId);
+        smsCode: smsCode, verificationId: verificationId!);
 
     /// Hide loader
     loader.hideLoader();
@@ -103,13 +103,13 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
 
   Future checkMobileAvailability(BuildContext context) async {
     final response =
-        await authRepo.checkMobileAvailability(credential.user.phoneNumber);
+        await authRepo.checkMobileAvailability(credential!.user!.phoneNumber!);
     response.fold(
         (l) => emit(SignupMobileState.response(
             EVerifyMobileState.MobileAlreadyInUse,
             Utility.encodeStateMessage(
                 context.locale.account_already_existed_with_mobile))),
-        (r) => emit(SignupMobileState.created(credential)));
+        (r) => emit(SignupMobileState.created(credential!)));
   }
 
   @override

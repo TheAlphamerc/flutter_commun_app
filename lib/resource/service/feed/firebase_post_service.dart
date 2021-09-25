@@ -50,11 +50,15 @@ class FirebasePostService {
     }
   }
 
-  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
-      getPostLists(String userId, PageInfo pageInfo) async {
+  Future<
+      Either<
+          String,
+          Tuple2<List<PostModel>,
+              QueryDocumentSnapshot<Map<String, dynamic>>>>> getPostLists(
+      String userId, PageInfo pageInfo) async {
     final List<PostModel> _feedlist = [];
-    QueryDocumentSnapshot lastSnapshot;
-    var query = firestore
+    QueryDocumentSnapshot<Map<String, dynamic>> lastSnapshot;
+    Query<Map<String, dynamic>> query = firestore
         .collection(CollectionsConstants.feed)
         .orderBy("createdAt", descending: true);
 
@@ -73,17 +77,21 @@ class FirebasePostService {
       lastSnapshot = querySnapshot.docs.last;
 
       _feedlist.sort((x, y) =>
-          DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
+          DateTime.parse(x.createdAt!).compareTo(DateTime.parse(y.createdAt!)));
       return Right(Tuple2(_feedlist, lastSnapshot));
     } else {
       return const Left("No Post found");
     }
   }
 
-  Future<Either<String, Tuple2<List<PostModel>, QueryDocumentSnapshot>>>
-      getCommunityPosts(String communityId, {PageInfo option}) async {
+  Future<
+          Either<
+              String,
+              Tuple2<List<PostModel>,
+                  QueryDocumentSnapshot<Map<String, dynamic>>>>>
+      getCommunityPosts(String communityId, {required PageInfo option}) async {
     final List<PostModel> _feedlist = [];
-    QueryDocumentSnapshot lastSnapshot;
+    QueryDocumentSnapshot<Map<String, dynamic>> lastSnapshot;
     var query = firestore
         .collection(CollectionsConstants.feed)
         .where("communityId", isEqualTo: communityId)
@@ -146,11 +154,12 @@ class FirebasePostService {
     }
   }
 
-  Stream<QuerySnapshot> listenPostToChange() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenPostToChange() {
     return firestore.collection(CollectionsConstants.feed).snapshots();
   }
 
-  Stream<QuerySnapshot> listenToCommentChange(String parentPostId) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenToCommentChange(
+      String parentPostId) {
     return firestore
         .collection(CollectionsConstants.comment)
         .doc(parentPostId)
@@ -207,22 +216,23 @@ class FirebasePostService {
       /// Sort Tweet by time
       /// It helps to display newest Tweet first.
       _feedlist.sort((x, y) =>
-          DateTime.parse(x.createdAt).compareTo(DateTime.parse(y.createdAt)));
+          DateTime.parse(x.createdAt!).compareTo(DateTime.parse(y.createdAt!)));
       return Right(_feedlist);
     } else {
       return const Left("No Post found");
     }
   }
 
-  Query _prepareQuery(Query query, PageInfo pageInfo) {
+  Query<Map<String, dynamic>> _prepareQuery(
+      Query<Map<String, dynamic>> query, PageInfo pageInfo) {
     if (option != null) {
       if (pageInfo.lastSnapshot != null) {
         // ignore: parameter_assignments
-        query = query.startAfterDocument(pageInfo.lastSnapshot);
+        query = query.startAfterDocument(pageInfo.lastSnapshot!);
       }
       if (pageInfo.limit != null) {
         // ignore: parameter_assignments
-        query = query.limit(pageInfo.limit);
+        query = query.limit(pageInfo.limit!);
       }
     }
 

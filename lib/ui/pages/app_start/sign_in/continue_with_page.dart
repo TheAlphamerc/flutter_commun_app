@@ -8,13 +8,13 @@ import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_in/signin_with_email_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_in/signin_with_mobile_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
-import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/dont_have%20account_widget.dart';
+import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/dont_have_account_widget.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 import '../../../../locator.dart';
 
 class ContinueWithPage extends StatelessWidget {
-  const ContinueWithPage({Key key}) : super(key: key);
+  const ContinueWithPage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
@@ -24,7 +24,10 @@ class ContinueWithPage extends StatelessWidget {
   }
 
   Widget _button(BuildContext context,
-      {String image, String title, Color backgroundColor, Function onPressed}) {
+      {required String image,
+      required String title,
+      Color? backgroundColor,
+      Function? onPressed}) {
     return OutlinedButton(
       onPressed: () {
         if (onPressed == null) {

@@ -9,7 +9,7 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/kit/alert.dart';
 
 class CommunityFeed extends StatelessWidget {
-  const CommunityFeed({Key key}) : super(key: key);
+  const CommunityFeed({Key? key}) : super(key: key);
   static Route<T> getRoute<T>() {
     return MaterialPageRoute(builder: (_) {
       return const CommunityFeed();
@@ -41,13 +41,13 @@ class CommunityFeed extends StatelessWidget {
 
   void handleJoinButtonPressed(BuildContext context, CommunityModel model) {
     if (model.myRole == MemberRole.notDefine.encode()) {
-      context.read<CommunityFeedCubit>().joinCommunity(model.id);
+      context.read<CommunityFeedCubit>().joinCommunity(model.id!);
     } else {
       Alert.confirmDialog(
         context,
         message: context.locale.confirm_leave_community,
         onConfirm: () {
-          context.read<CommunityFeedCubit>().leaveCommunity(model.id);
+          context.read<CommunityFeedCubit>().leaveCommunity(model.id!);
         },
       );
     }
@@ -124,7 +124,7 @@ class CommunityFeed extends StatelessWidget {
                                               onJoinButtonPressed: () {
                                                 context
                                                     .read<CommunityFeedCubit>()
-                                                    .joinCommunity(e.id);
+                                                    .joinCommunity(e.id!);
                                               },
                                               onTilePressed: () {
                                                 Navigator.push(

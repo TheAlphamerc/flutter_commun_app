@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/pages/community/create/widget/next_buton.dart';
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class NavSliderPanel extends StatelessWidget {
   final Function() onNextPressed;
   final bool hideBackButton;
   final int pageCount;
   final int currentPage;
-  final String nextButtonText;
+  final String? nextButtonText;
   const NavSliderPanel(
-      {Key key,
-      this.onNextPressed,
+      {Key? key,
+      required this.onNextPressed,
       this.hideBackButton = false,
-      @required this.currentPage,
-      @required this.pageCount,
+      required this.currentPage,
+      required this.pageCount,
       this.nextButtonText = "Next"})
       : super(key: key);
   Widget _button(BuildContext context,
-      {String title, VoidCallback onPressed, bool isPrimary = true}) {
+      {required String title,
+      required VoidCallback onPressed,
+      bool isPrimary = true}) {
     return SecondaryButton(
       title: title,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),

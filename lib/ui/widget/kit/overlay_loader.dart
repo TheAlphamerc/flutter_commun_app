@@ -33,10 +33,10 @@ class CustomLoader implements LoaderService {
   // }
   // CustomLoader._createObject();
 
-  OverlayState _overlayState;
-  OverlayEntry _overlayEntry;
+  OverlayState? _overlayState;
+  OverlayEntry? _overlayEntry;
 
-  void _buildLoader({String message, Stream<String> progress}) {
+  void _buildLoader({String? message, Stream<String>? progress}) {
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
         return SizedBox(
@@ -49,16 +49,16 @@ class CustomLoader implements LoaderService {
 
   @override
   void showLoader(BuildContext context,
-      {String message, Stream<String> progress}) {
+      {String? message, Stream<String>? progress}) {
     _overlayState = Overlay.of(context);
     _buildLoader(message: message, progress: progress);
-    _overlayState.insert(_overlayEntry);
+    _overlayState!.insert(_overlayEntry!);
   }
 
   @override
   void hideLoader() {
     try {
-      _overlayEntry?.remove();
+      _overlayEntry!.remove();
       _overlayEntry = null;
     } catch (e) {
       Utility.cprint("Exception:: $e");
@@ -66,7 +66,7 @@ class CustomLoader implements LoaderService {
   }
 
   Widget buildLoader(BuildContext context,
-      {Color backgroundColor, String message, Stream<String> progress}) {
+      {Color? backgroundColor, String? message, Stream<String>? progress}) {
     backgroundColor ??= const Color(0xffa8a8a8).withOpacity(.5);
     const height = 140.0;
     return Scaffold(
@@ -85,14 +85,14 @@ class CustomLoader implements LoaderService {
 }
 
 class _CustomScreenLoader extends StatelessWidget {
-  final Color backgroundColor;
-  final double height;
-  final double width;
-  final VoidCallback onTap;
-  final String message;
-  final Stream<String> progress;
+  final Color? backgroundColor;
+  final double? height;
+  final double? width;
+  final VoidCallback? onTap;
+  final String? message;
+  final Stream<String>? progress;
   const _CustomScreenLoader({
-    Key key,
+    Key? key,
     this.backgroundColor = const Color(0xfff8f8f8),
     this.height = 40,
     this.width = 40,
@@ -123,8 +123,8 @@ class _CustomScreenLoader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: height - 50,
-                  width: height - 50,
+                  height: height! - 50,
+                  width: height! - 50,
                   child: Stack(
                     fit: StackFit.expand,
                     alignment: Alignment.center,
@@ -162,7 +162,7 @@ class _CustomScreenLoader extends StatelessWidget {
                       ),
                       Center(
                         child: Text(
-                          message,
+                          message!,
                           style: TextStyles.subtitle16(context),
                           overflow: TextOverflow.ellipsis,
                         ),

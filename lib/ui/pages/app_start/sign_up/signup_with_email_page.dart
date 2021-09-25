@@ -12,7 +12,7 @@ import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 import '../../../../locator.dart';
 
 class SignupWithEmailPage extends StatelessWidget {
-  const SignupWithEmailPage({Key key}) : super(key: key);
+  const SignupWithEmailPage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
       builder: (BuildContext context) => BlocProvider(
@@ -22,12 +22,13 @@ class SignupWithEmailPage extends StatelessWidget {
     );
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context,
+      {required String title, Color? backgroundColor}) {
     return IntrinsicWidth(
       stepWidth: context.width - 32,
       child: TextButton(
         onPressed: () async {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
           await context.read<SignupEmailCubit>().signupWithEmail(context);
         },
         style: ButtonStyle(
@@ -123,7 +124,7 @@ class SignupWithEmailPage extends StatelessWidget {
                                 .watch<SignupEmailCubit>()
                                 .displayPasswords,
                             builder: (BuildContext context, bool value,
-                                Widget child) {
+                                Widget? child) {
                               return KTextField(
                                 controller:
                                     context.watch<SignupEmailCubit>().password,
@@ -150,7 +151,7 @@ class SignupWithEmailPage extends StatelessWidget {
                                 .watch<SignupEmailCubit>()
                                 .displayConfirmPasswords,
                             builder: (BuildContext context, bool value,
-                                Widget child) {
+                                Widget? child) {
                               return KTextField(
                                 controller: context
                                     .watch<SignupEmailCubit>()

@@ -4,19 +4,19 @@ part 'profile_model.freezed.dart';
 part 'e_profile_provider_id.dart';
 
 @freezed
-abstract class ProfileModel with _$ProfileModel {
+class ProfileModel with _$ProfileModel {
   const factory ProfileModel({
-    String id,
-    String name,
-    String email,
-    String username,
-    String createdAt,
-    String photoURL,
-    String phoneNumber,
-    String website,
-    String bio,
-    String bannerURL,
-    String providerId,
+    String? id,
+    String? name,
+    String? email,
+    String? username,
+    String? createdAt,
+    String? photoURL,
+    String? phoneNumber,
+    String? website,
+    String? bio,
+    String? bannerURL,
+    String? providerId,
     @Default(false) isVerified,
   }) = _ProfileModel;
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>

@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
 
 class FirebaseStorageService {
@@ -12,7 +13,7 @@ class FirebaseStorageService {
   FirebaseStorageService(this.storage);
 
   Future<Either<String, String>> uploadFile(File file, String uploadPath,
-      {Function(FileUploadTaskResponse response) onFileUpload}) async {
+      {required Function(FileUploadTaskResponse response) onFileUpload}) async {
     // We can still optionally use the Future alongside the stream.
     try {
       final firebase_storage.Reference ref = storage.ref(uploadPath);
@@ -46,17 +47,15 @@ class FirebaseStorageService {
     }
   }
 
-  Future deletePostFiles(List<String> list) async {
-    if (list != null && list.isNotEmpty) {
-      for (final path in list) {
-        if (path != null) {
-          final photoRef = storage.refFromURL(path);
-          Utility.cprint('[Path]$path');
-          try {
-            await photoRef.delete();
-          } catch (e) {
-            Utility.cprint('[deletePostFiles]', error: e);
-          }
+  Future deletePostFiles(List<String>? list) async {
+    if (list.notNullAndEmpty) {
+      for (final path in list!) {
+        final photoRef = storage.refFromURL(path);
+        Utility.cprint('[Path]$path');
+        try {
+          await photoRef.delete();
+        } catch (e) {
+          Utility.cprint('[deletePostFiles]', error: e);
         }
       }
     }

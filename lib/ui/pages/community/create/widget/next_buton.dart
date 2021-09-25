@@ -3,20 +3,20 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.backgroundColor,
-    this.onPressed,
+    required this.onPressed,
     this.padding = const EdgeInsets.symmetric(vertical: 20),
     this.textColor,
     this.borderSide = const BorderSide(width: .3),
   }) : super(key: key);
   final String title;
-  final Color backgroundColor;
-  final EdgeInsetsGeometry padding;
+  final Color? backgroundColor;
+  final EdgeInsetsGeometry? padding;
   final VoidCallback onPressed;
-  final Color textColor;
-  final BorderSide borderSide;
+  final Color? textColor;
+  final BorderSide? borderSide;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SecondaryButton extends StatelessWidget {
       // stepWidth: context.width - 32,
       child: TextButton(
         onPressed: () async {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
           onPressed.call();
         },
         style: ButtonStyle(

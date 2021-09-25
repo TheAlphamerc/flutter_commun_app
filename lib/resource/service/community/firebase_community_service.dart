@@ -16,7 +16,7 @@ class FirebaseCommunityService {
     final doc =
         await firestore.collection(CollectionsConstants.community).add(json);
     joinCommunity(
-        communityId: doc.id, role: MemberRole.admin, userId: model.createdBy);
+        communityId: doc.id, role: MemberRole.admin, userId: model.createdBy!);
     return Future.value(Right(doc));
   }
 
@@ -46,7 +46,7 @@ class FirebaseCommunityService {
       for (var i = 0; i < data.length; i++) {
         var model = CommunityModel.fromJson(querySnapshot.docs[i].data());
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
-        String role = '';
+        String? role = '';
 
         if (_myCommunityList.notNullAndEmpty &&
             _myCommunityList.any((element) => element.id == model.id)) {
@@ -81,7 +81,8 @@ class FirebaseCommunityService {
     if (data.notNullAndEmpty) {
       for (var i = 0; i < data.length; i++) {
         final map = querySnapshot.docs[i].data();
-        final model = CommunityModel.fromJson(map);
+        var model = CommunityModel.fromJson(map);
+        model = model.copyWith.call(id: querySnapshot.docs[i].id);
         list.add(model);
       }
 
@@ -92,16 +93,20 @@ class FirebaseCommunityService {
   }
 
   Future<Either<String, CommunityModel>> getCommunityById(
-      String id, String userId) async {
+      String id, String userId,
+      {bool fetchRole = true}) async {
     final docSnapshot = await firestore
         .collection(CollectionsConstants.community)
         .doc(id)
         .get();
     if (docSnapshot.exists) {
       final data = docSnapshot.data();
-      var community = CommunityModel.fromJson(data);
-      final role = await getMyRole(community.id, userId);
-      community = community.copyWith.call(myRole: role);
+      var community = CommunityModel.fromJson(data!);
+      community = community.copyWith.call(id: docSnapshot.id);
+      if (fetchRole) {
+        final role = await getMyRole(community.id!, userId);
+        community = community.copyWith.call(myRole: role);
+      }
 
       return Right(community);
     } else {
@@ -118,20 +123,19 @@ class FirebaseCommunityService {
         .get()
         .onError((error, stackTrace) {
       Utility.cprint("[GetMyRole]", error: error, stackTrace: stackTrace);
-      return null;
+      throw Exception(error);
     });
-    if (querySnapshot != null) {
-      final doc = querySnapshot.docs;
-      if (doc != null && doc.isNotEmpty) {
-        final role = doc.first.data();
-        return role["role"] as String;
-      }
-    }
-    return "";
+
+    final doc = querySnapshot.docs;
+
+    final role = doc.first.data();
+    return role["role"] as String;
   }
 
   Future<Either<String, bool>> joinCommunity(
-      {String communityId, String userId, MemberRole role}) async {
+      {required String communityId,
+      required String userId,
+      required MemberRole role}) async {
     /// Add user to the commmunity member list
     await firestore
         .collection(CollectionsConstants.community)
@@ -160,15 +164,15 @@ class FirebaseCommunityService {
     final community = await getCommunityById(communityId, userId);
     community.fold(
       (l) => null,
-      (model) =>
-          updateCommunity(model.copyWith(membersCount: model.membersCount + 1)),
+      (model) => updateCommunity(
+          model.copyWith(membersCount: model.membersCount! + 1)),
     );
 
     return const Right(true);
   }
 
   Future<Either<String, bool>> leaveCommunity(
-      {String communityId, String userId}) async {
+      {required String communityId, required String userId}) async {
     /// Remove user from the commmunity member list
     await firestore
         .collection(CollectionsConstants.community)
@@ -186,11 +190,12 @@ class FirebaseCommunityService {
         .delete();
 
     /// Decrease community members count by 1
-    final community = await getCommunityById(communityId, userId);
+    final community =
+        await getCommunityById(communityId, userId, fetchRole: false);
     community.fold(
       (l) => null,
-      (model) =>
-          updateCommunity(model.copyWith(membersCount: model.membersCount - 1)),
+      (model) => updateCommunity(
+          model.copyWith(membersCount: model.membersCount! - 1)),
     );
 
     return const Right(true);

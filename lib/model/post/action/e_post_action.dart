@@ -14,27 +14,27 @@ const _$PostActionTypeMap = {
 };
 
 extension ActionHelper on PostAction {
-  String encode() => _$PostActionTypeMap[this];
+  String? encode() => _$PostActionTypeMap[this];
 
   PostAction key(String value) => _decodePostAction(value);
 
   PostAction _decodePostAction(String value) {
     return _$PostActionTypeMap.entries
-        .singleWhere((element) => element.value == value, orElse: () => null)
-        ?.key;
+        .singleWhere((element) => element.value == value)
+        .key;
   }
 
   T when<T>({
-    T Function() elseMaybe,
-    T Function() like,
-    T Function() upVote,
-    T Function() delete,
-    T Function() downVote,
-    T Function() modify,
-    T Function() share,
-    T Function() favourite,
-    T Function() edit,
-    T Function() report,
+    T Function()? elseMaybe,
+    T Function()? like,
+    T Function()? upVote,
+    T Function()? delete,
+    T Function()? downVote,
+    T Function()? modify,
+    T Function()? share,
+    T Function()? favourite,
+    T Function()? edit,
+    T Function()? report,
   }) {
     switch (this) {
       case PostAction.like:
@@ -86,6 +86,6 @@ extension ActionHelper on PostAction {
       default:
     }
     if (elseMaybe != null) return elseMaybe.call();
-    return null;
+    throw Exception("Unknown value: $this");
   }
 }

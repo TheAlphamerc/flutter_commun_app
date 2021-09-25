@@ -7,7 +7,7 @@ import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_term
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class SignUpWithPage extends StatelessWidget {
-  const SignUpWithPage({Key key}) : super(key: key);
+  const SignUpWithPage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
       builder: (BuildContext context) => const SignUpWithPage(),
@@ -15,13 +15,16 @@ class SignUpWithPage extends StatelessWidget {
   }
 
   Widget _button(BuildContext context,
-      {String image, String title, Color backgroundColor, Function onPressed}) {
+      {required String image,
+      required String title,
+      Color? backgroundColor,
+      required Function onPressed}) {
     return OutlinedButton(
       onPressed: () {
-        if (onPressed == null) {
-          logger.w("$title feature is in development");
-          return;
-        }
+        // if (onPressed == null) {
+        //   logger.w("$title feature is in development");
+        //   return;
+        // }
         onPressed();
       },
       style: ButtonStyle(

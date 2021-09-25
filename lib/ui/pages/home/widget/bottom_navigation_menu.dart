@@ -7,8 +7,9 @@ import 'package:flutter_commun_app/ui/pages/post/create_post_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class BottomNavigationMenu extends StatelessWidget {
-  const BottomNavigationMenu({Key key}) : super(key: key);
-  Widget _icon(BuildContext context, {IconData icon, VoidCallback onPressed}) {
+  const BottomNavigationMenu({Key? key}) : super(key: key);
+  Widget _icon(BuildContext context,
+      {required IconData icon, required VoidCallback onPressed}) {
     return IconButton(icon: Icon(icon), onPressed: onPressed);
   }
 

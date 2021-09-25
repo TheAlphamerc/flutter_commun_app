@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 
 class FeedAppBar extends StatelessWidget with PreferredSizeWidget {
-  const FeedAppBar({Key key}) : super(key: key);
+  const FeedAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

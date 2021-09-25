@@ -12,7 +12,7 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
 
 class SigninWithMobilePage extends StatelessWidget {
-  const SigninWithMobilePage({Key key}) : super(key: key);
+  const SigninWithMobilePage({Key? key}) : super(key: key);
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
         builder: (BuildContext context) => BlocProvider(
@@ -21,7 +21,7 @@ class SigninWithMobilePage extends StatelessWidget {
             ));
   }
 
-  Widget _button(BuildContext context, {String title, Color backgroundColor}) {
+  Widget _button(BuildContext context, {required String title}) {
     return AuthButton(
       title: title,
       onPressed: () async {
@@ -80,60 +80,59 @@ class SigninWithMobilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              width: 30,
-              height: 30,
-              alignment: Alignment.centerLeft,
-              child: Icon(
-                Icons.keyboard_arrow_left,
-                color: context.bodyTextColor,
-                size: 40,
-              ),
-            ),
-          ).circular,
-        ),
-        bottomSheet: _button(context,
-            title: context.locale.next, backgroundColor: context.primaryColor),
-        body: BlocListener<SignupMobileCubit, SignupMobileState>(
-          listener: listener,
+      appBar: AppBar(
+        elevation: 0,
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: SizedBox(
-                    height: context.height,
-                    child: Form(
-                      key: context.watch<SignupMobileCubit>().formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            context.locale.signIn,
-                            style: TextStyles.headline36(context),
-                          ),
-                          const SizedBox(height: 72),
-                          KTextField(
-                            controller:
-                                context.watch<SignupMobileCubit>().phone,
-                            type: FieldType.phone,
-                            hintText: context.locale.phone_no,
-                            backgroundColor: KColors.light_gray,
-                          ).pH(24),
-                        ],
-                      ),
+            width: 30,
+            height: 30,
+            alignment: Alignment.centerLeft,
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              color: context.bodyTextColor,
+              size: 40,
+            ),
+          ),
+        ).circular,
+      ),
+      bottomSheet: _button(context, title: context.locale.next),
+      body: BlocListener<SignupMobileCubit, SignupMobileState>(
+        listener: listener,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: SizedBox(
+                  height: context.height,
+                  child: Form(
+                    key: context.watch<SignupMobileCubit>().formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          context.locale.signIn,
+                          style: TextStyles.headline36(context),
+                        ),
+                        const SizedBox(height: 72),
+                        KTextField(
+                          controller: context.watch<SignupMobileCubit>().phone,
+                          type: FieldType.phone,
+                          hintText: context.locale.phone_no,
+                          backgroundColor: KColors.light_gray,
+                        ).pH(24),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

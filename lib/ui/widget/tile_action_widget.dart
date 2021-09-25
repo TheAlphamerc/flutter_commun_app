@@ -3,16 +3,16 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class TileActionWidget extends StatelessWidget {
   const TileActionWidget({
-    Key key,
+    Key? key,
     this.icon,
     this.list = const [],
     this.menuKey,
     this.iconColor,
   }) : super(key: key);
-  final Widget icon;
-  final Color iconColor;
-  final List<Choice> list;
-  final GlobalKey menuKey;
+  final Widget? icon;
+  final Color? iconColor;
+  final List<Choice>? list;
+  final GlobalKey? menuKey;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class TileActionWidget extends StatelessWidget {
       key: menuKey,
       onSelected: (action) {
         if (action.onPressed != null) {
-          action.onPressed();
+          action.onPressed!.call();
         }
       },
       padding: EdgeInsets.zero,
@@ -31,7 +31,7 @@ class TileActionWidget extends StatelessWidget {
             color: context.theme.iconTheme.color,
           ),
       itemBuilder: (BuildContext context) {
-        return list.map((Choice choice) {
+        return list!.map((Choice choice) {
           return PopupMenuItem<Choice>(
               value: choice,
               child: Row(
@@ -54,9 +54,9 @@ class TileActionWidget extends StatelessWidget {
 }
 
 class Choice {
-  const Choice({this.title, this.icon, this.onPressed});
+  const Choice({required this.title, this.icon, this.onPressed});
 
-  final IconData icon;
+  final IconData? icon;
   final String title;
-  final Function onPressed;
+  final Function? onPressed;
 }

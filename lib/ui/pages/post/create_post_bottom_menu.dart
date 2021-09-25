@@ -6,10 +6,10 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class CreatePostBottomMenu extends StatelessWidget {
   const CreatePostBottomMenu(
-      {Key key,
-      @required this.node,
-      @required this.onSubmit,
-      @required this.onImageSelected,
+      {Key? key,
+      required this.node,
+      required this.onSubmit,
+      required this.onImageSelected,
       this.isLoading = false})
       : super(key: key);
   final FocusNode node;
@@ -17,13 +17,13 @@ class CreatePostBottomMenu extends StatelessWidget {
   final bool isLoading;
   final Function(File) onImageSelected;
 
-  Widget _wrap(Widget child, {VoidCallback onPressed}) {
+  Widget _wrap(Widget child, {required VoidCallback onPressed}) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100), color: KColors.light_gray),
       child: child,
-    ).ripple(onPressed, radius: 20);
+    ).ripple(onPressed.call, radius: 20);
   }
 
   Widget _loader(BuildContext context) {
@@ -42,9 +42,9 @@ class CreatePostBottomMenu extends StatelessWidget {
       return;
     }
     if (node.hasFocus) {
-      FocusManager.instance.primaryFocus.unfocus();
+      FocusManager.instance.primaryFocus!.unfocus();
     } else {
-      FocusManager.instance.primaryFocus.requestFocus(node);
+      FocusManager.instance.primaryFocus!.requestFocus(node);
     }
   }
 
@@ -81,13 +81,17 @@ class CreatePostBottomMenu extends StatelessWidget {
                 ),
                 onPressed: () => _handleImagePick(context),
               ).pR(10),
-              _wrap(Row(
-                children: [
-                  const Icon(MdiIcons.fileDocument, size: 18).pR(6),
-                  Text(context.locale.article,
-                      style: TextStyles.subtitle14(context)),
-                ],
-              )),
+              _wrap(
+                  Row(
+                    children: [
+                      const Icon(MdiIcons.fileDocument, size: 18).pR(6),
+                      Text(
+                        context.locale.article,
+                        style: TextStyles.subtitle14(context),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {}),
               const Spacer(),
               SizedBox(
                 height: 35,

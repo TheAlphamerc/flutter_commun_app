@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/post/detail/post_detail_cubit.dart';
 import 'package:flutter_commun_app/locator.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
@@ -31,11 +31,11 @@ class Comment extends StatelessWidget {
   final PostType type;
 
   const Comment({
-    Key key,
+    Key? key,
     this.type = PostType.post,
     this.margin = const EdgeInsets.symmetric(vertical: 8),
-    @required this.post,
-    @required this.myUser,
+    required this.post,
+    required this.myUser,
   }) : super(key: key);
 
   Widget _trailing(BuildContext context) {
@@ -47,7 +47,7 @@ class Comment extends StatelessWidget {
       ),
       alignment: Alignment.topCenter,
       onPressed: () {
-        FocusManager.instance.primaryFocus.unfocus();
+        FocusManager.instance.primaryFocus!.unfocus();
         sheet.displayBottomSheet(
           context,
           headerChild: PostHeader(
@@ -95,8 +95,8 @@ class Comment extends StatelessWidget {
 
   // ignore: avoid_void_async
   void onPostTap(BuildContext context) async {
-    final action =
-        await context.navigate.push(PostDetailPage.getRoute(post.id));
+    final action = await context.navigate.push(PostDetailPage.getRoute(post.id!,
+        onPostAction: (PostAction action, PostModel model) {}));
     if (action != null && action is PostAction) {
       // onPostAction(action, post);
     } else if (action != null && action is PostModel) {
@@ -141,7 +141,7 @@ class Comment extends StatelessWidget {
                   ),
 
                   /// Post Images
-                  PostImages(list: post.images),
+                  PostImages(list: post.images!),
                 ],
               ),
             ).extended,
