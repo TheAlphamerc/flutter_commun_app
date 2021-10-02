@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app_start/username/username_cubit.dart';
-import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/onboard/onboard_user_profile.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';

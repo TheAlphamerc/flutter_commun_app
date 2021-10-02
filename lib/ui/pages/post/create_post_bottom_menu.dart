@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/file_utility.dart';
+import 'package:flutter_commun_app/helper/utility/file_utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class CreatePostBottomMenu extends StatelessWidget {

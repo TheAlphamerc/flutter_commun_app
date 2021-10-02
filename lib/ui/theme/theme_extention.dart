@@ -157,46 +157,6 @@ extension ExAlignment on Widget {
       );
 }
 
-extension StringHelper on String? {
-  String? takeOnly(int value) {
-    if (this != null && this!.length >= value) {
-      return this!.substring(0, value);
-    } else {
-      return this;
-    }
-  }
-
-  bool get isNotNullEmpty => this != null && this!.isNotEmpty;
-
-  String get toPostTime {
-    if (this == null || this!.isEmpty) {
-      return '';
-    }
-    final dt = DateTime.parse(this!).toLocal();
-    final dat =
-        '${DateFormat.jm().format(dt)} - ${DateFormat("dd MMM yy").format(dt)}';
-    return dat;
-  }
-
-  String get toHMTime {
-    if (this == null || this!.isEmpty) {
-      return '';
-    }
-    final dt = DateTime.parse(this!).toLocal();
-    final dat = DateFormat("hh:mm:ss").format(dt);
-    return dat;
-  }
-
-  String get toCommentTime {
-    if (this == null || this!.isEmpty) {
-      return '';
-    }
-    final dt = DateTime.parse(this!).toLocal();
-    final dat = DateFormat.jm().format(dt);
-    return dat;
-  }
-}
-
 extension ThemeHelper on BuildContext {
   ThemeData get theme => Theme.of(this);
   Color get primaryColor => Theme.of(this).primaryColor;
@@ -217,37 +177,6 @@ extension NavigationHelper on BuildContext {
 extension SizeHelper on BuildContext {
   double get width => MediaQuery.of(this).size.width;
   double get height => MediaQuery.of(this).size.height;
-}
-
-extension ListHelper<T> on List<T>? {
-  Option<List<T>> get value {
-    if (this != null && this!.isNotEmpty) {
-      return some(this!);
-    } else {
-      return none();
-    }
-  }
-
-  /// Check if list is not null and not empty
-  bool get notNullAndEmpty => this != null && this!.isNotEmpty;
-
-  Widget on({
-    Widget Function()? nul,
-    Widget Function()? empty,
-    Widget Function()? value,
-  }) {
-    if (this == null) {
-      return nul!.call();
-    } else if (this!.isEmpty) {
-      return empty!.call();
-    } else {
-      return value!.call();
-    }
-  }
-}
-
-extension OptionHelper<T> on Option<T> {
-  T? get valueOrDefault => fold(() => null, (a) => a);
 }
 
 extension ApplocalisationHelper on BuildContext {

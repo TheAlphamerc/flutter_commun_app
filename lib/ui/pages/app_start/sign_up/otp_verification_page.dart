@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class OTPVerificationPAge extends StatefulWidget {

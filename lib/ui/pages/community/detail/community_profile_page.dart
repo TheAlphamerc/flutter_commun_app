@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/community/profile/community_profile_cubit.dart';
-import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
@@ -66,20 +66,26 @@ class CommunityProfilePage extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(community.name!,
-                        style: TextStyles.headline20(context)),
+                    Text(
+                      community.name!,
+                      style: TextStyles.headline20(context),
+                    ),
                     if (community.createdAt.isNotNullEmpty)
-                      Text(community.createdAt ?? "N/A",
-                          style: TextStyles.bodyText14(context)),
+                      Text(
+                        community.createdAt ?? "N/A",
+                        style: TextStyles.bodyText14(context),
+                      ),
                   ],
                 )
               ],
             ),
             if (community.description.isNotNullEmpty) ...[
               const SizedBox(height: 10),
-              Text(community.description!,
-                  style: TextStyles.bodyText15(context)),
-            ]
+              Text(
+                community.description!,
+                style: TextStyles.bodyText15(context),
+              ),
+            ],
           ],
         ),
       ),

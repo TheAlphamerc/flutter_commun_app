@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/ui/app/commun_app.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/splash.dart';

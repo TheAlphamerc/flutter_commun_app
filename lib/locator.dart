@@ -18,6 +18,7 @@ import 'package:flutter_commun_app/ui/widget/kit/overlay_loader.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+export 'package:flutter_commun_app/helper/index.dart';
 export 'package:flutter_commun_app/ui/theme/index.dart';
 
 final getIt = GetIt.instance;

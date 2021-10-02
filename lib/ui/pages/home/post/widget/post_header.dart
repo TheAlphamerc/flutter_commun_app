@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility.dart';
+import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/circular_image.dart';
@@ -39,7 +39,7 @@ class PostHeader extends StatelessWidget {
     if (isFeedPost) {
       return post.communityAvatar;
     } else if (post.user != null) {
-      return post.user!.photoURL!;
+      return post.user!.photoURL;
     }
     return null;
   }
@@ -48,7 +48,7 @@ class PostHeader extends StatelessWidget {
     if (isFeedPost) {
       return post.communityName;
     } else if (post.user != null) {
-      return post.user!.name!;
+      return post.user!.name;
     }
     return "N/A";
   }

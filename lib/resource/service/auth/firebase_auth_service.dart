@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_commun_app/helper/collections_constants.dart';
+import 'package:flutter_commun_app/helper/index.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/service/auth/verify_phone_response.dart';
 import 'package:google_sign_in/google_sign_in.dart';
