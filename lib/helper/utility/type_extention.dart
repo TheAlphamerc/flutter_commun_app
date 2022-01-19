@@ -44,6 +44,8 @@ extension StringHelper on String? {
     final dat = DateFormat.jm().format(dt);
     return dat;
   }
+
+  DateTime? get toDateTime => this == null ? null : DateTime.tryParse(this!);
 }
 
 extension ListHelper<T> on List<T>? {
@@ -70,5 +72,14 @@ extension ListHelper<T> on List<T>? {
     } else {
       return value!.call();
     }
+  }
+}
+
+extension DateTimeExtension on DateTime? {
+  String? format([String pattern = 'dd/MM/yyyy']) {
+    if (this == null) {
+      return null;
+    }
+    return DateFormat(pattern).format(this!);
   }
 }

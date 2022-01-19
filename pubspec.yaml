@@ -46,7 +46,7 @@ dependencies:
   rxdart: ^0.27.2
   freezed: ^0.14.5
   equatable: ^2.0.3
-  flutter_bloc: ^7.3.0
+  flutter_bloc: ^8.0.1
   freezed_annotation: ^0.14.3
   
   # Firebase packages

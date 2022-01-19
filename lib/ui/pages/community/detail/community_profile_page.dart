@@ -72,8 +72,10 @@ class CommunityProfilePage extends StatelessWidget {
                     ),
                     if (community.createdAt.isNotNullEmpty)
                       Text(
-                        community.createdAt ?? "N/A",
-                        style: TextStyles.bodyText14(context),
+                        community.createdAt.toDateTime!
+                                .format("MMMM dd, yyyy") ??
+                            "N/A",
+                        style: TextStyles.subtitle14(context),
                       ),
                   ],
                 )
@@ -94,15 +96,13 @@ class CommunityProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.theme.backgroundColor,
-      body: SizedBox(
-        child: LazyLoadScrollView(
-          onEndOfPage: () async {
-            await context.read<CommunityProfileCubit>().getMorePosts();
-          },
-          child: CustomScrollView(
-            slivers: [
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: context.theme.backgroundColor,
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
               const SliverToBoxAdapter(child: SizedBox()),
 
               /// Community banner image
@@ -131,19 +131,55 @@ class CommunityProfilePage extends StatelessWidget {
                         _communityProfile(context, state.community!),
                   );
                 },
-              ),
+              )
+            ];
+          },
+          body: Column(
+            children: [
+              // Tab bar
+              // Container(
+              //   color: context.onPrimary,
+              //   height: 40,
+              //   child: TabBar(
+              //     indicatorColor: context.primaryColor,
+              //     labelColor: context.theme.primaryColor,
+              //     unselectedLabelColor: context.textTheme.bodyText1!.color,
+              //     labelPadding: const EdgeInsets.symmetric(
+              //       vertical: 10,
+              //       horizontal: 16,
+              //     ),
+              //     physics: const BouncingScrollPhysics(),
+              //     tabs: const <Widget>[
+              //       Text("Activity"),
+              //       Text("Posts"),
+              //     ],
+              //   ),
+              // ),
 
-              /// Community Posts list
-              BlocBuilder<CommunityProfileCubit, CommunityProfileState>(
-                builder: (context, state) {
-                  return state.estate.mayBeWhen(
-                    elseMaybe: () => const SliverToBoxAdapter(
-                      child: Center(child: CircularProgressIndicator()),
+              LazyLoadScrollView(
+                onEndOfPage: () =>
+                    context.read<CommunityProfileCubit>().getMorePosts(),
+                child: CustomScrollView(
+                  slivers: [
+                    const SliverToBoxAdapter(child: SizedBox()),
+
+                    /// Community Posts list
+                    BlocBuilder<CommunityProfileCubit, CommunityProfileState>(
+                      builder: (context, state) {
+                        return state.estate.mayBeWhen(
+                          elseMaybe: () => const SliverToBoxAdapter(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          loaded: () => CommunityPostsList(posts: state.posts!),
+                          loadingMore: () =>
+                              CommunityPostsList(posts: state.posts!),
+                        );
+                      },
                     ),
-                    loaded: () => CommunityPostsList(posts: state.posts!),
-                    loadingMore: () => CommunityPostsList(posts: state.posts!),
-                  );
-                },
+                  ],
+                ).extended,
               ),
             ],
           ),

@@ -1,7 +1,7 @@
-[1.0.0] Comming soon
+[1.0.0] Coming soon
 * Added splash screen.
 * Added onboarding screen
-* Added localisation
+* Added localization
 * Added Signup with Mobile and OTP
 * Added Signup with Email and password
 * Added login with Mobile and OTP
