@@ -24,7 +24,7 @@ class Utility {
     }
   }
 
-  static String encodeStateMessage(String message) {
+  static String encodeStateMessage(String? message) {
     if (message != null) {
       final mess = "$message ##${DateTime.now().microsecondsSinceEpoch}";
       return mess;
@@ -60,15 +60,26 @@ class Utility {
     }
   }
 
-  static Map<String, dynamic> getMap(Map<String, dynamic> map,
-      {bool removeNullValue = false}) {
-    assert(map != null);
+  static Map<String, dynamic> getMap(
+    Map<String, dynamic> map, {
+    bool removeNullValue = false,
+    List<String>? removeNullFromKeys,
+  }) {
     final jsonString = jsonEncode(map);
     final json2 = jsonDecode(jsonString);
-    final dd = cast<Map<String, dynamic>>(json2);
+    final newMap = cast<Map<String, dynamic>>(json2);
     if (removeNullValue) {
-      dd.removeWhere((key, value) => value == null);
+      newMap.removeWhere((key, value) => value == null);
+
+      /// Remove null from value from nested map
+      if (removeNullFromKeys != null) {
+        for (final key in removeNullFromKeys) {
+          if (newMap.containsKey(key)) {
+            newMap[key].removeWhere((_, value) => value == null);
+          }
+        }
+      }
     }
-    return dd;
+    return newMap;
   }
 }

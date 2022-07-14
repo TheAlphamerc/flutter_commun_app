@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signup_email_cubit.freezed.dart';
@@ -31,7 +29,7 @@ class SignupEmailCubit extends Cubit<SignupEmailState>
       return;
     } else if (password.text != confirmPassword.text) {
       emit(SignupEmailState.response(
-          EVerifyEmaileState.Error,
+          EVerifyEmailState.Error,
           Utility.encodeStateMessage(
               context.locale.password_confirm_password_not_mathched)));
       return;
@@ -45,7 +43,7 @@ class SignupEmailCubit extends Cubit<SignupEmailState>
     loader.hideLoader();
     response.fold(
         (l) => emit(SignupEmailState.response(
-            EVerifyEmaileState.Error, Utility.encodeStateMessage(l))),
+            EVerifyEmailState.Error, Utility.encodeStateMessage(l))),
         (credential) {
       emit(SignupEmailState.created(credential));
     });

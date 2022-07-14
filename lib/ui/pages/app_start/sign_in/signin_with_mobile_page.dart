@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/cubit/app_start/signup/mobile/signup_mobile_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/create_username_page.dart';
@@ -59,7 +58,7 @@ class SigninWithMobilePage extends StatelessWidget {
               break;
             }
 
-          case EVerifyMobileState.VerficationFailed:
+          case EVerifyMobileState.VerificationFailed:
             {
               Utility.displaySnackbar(context,
                   msg: Utility.decodeStateMessage(message));

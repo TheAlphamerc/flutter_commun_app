@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/cubit/app_start/Signin/email/signin_email_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/widget/auth_button.dart';
@@ -32,8 +31,8 @@ class SignInWithEmailPage extends StatelessWidget {
   void listener(BuildContext context, SigninEmailState state) {
     state.maybeWhen(
       orElse: () {},
-      verfied: (credentials) async {
-        Utility.cprint("Account verfied");
+      verified: (credentials) async {
+        Utility.cprint("Account verified");
         await Future.delayed(const Duration(milliseconds: 500));
         context.read<AppCubit>().checkAuthentication();
       },

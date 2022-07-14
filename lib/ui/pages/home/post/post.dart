@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
+import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/detail/post_detail_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/widget/post_bottom_control.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/widget/post_header.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/widget/post_image.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/ui/widget/kit/custom_bottom_sheet.dart';
+
 export 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 
 typedef OnPostAction = void Function(PostAction action, PostModel model);
@@ -58,7 +59,7 @@ class Post extends StatelessWidget {
           context,
           headerChild: PostHeader(
             post: post,
-            type: type!,
+            type: type,
             contentPadding: EdgeInsets.zero,
             isFeedPost: isFeedPost,
           ),
@@ -77,7 +78,7 @@ class Post extends StatelessWidget {
                 onPostAction(PostAction.favourite, post);
                 Navigator.pop(context);
               },
-              title: context.locale.add_to_favourite,
+              title: context.locale.add_to_favorite,
             ),
 
             /// Post can be edit or delete by post owner only

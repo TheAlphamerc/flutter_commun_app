@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
 import 'package:flutter_commun_app/resource/service/storage/file_upload_task_response.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'e_onboard_profile_state.dart';
@@ -74,7 +72,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
 
     /// Check profile update response
     response.fold((l) {
-      /// An error occured while saving profile data to database
+      /// An error occurred while saving profile data to database
       OnboardProfileState.response(
           EOnboardProfileState.Error, Utility.encodeStateMessage(l));
       Utility.cprint(l);
@@ -104,7 +102,7 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
       Utility.cprint(Utility.encodeStateMessage(l));
       return null;
     }, (r) {
-      Utility.cprint(Utility.encodeStateMessage("Image uploaded Succesfully"));
+      Utility.cprint(Utility.encodeStateMessage("Image uploaded Successfully"));
       return r;
     });
   }

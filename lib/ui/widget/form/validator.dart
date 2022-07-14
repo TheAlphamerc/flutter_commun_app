@@ -11,16 +11,14 @@ class KValidator {
       return "Name field can not be empty";
     }
     if (value.length > 32) {
-      return "Name length can not be greter then 32";
+      return "Name length can not be greater then 32";
     }
-    // ignore: unnecessary_raw_strings
     if (!value.startsWith(RegExp(r'[A-za-z]'))) {
       return "Invalid name format";
     }
     if (value.length < 3) {
-      return "Name length can not be lesser then 3 charater";
+      return "Name length can not be lesser then 3 charter";
     }
-    // ignore: unnecessary_raw_strings
     if (value.contains(RegExp(r'[0-9]'))) {
       return "Invalid name format";
     }

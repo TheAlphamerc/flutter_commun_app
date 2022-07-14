@@ -1,14 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'e_usename_state.dart';
+part 'e_username_state.dart';
 part 'username_cubit.freezed.dart';
 part 'username_state.dart';
 
@@ -28,10 +26,10 @@ class UsernameCubit extends Cubit<UsernameState> {
     final response = await authRepo.checkUserNameAvailability(username.text);
     loader.hideLoader();
     response.fold((l) {
-      emit(UsernameState.respose(EUsernameState.AlreadyExists,
+      emit(UsernameState.response(EUsernameState.AlreadyExists,
           Utility.encodeStateMessage(context.locale.username_already_existed)));
     }, (r) {
-      emit(UsernameState.respose(
+      emit(UsernameState.response(
           EUsernameState.Available, context.locale.username));
     });
   }
@@ -53,7 +51,7 @@ class UsernameCubit extends Cubit<UsernameState> {
     final response = await authRepo.createUserAccount(model);
     loader.hideLoader();
     response.fold((l) {
-      emit(UsernameState.respose(
+      emit(UsernameState.response(
           EUsernameState.Error, context.locale.username_creation_failed));
     }, (r) {
       emit(UsernameState.created(model));

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_commun_app/ui/widget/form/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/form/k_textfield.dart';
+import 'package:flutter_commun_app/ui/widget/form/validator.dart';
 
 class KTextField2 extends StatelessWidget {
   const KTextField2({

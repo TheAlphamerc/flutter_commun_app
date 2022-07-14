@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_commun_app/cubit/post/base/post_base_actions.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
@@ -49,7 +48,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     final response = await postrepo.getPostLists("", pageInfo!);
     response.fold(
         (l) => updatePostState(null,
-            error: "Post not available", estate: EPostFeedState.erorr), (r) {
+            error: "Post not available", estate: EPostFeedState.error), (r) {
       var postList = state.list;
       pageInfo = pageInfo!.copyWith(lastSnapshot: r.value2);
       if (postList == null) {

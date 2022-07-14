@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/model/community/cover_image_model.dart';
@@ -19,7 +18,10 @@ part 'create_community_state.dart';
 part 'e_create_community_state.dart';
 
 class CreateCommunityCubit extends Cubit<CreateCommunityState>
-    with CreateCommunityMixin, SelectCommunityTopicMxin, SocialLinksTopicMxin {
+    with
+        CreateCommunityMixin,
+        SelectCommunityTopicMixin,
+        SocialLinksTopicMixin {
   final CommunityFeedRepo communRepo;
   CreateCommunityCubit(this.communRepo)
       : super(const CreateCommunityState.response(
@@ -219,12 +221,12 @@ mixin CreateCommunityMixin {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 }
 
-mixin SelectCommunityTopicMxin {
+mixin SelectCommunityTopicMixin {
   late List<TextEditingController> topicControllers;
   GlobalKey<FormState> topicsFormKey = GlobalKey<FormState>();
 }
 
-mixin SocialLinksTopicMxin {
+mixin SocialLinksTopicMixin {
   late List<CommunityLinks> socialLinksControllers;
   GlobalKey<FormState> linksFormKey = GlobalKey<FormState>();
 }

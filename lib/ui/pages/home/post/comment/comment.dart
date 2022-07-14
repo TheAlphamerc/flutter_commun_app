@@ -141,7 +141,7 @@ class Comment extends StatelessWidget {
                   ),
 
                   /// Post Images
-                  PostImages(list: post.images!),
+                  PostImages(list: post.images),
                 ],
               ),
             ).extended,

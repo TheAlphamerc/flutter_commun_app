@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app_start/username/username_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/onboard/onboard_user_profile.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -54,14 +53,13 @@ class CreateUserNamePage extends StatelessWidget {
     state.maybeWhen(
       orElse: () {},
       created: (profile) {
-        /// Permform action on the basis of login type
+        /// Perform action on the basis of login type
         logger.i("Account created:successfully!!. Navigate to Home page");
         Navigator.pushReplacement(
             context, OnBoardUserProfilePage.getRoute(profile));
       },
-      respose: (state, message) {
+      response: (state, message) {
         state.when(
-          elseMaybe: () {},
           alreadyExists: () {
             Utility.displaySnackbar(context,
                 msg: Utility.decodeStateMessage(message));
@@ -71,6 +69,10 @@ class CreateUserNamePage extends StatelessWidget {
           },
           accountCreated: () {
             Utility.cprint("Account created");
+          },
+          error: () {
+            Utility.displaySnackbar(context,
+                msg: Utility.decodeStateMessage(message));
           },
         );
       },

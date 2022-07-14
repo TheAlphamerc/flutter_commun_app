@@ -2,6 +2,7 @@ part of 'profile_model.dart';
 
 // ignore: constant_identifier_names
 enum EProfileProviderId { Password, Google, Phone }
+
 const _$EProfileProviderIdTypeMap = {
   EProfileProviderId.Password: 'password',
   EProfileProviderId.Google: "google.com",
@@ -34,9 +35,7 @@ extension EProfileProviderIdHelper on EProfileProviderId {
         return phone.call();
       default:
     }
-    if (elseMaybe != null) return elseMaybe.call();
-
-    throw Exception("Unknown value: $this");
+    return elseMaybe.call();
   }
 
   T mayBeWhen<T>(

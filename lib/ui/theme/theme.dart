@@ -17,7 +17,6 @@ mixin AppTheme {
         brightness: Brightness.light,
         primaryColor: KColors.primary,
         primaryColorLight: KColors.primaryLight,
-        buttonColor: KColors.primary,
         backgroundColor: KColors.background,
         cardColor: KColors.cardColor,
         errorColor: KColors.errorColor,

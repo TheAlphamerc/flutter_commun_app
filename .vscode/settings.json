@@ -1,5 +1,11 @@
 {
     "cSpell.enableFiletypes": [
         "!yaml"
+    ],
+    "cSpell.words": [
+        "Commun",
+        "Signin",
+        "signup",
+        "textfield"
     ]
 }

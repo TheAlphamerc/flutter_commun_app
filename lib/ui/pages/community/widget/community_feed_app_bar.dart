@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/ui/pages/community/create/create_community.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';

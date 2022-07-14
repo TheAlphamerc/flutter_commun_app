@@ -18,7 +18,7 @@ enum EVerifyMobileState {
   // ignore: constant_identifier_names
   Loading,
   // ignore: constant_identifier_names
-  VerficationFailed,
+  VerificationFailed,
   // ignore: constant_identifier_names
   MobileAlreadyInUse,
   // ignore: constant_identifier_names

@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/community/create/create_community_cubit.dart';
-import 'package:flutter_commun_app/helper/route/fade_route.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/community/community_model.dart';
 import 'package:flutter_commun_app/ui/pages/community/create/widget/nav_slider_panel.dart';

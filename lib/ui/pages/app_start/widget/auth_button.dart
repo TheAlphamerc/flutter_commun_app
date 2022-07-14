@@ -21,10 +21,8 @@ class AuthButton extends StatelessWidget {
       margin: margin,
       child: TextButton(
         onPressed: () async {
-          if (onPressed != null) {
-            FocusManager.instance.primaryFocus!.unfocus();
-            onPressed.call();
-          }
+          FocusManager.instance.primaryFocus!.unfocus();
+          onPressed.call();
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(

@@ -10,7 +10,6 @@ import 'package:flutter_commun_app/ui/pages/community/community_feed.dart';
 import 'package:flutter_commun_app/ui/pages/home/feed/feed_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/bottom_navigation_menu.dart';
 import 'package:flutter_commun_app/ui/pages/home/widget/feed_app_bar.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

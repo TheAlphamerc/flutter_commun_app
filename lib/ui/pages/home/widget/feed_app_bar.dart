@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
+import 'package:flutter_commun_app/ui/theme/theme.dart';
 
 class FeedAppBar extends StatelessWidget with PreferredSizeWidget {
   const FeedAppBar({Key? key}) : super(key: key);

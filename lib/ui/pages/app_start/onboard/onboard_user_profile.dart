@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/cubit/app_start/onboard/onboard_profile_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/file_utility.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/resource/repository/profile/profile_repo.dart';
@@ -308,6 +306,7 @@ class _CustomInputField extends StatelessWidget {
     required this.label,
     required this.type,
     this.maxLines = 1,
+    // ignore: unused_element
     this.height = 70,
     this.readOnly = false,
   }) : super(key: key);
@@ -327,7 +326,7 @@ class _CustomInputField extends StatelessWidget {
       scrollPadding: EdgeInsets.zero,
       controller: controller,
       style: TextStyles.headline16(context),
-      decoration: getInputDecotration(
+      decoration: getInputDecoration(
         context,
       ),
       readOnly: readOnly,
@@ -360,7 +359,7 @@ class _CustomInputField extends StatelessWidget {
     );
   }
 
-  InputDecoration getInputDecotration(BuildContext context,
+  InputDecoration getInputDecoration(BuildContext context,
       {String? hintText, Widget? suffixIcon}) {
     return InputDecoration(
       hintText: hintText,

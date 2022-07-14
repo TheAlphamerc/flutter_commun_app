@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/home/feed/post_feed_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
-import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/resource/session/session.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
@@ -133,7 +131,7 @@ class Feedpage extends StatelessWidget {
                         ),
                       ),
                       loaded: () => _postList(context, state.list!),
-                      erorr: () => _noPosts(context),
+                      error: () => _noPosts(context),
                       loadingMore: () => _postList(context, state.list!),
                     );
                   },

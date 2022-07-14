@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_commun_app/helper/index.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 
@@ -11,7 +10,8 @@ class FirebasePostService {
   FirebasePostService(this.firestore);
 
   Future<Either<String, bool>> createPost(PostModel model) async {
-    final json = Utility.getMap(model.toJson(), removeNullValue: true);
+    final json = Utility.getMap(model.toJson(),
+        removeNullValue: true, removeNullFromKeys: ['user']);
     await firestore.collection(CollectionsConstants.feed).add(json);
     return Future.value(const Right(true));
   }
@@ -65,7 +65,7 @@ class FirebasePostService {
     query = _prepareQuery(query, pageInfo);
     final querySnapshot = await query.get();
     final data = querySnapshot.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       for (var i = 0; i < data.length; i++) {
         var model = PostModel.fromJson(querySnapshot.docs[i].data());
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
@@ -100,7 +100,7 @@ class FirebasePostService {
 
     final querySnapshot = await query.get();
     final data = querySnapshot.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       for (var i = 0; i < data.length; i++) {
         var model = PostModel.fromJson(querySnapshot.docs[i].data());
 
@@ -124,7 +124,7 @@ class FirebasePostService {
         .collection(CollectionsConstants.statics)
         .get();
     final data = querySnapshot.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       for (var i = 0; i < data.length; i++) {
         final map = querySnapshot.docs[i].data();
 
@@ -204,7 +204,7 @@ class FirebasePostService {
         .collection(CollectionsConstants.statics)
         .get();
     final data = querySnapshot.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       for (var i = 0; i < data.length; i++) {
         var model = PostModel.fromJson(querySnapshot.docs[i].data());
         model = model.copyWith.call(id: querySnapshot.docs[i].id);
@@ -225,15 +225,13 @@ class FirebasePostService {
 
   Query<Map<String, dynamic>> _prepareQuery(
       Query<Map<String, dynamic>> query, PageInfo pageInfo) {
-    if (option != null) {
-      if (pageInfo.lastSnapshot != null) {
-        // ignore: parameter_assignments
-        query = query.startAfterDocument(pageInfo.lastSnapshot!);
-      }
-      if (pageInfo.limit != null) {
-        // ignore: parameter_assignments
-        query = query.limit(pageInfo.limit!);
-      }
+    if (pageInfo.lastSnapshot != null) {
+      // ignore: parameter_assignments
+      query = query.startAfterDocument(pageInfo.lastSnapshot!);
+    }
+    if (pageInfo.limit != null) {
+      // ignore: parameter_assignments
+      query = query.limit(pageInfo.limit!);
     }
 
     return query;

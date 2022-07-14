@@ -8,8 +8,8 @@ import 'package:flutter_commun_app/resource/service/navigation/navigation_servic
 import 'package:flutter_commun_app/ui/pages/app_start/welcome/onboard_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/home_page.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CommunApp extends StatefulWidget {
   final Widget home;

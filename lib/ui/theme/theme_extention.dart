@@ -114,9 +114,7 @@ extension OnPressed on Widget {
                   ),
                 ),
                 onPressed: () {
-                  if (onPressed != null) {
-                    onPressed();
-                  }
+                  onPressed();
                 },
                 child: Container()),
           )

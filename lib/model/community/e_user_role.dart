@@ -1,6 +1,9 @@
+// ignore_for_file: dead_code
+
 part of 'community_model.dart';
 
 enum MemberRole { admin, user, moderator, notDefine }
+
 const _$GroupMemberRoleTypeMap = {
   MemberRole.admin: 'admin',
   MemberRole.user: 'user',
@@ -37,24 +40,16 @@ extension GroupMemberRoleEnumHelper on MemberRole {
   }) {
     switch (this) {
       case MemberRole.admin:
-        if (admin != null) {
-          return admin.call();
-        }
+        return admin.call();
         break;
       case MemberRole.user:
-        if (user != null) {
-          return user.call();
-        }
+        return user.call();
         break;
       case MemberRole.moderator:
-        if (moderator != null) {
-          return moderator.call();
-        }
+        return moderator.call();
         break;
       case MemberRole.notDefine:
-        if (notDefine != null) {
-          return notDefine.call();
-        }
+        return notDefine.call();
         break;
       default:
     }

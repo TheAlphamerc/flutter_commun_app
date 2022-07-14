@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_commun_app/cubit/post/base/post_base_actions.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/model/page/page_info.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
@@ -50,12 +49,12 @@ class PostDetailCubit extends Cubit<PostDetailState>
     files = files ?? [];
     files!.add(file);
     postType = type;
-    updatePostState(state.post!, message: "Image Added");
+    updatePostState(state.post, message: "Image Added");
   }
 
   void removeFiles(File file) {
     files!.remove(file);
-    updatePostState(state.post!, message: "File Removed");
+    updatePostState(state.post, message: "File Removed");
   }
 
   @override
@@ -88,23 +87,23 @@ class PostDetailCubit extends Cubit<PostDetailState>
 
   @override
   Future handleVote(PostModel model, {required bool isUpVote}) async {
-    /// List of all upvotes on post
+    /// List of all up-votes on post
     final upVotes = model.upVotes ?? <String>[];
 
-    /// List of all downvotes on post
+    /// List of all down-votes on post
     final downVotes = model.downVotes ?? <String>[];
 
     final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
-          /// If user has already cast his downvote and now he wants to change to upvote
+          /// If user has already cast his down vote and now he wants to change to up vote
           if (isUpVote) {
             downVotes.removeWhere((element) => element == myUserId);
             upVotes.add(myUserId);
           }
 
-          /// If user wants to undo his downvote
+          /// If user wants to undo his down vote
           else {
             downVotes.removeWhere((element) => element == myUserId);
           }
@@ -113,14 +112,14 @@ class PostDetailCubit extends Cubit<PostDetailState>
         break;
       case PostVoteStatus.upVote:
         {
-          /// If user has already cast his upvote and now he wants to change to downvote
+          /// If user has already cast his up vote and now he wants to change to down vote
           if (!isUpVote) {
             upVotes.removeWhere((element) => element == myUserId);
 
             downVotes.add(myUserId);
           }
 
-          /// If user wants to undo his upvote
+          /// If user wants to undo his up vote
           else {
             upVotes.removeWhere((element) => element == myUserId);
           }
@@ -130,10 +129,10 @@ class PostDetailCubit extends Cubit<PostDetailState>
       case PostVoteStatus.noVote:
         {
           if (isUpVote) {
-            /// If user wants to cast upvote
+            /// If user wants to cast up vote
             upVotes.add(myUserId);
           } else {
-            /// If user wants to cast downvote
+            /// If user wants to cast down vote
             downVotes.add(myUserId);
           }
         }
@@ -148,13 +147,13 @@ class PostDetailCubit extends Cubit<PostDetailState>
       Utility.cprint(l);
     }, (r) {
       updatePostState(model, message: "Voted");
-      Utility.cprint("Voted Sucess");
+      Utility.cprint("Voted Success");
     });
   }
 
   @override
   void reportPost(PostModel model) {
-    // TODO: implement reportPost
+    // TODO: implement report Post
   }
 
   @override
@@ -219,14 +218,14 @@ class PostDetailCubit extends Cubit<PostDetailState>
     final list = List<PostModel>.from(state.comments!);
     if (list.any((element) => element.id == model.id)) {
       list.removeWhere((element) => element.id == model.id);
-      updatePostState(state.post!, comments: list);
+      updatePostState(state.post, comments: list);
     }
   }
 
   void onCommentAdd(PostModel model) {
     final list = state.comments ?? <PostModel>[];
     list.insert(0, model);
-    updatePostState(state.post!, comments: list);
+    updatePostState(state.post, comments: list);
   }
 
   void onCommentUpdate(PostModel model) {
@@ -240,7 +239,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
         upVotes: oldModel.upVotes,
         downVotes: oldModel.downVotes,
         shareList: oldModel.shareList);
-    updatePostState(state.post!, comments: list);
+    updatePostState(state.post, comments: list);
   }
 
   Future getPostDetail(String postId) async {
@@ -258,7 +257,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
     response.fold(
       (l) => updatePostState(null,
           estate: EPostDetailState.error, message: "Post not found"),
-      (r) => updatePostState(state.post!, comments: r),
+      (r) => updatePostState(state.post, comments: r),
     );
   }
 

@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signin_email_cubit.freezed.dart';
@@ -37,7 +35,7 @@ class SigninEmailCubit extends Cubit<SigninEmailState>
         (l) => emit(SigninEmailState.response(
             ESigninEmailState.Error, Utility.encodeStateMessage(l))),
         (credential) {
-      emit(SigninEmailState.verfied(credential));
+      emit(SigninEmailState.verified(credential));
     });
   }
 

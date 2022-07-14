@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/post/detail/post_detail_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/file_utility.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/ui/pages/post/widget/create_post_images.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
@@ -11,7 +9,7 @@ class CommentEntryField extends StatelessWidget {
   const CommentEntryField({Key? key}) : super(key: key);
 
   Widget _bottomEntryField(BuildContext context) {
-    var state = context.watch<PostDetailCubit>();
+    final state = context.watch<PostDetailCubit>();
     final col = SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,

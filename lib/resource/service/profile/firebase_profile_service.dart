@@ -15,10 +15,10 @@ class FirebaseProfileService {
     String? errorMessage;
     await firestore
         .collection(CollectionsConstants.profile)
-        .doc(model.id!)
+        .doc(model.id)
         .update(model.toJson())
         .onError((FirebaseException error, stackTrace) {
-      errorMessage = error.message!;
+      errorMessage = error.message;
     });
     if (errorMessage != null) {
       return Left(errorMessage!);
@@ -31,7 +31,8 @@ class FirebaseProfileService {
         .collection(CollectionsConstants.profile)
         .doc(userId)
         .get();
-    if (ref != null) {
+    final data = ref.data();
+    if (data != null) {
       final user = ProfileModel.fromJson(ref.data()!);
       return Right(user);
     } else {

@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 part of 'post_detail_cubit.dart';
 
 enum EPostDetailState { loading, loaded, error, delete, savingComment, saved }
@@ -6,29 +8,21 @@ extension EAppStateHelper on EPostDetailState {
   T when<T>({
     required T Function() loading,
     required T Function() loaded,
-    required T Function() erorr,
+    required T Function() error,
     required T Function() delete,
   }) {
     switch (this) {
       case EPostDetailState.loading:
-        if (loading != null) {
-          return loading.call();
-        }
+        return loading.call();
         break;
       case EPostDetailState.loaded:
-        if (loaded != null) {
-          return loaded.call();
-        }
+        return loaded.call();
         break;
       case EPostDetailState.error:
-        if (erorr != null) {
-          return erorr.call();
-        }
+        return error.call();
         break;
       case EPostDetailState.delete:
-        if (delete != null) {
-          return delete.call();
-        }
+        return delete.call();
         break;
       default:
     }
@@ -39,7 +33,7 @@ extension EAppStateHelper on EPostDetailState {
     required T Function() elseMaybe,
     T Function()? loading,
     T Function()? loaded,
-    T Function()? erorr,
+    T Function()? error,
     T Function()? delete,
     T Function()? savingComment,
     T Function()? saved,
@@ -60,8 +54,8 @@ extension EAppStateHelper on EPostDetailState {
         }
         break;
       case EPostDetailState.error:
-        if (erorr != null) {
-          return erorr.call();
+        if (error != null) {
+          return error.call();
         } else {
           return elseMaybe();
         }

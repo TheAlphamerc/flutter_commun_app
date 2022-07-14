@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/post/detail/post_detail_cubit.dart';
 import 'package:flutter_commun_app/locator.dart';
-import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
 import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/resource/repository/post/post_repo.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/comment/comment.dart';
@@ -138,7 +137,7 @@ class PostDetailPage extends StatelessWidget {
                         return state.estate.when(
                           loading: () => _loader(context),
                           loaded: () => _post(context, state.post!),
-                          erorr: () => Column(children: [Text(state.message!)]),
+                          error: () => Column(children: [Text(state.message!)]),
                           delete: () => const SizedBox.shrink(),
                         );
                       },

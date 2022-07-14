@@ -8,7 +8,7 @@ enum ECreateCommunityState {
   saving,
   saved,
   addTopic,
-  removeTpoic,
+  removeTopic,
   addLink,
   removeLink
 }
@@ -17,25 +17,16 @@ extension EAppStateHelper on ECreateCommunityState {
   T when<T>({
     required T Function() loading,
     required T Function() loaded,
-    required T Function() erorr,
+    required T Function() error,
     required T Function() delete,
   }) {
     switch (this) {
       case ECreateCommunityState.loading:
-        if (loading != null) {
-          return loading.call();
-        }
-        break;
+        return loading.call();
       case ECreateCommunityState.loaded:
-        if (loaded != null) {
-          return loaded.call();
-        }
-        break;
+        return loaded.call();
       case ECreateCommunityState.error:
-        if (erorr != null) {
-          return erorr.call();
-        }
-        break;
+        return error.call();
 
       default:
     }
@@ -46,7 +37,7 @@ extension EAppStateHelper on ECreateCommunityState {
     required T Function() elseMaybe,
     T Function()? loading,
     T Function()? loaded,
-    T Function()? erorr,
+    T Function()? error,
     T Function()? delete,
     T Function()? saving,
     T Function()? saved,
@@ -58,21 +49,18 @@ extension EAppStateHelper on ECreateCommunityState {
         } else {
           return elseMaybe();
         }
-        break;
       case ECreateCommunityState.loaded:
         if (loaded != null) {
           return loaded.call();
         } else {
           return elseMaybe();
         }
-        break;
       case ECreateCommunityState.error:
-        if (erorr != null) {
-          return erorr.call();
+        if (error != null) {
+          return error.call();
         } else {
           return elseMaybe();
         }
-        break;
 
       case ECreateCommunityState.saving:
         if (saving != null) {
@@ -80,14 +68,12 @@ extension EAppStateHelper on ECreateCommunityState {
         } else {
           return elseMaybe();
         }
-        break;
       case ECreateCommunityState.saved:
         if (saved != null) {
           return saved.call();
         } else {
           return elseMaybe();
         }
-        break;
       default:
         return elseMaybe();
     }

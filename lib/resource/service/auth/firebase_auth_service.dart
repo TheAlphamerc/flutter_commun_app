@@ -37,8 +37,8 @@ class FirebaseAuthService {
     );
   }
 
-  /// Once OTP recieved on mobile, pass otp and verficationId to verifiy otp.
-  /// If Otp is verfied successfully then new user will created in firebase.
+  /// Once OTP received on mobile, pass otp and verificationId to verify otp.
+  /// If Otp is verified successfully then new user will created in firebase.
   /// Creating new user doesn't mean its data is saved in firebase firestore/realtime database.
   Future<Either<String, UserCredential>> verifyOTP(
       {required String verificationId, required String smsCode}) async {
@@ -69,7 +69,7 @@ class FirebaseAuthService {
         .where("username", isEqualTo: userName)
         .get();
     final data = query.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       return Future.value(const Left("User name already in use"));
     } else {
       return Future.value(const Right(true));
@@ -83,7 +83,7 @@ class FirebaseAuthService {
         .where("phoneNumber", isEqualTo: phoneNumber)
         .get();
     final data = query.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       return Future.value(const Left("Mobile name already in use"));
     } else {
       return Future.value(const Right(true));
@@ -147,7 +147,7 @@ class FirebaseAuthService {
         .where("email", isEqualTo: email)
         .get();
     final data = query.docs;
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       return Future.value(const Left("Email already Taken"));
     } else {
       return Future.value(const Right(true));

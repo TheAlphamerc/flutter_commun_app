@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_commun_app/cubit/app/app_cubit.dart';
 import 'package:flutter_commun_app/cubit/app_start/signup/social/social_signup_cubit.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_in/signin_with_email_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_in/signin_with_mobile_page.dart';

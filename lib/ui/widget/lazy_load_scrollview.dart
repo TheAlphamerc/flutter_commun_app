@@ -17,8 +17,7 @@ class LazyLoadScrollView extends StatefulWidget {
     this.onPageScrollEnd,
     this.onInBetweenOfPage,
     this.scrollOffset = 100,
-  })  : assert(child != null, 'Parameter child should not be null'),
-        super(key: key);
+  })  : super(key: key);
 
   /// The [Widget] that this widget watches for changes on
   final Widget child;
@@ -114,7 +113,7 @@ class _LazyLoadScrollViewState extends State<LazyLoadScrollView> {
   }
 
   void _onEndOfPage() {
-    if (_loadMoreStatus != null && _loadMoreStatus == _LoadingStatus.stable) {
+    if (_loadMoreStatus == _LoadingStatus.stable) {
       if (widget.onEndOfPage != null) {
         _loadMoreStatus = _LoadingStatus.loading;
         widget.onEndOfPage!.call().whenComplete(() {
@@ -125,7 +124,7 @@ class _LazyLoadScrollViewState extends State<LazyLoadScrollView> {
   }
 
   void _onStartOfPage() {
-    if (_loadMoreStatus != null && _loadMoreStatus == _LoadingStatus.stable) {
+    if (_loadMoreStatus == _LoadingStatus.stable) {
       if (widget.onStartOfPage != null) {
         _loadMoreStatus = _LoadingStatus.loading;
         widget.onStartOfPage!.call().whenComplete(() {

@@ -13,30 +13,18 @@ extension EAppStateHelper on ECommunityFeedState {
   T when<T>({
     required T Function() loading,
     required T Function() loaded,
-    required T Function() erorr,
+    required T Function() error,
     required T Function() delete,
   }) {
     switch (this) {
       case ECommunityFeedState.loading:
-        if (loading != null) {
-          return loading.call();
-        }
-        break;
+        return loading.call();
       case ECommunityFeedState.loaded:
-        if (loaded != null) {
-          return loaded.call();
-        }
-        break;
+        return loaded.call();
       case ECommunityFeedState.error:
-        if (erorr != null) {
-          return erorr.call();
-        }
-        break;
+        return error.call();
       case ECommunityFeedState.delete:
-        if (delete != null) {
-          return delete.call();
-        }
-        break;
+        return delete.call();
       default:
     }
     throw Exception('Invalid ECommunityFeedState');
@@ -46,7 +34,7 @@ extension EAppStateHelper on ECommunityFeedState {
     required T Function() elseMaybe,
     T Function()? loading,
     T Function()? loaded,
-    T Function()? erorr,
+    T Function()? error,
     T Function()? delete,
     T Function()? savingComment,
     T Function()? saved,
@@ -59,35 +47,31 @@ extension EAppStateHelper on ECommunityFeedState {
         } else {
           return elseMaybe();
         }
-        break;
+
       case ECommunityFeedState.loading:
         if (loading != null) {
           return loading.call();
         } else {
           return elseMaybe();
         }
-        break;
       case ECommunityFeedState.loaded:
         if (loaded != null) {
           return loaded.call();
         } else {
           return elseMaybe();
         }
-        break;
       case ECommunityFeedState.error:
-        if (erorr != null) {
-          return erorr.call();
+        if (error != null) {
+          return error.call();
         } else {
           return elseMaybe();
         }
-        break;
       case ECommunityFeedState.delete:
         if (delete != null) {
           return delete.call();
         } else {
           return elseMaybe();
         }
-        break;
       default:
         return elseMaybe();
     }

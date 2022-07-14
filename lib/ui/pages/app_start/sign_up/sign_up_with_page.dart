@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_email_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/signup_with_mobile_page.dart';
 import 'package:flutter_commun_app/ui/pages/app_start/sign_up/widget/signup_terms_of_service_widget.dart';

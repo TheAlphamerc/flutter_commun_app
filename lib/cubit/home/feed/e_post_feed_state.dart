@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 part of 'post_feed_cubit.dart';
 
 enum EPostFeedState {
@@ -5,8 +7,9 @@ enum EPostFeedState {
   loading,
   loaded,
   loadingMore,
-  erorr,
+  error,
 }
+
 const _$EAppStateTypeMap = {EPostFeedState.loading: 'loading'};
 
 extension EAppStateHelper on EPostFeedState {
@@ -24,28 +27,20 @@ extension EAppStateHelper on EPostFeedState {
     required T Function() initial,
     required T Function() loading,
     required T Function() loaded,
-    required T Function() erorr,
+    required T Function() error,
   }) {
     switch (this) {
       case EPostFeedState.initial:
-        if (initial != null) {
-          return initial.call();
-        }
+        return initial.call();
         break;
       case EPostFeedState.loading:
-        if (loading != null) {
-          return loading.call();
-        }
+        return loading.call();
         break;
       case EPostFeedState.loaded:
-        if (loaded != null) {
-          return loaded.call();
-        }
+        return loaded.call();
         break;
-      case EPostFeedState.erorr:
-        if (erorr != null) {
-          return erorr.call();
-        }
+      case EPostFeedState.error:
+        return error.call();
         break;
       default:
     }
@@ -58,7 +53,7 @@ extension EAppStateHelper on EPostFeedState {
     T Function()? loading,
     T Function()? loaded,
     T Function()? loadingMore,
-    T Function()? erorr,
+    T Function()? error,
   }) {
     switch (this) {
       case EPostFeedState.loading:
@@ -82,9 +77,9 @@ extension EAppStateHelper on EPostFeedState {
           return elseMaybe();
         }
         break;
-      case EPostFeedState.erorr:
-        if (erorr != null) {
-          return erorr.call();
+      case EPostFeedState.error:
+        if (error != null) {
+          return error.call();
         } else {
           return elseMaybe();
         }

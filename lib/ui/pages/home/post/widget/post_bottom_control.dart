@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/model/post/action/e_post_action.dart';
+import 'package:flutter_commun_app/model/post/post_model.dart';
 import 'package:flutter_commun_app/model/profile/profile_model.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/detail/post_detail_page.dart';
 import 'package:flutter_commun_app/ui/pages/home/post/post.dart';
 import 'package:flutter_commun_app/ui/theme/theme.dart';
-import 'package:flutter_commun_app/model/post/post_model.dart';
 
 class PostBottomControl extends StatelessWidget {
   /// Contains post data

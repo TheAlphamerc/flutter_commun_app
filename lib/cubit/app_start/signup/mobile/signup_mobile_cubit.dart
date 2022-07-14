@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_commun_app/helper/utility/utility.dart';
 import 'package:flutter_commun_app/locator.dart';
 import 'package:flutter_commun_app/resource/repository/auth/auth_repo.dart';
 import 'package:flutter_commun_app/resource/service/auth/verify_phone_response.dart';
-import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'signup_mobile_cubit.freezed.dart';
@@ -28,7 +26,6 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
     if (!isValid) {
       return;
     }
-    assert(phone != null);
     loader.showLoader(context, message: "Sending OTP");
 
     /// Make sure to replace `+1` with your country code
@@ -59,7 +56,7 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
         /// A [FirebaseAuthException] is provided when this is triggered.
         verificationFailed: (state) {
       Utility.cprint("[verifyPhoneNumberListener] Failed");
-      emit(SignupMobileState.response(EVerifyMobileState.VerficationFailed,
+      emit(SignupMobileState.response(EVerifyMobileState.VerificationFailed,
           context.locale.varification_failed));
     },
 
@@ -82,7 +79,7 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
 
   /// Verify otp
   Future<void> verifyOTP(BuildContext context, String smsCode) async {
-    /// Display loader on screeen while verifying Otp
+    /// Display loader on screen while verifying Otp
     loader.showLoader(context, message: context.locale.verifying);
     final user = await authRepo.verifyOTP(
         smsCode: smsCode, verificationId: verificationId!);
@@ -90,11 +87,11 @@ class SignupMobileCubit extends Cubit<SignupMobileState> {
     /// Hide loader
     loader.hideLoader();
     user.fold((l) {
-      /// If otp verifacation failed
-      emit(SignupMobileState.response(
-          EVerifyMobileState.VerficationFailed, Utility.encodeStateMessage(l)));
+      /// If otp verification failed
+      emit(SignupMobileState.response(EVerifyMobileState.VerificationFailed,
+          Utility.encodeStateMessage(l)));
     }, (r) {
-      /// If otp verifacation success
+      /// If otp verification success
       credential = r;
       emit(SignupMobileState.response(
           EVerifyMobileState.OtpVerified, context.locale.otpVerified));
