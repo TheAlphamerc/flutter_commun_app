@@ -98,7 +98,7 @@ class PostDetailPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () => onWillPop(context),
       child: Scaffold(
-        backgroundColor: context.theme.backgroundColor,
+        backgroundColor: context.theme.scaffoldBackgroundColor,
         body: SizedBox(
           child: Stack(
             children: [

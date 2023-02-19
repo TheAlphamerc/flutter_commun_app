@@ -4,11 +4,11 @@ part of 'theme.dart';
 
 class TextStyles {
   static TextStyle nameStyle(BuildContext context) =>
-      context.textTheme.headline6!
+      context.textTheme.titleLarge!
           .copyWith(fontWeight: FontWeight.w700, fontSize: 18);
 
   static TextStyle bodyText14(BuildContext context) =>
-      context.textTheme.bodyText1!.copyWith(
+      context.textTheme.bodyLarge!.copyWith(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: context.themeType == ThemeType.LIGHT

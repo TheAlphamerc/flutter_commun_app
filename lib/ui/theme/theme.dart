@@ -17,7 +17,7 @@ mixin AppTheme {
         brightness: Brightness.light,
         primaryColor: KColors.primary,
         primaryColorLight: KColors.primaryLight,
-        backgroundColor: KColors.background,
+        scaffoldBackgroundColor: KColors.background,
         cardColor: KColors.cardColor,
         errorColor: KColors.errorColor,
         iconTheme: const IconThemeData(color: KColors.icon),

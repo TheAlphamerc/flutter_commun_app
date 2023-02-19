@@ -62,8 +62,8 @@ class ContinueWithPage extends StatelessWidget {
   void listener(BuildContext context, SocialSignupState state) {
     state.maybeWhen(
       orElse: () {},
-      created: (credentails) {
-        Navigator.push(context, CreateUserNamePage.getRoute(credentails));
+      created: (credentials) {
+        Navigator.push(context, CreateUserNamePage.getRoute(credentials));
       },
       response: (state, message) async {
         switch (state) {

@@ -91,7 +91,7 @@
   "create_community": "Create Community",
   "community_name": "Community Name",
   "description": "Description",
-  "community_created_sucessfully": "Community Created successfully",
+  "community_created_successfully": "Community Created successfully",
   "topic_name": "Topic Name",
   "select_community_topic": "Select Community Topic",
   "topic_description_in_community": "Topics are needed for recommendation service. In that way, for users, interested in your community will by much easier to find it in list",

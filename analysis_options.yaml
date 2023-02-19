@@ -8,14 +8,13 @@ analyzer:
     missing_required_param: warning
     # treat missing returns as a warning (not a hint)
     missing_return: warning
-# Rules are in the same order (alphabetically) as documented at http://dart-lang.github.io/linter/lints
-# and https://github.com/dart-lang/linter/blob/master/example/all.yaml
+  # Rules are in the same order (alphabetically) as documented at http://dart-lang.github.io/linter/lints
+  # and https://github.com/dart-lang/linter/blob/master/example/all.yaml
 
   exclude:
-  - 'lib/**.freezed.dart'
-  - 'lib/**.g.dart'
-  - 'lib/ui/theme/color/light_colors.dart'
-
+    - "lib/**.freezed.dart"
+    - "lib/**.g.dart"
+    - "lib/ui/theme/color/light_colors.dart"
 
 linter:
   rules:
@@ -374,13 +373,6 @@ linter:
     # If you need access to some internal code, create an issue
     # https://dart-lang.github.io/linter/lints/implementation_imports.html
     - implementation_imports
-
-    # Although there are some false positives, this lint generally catches unnecessary checks
-    # - https://github.com/dart-lang/linter/issues/811
-    #
-    # pedantic: disabled
-    # https://dart-lang.github.io/linter/lints/invariant_booleans.html
-    - invariant_booleans
 
     # Type check for Iterable<T>.contains(other) where other is! T
     # otherwise contains will always report false. Those errors are usually very hard to catch.

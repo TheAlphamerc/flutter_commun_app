@@ -1,11 +1,13 @@
 {
-    "cSpell.enableFiletypes": [
-        "!yaml"
-    ],
-    "cSpell.words": [
-        "Commun",
-        "Signin",
-        "signup",
-        "textfield"
-    ]
+  "cSpell.enableFiletypes": ["!yaml"],
+  "cSpell.words": [
+    "Commun",
+    "Dont",
+    "downvote",
+    "downvotes",
+    "Ecommunity",
+    "Signin",
+    "signup",
+    "textfield"
+  ]
 }

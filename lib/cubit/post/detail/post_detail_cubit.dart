@@ -46,7 +46,7 @@ class PostDetailCubit extends Cubit<PostDetailState>
     if (postType != type) {
       files = [];
     }
-    files = files ?? [];
+    files = files.getAbsoluteOrEmpty;
     files!.add(file);
     postType = type;
     updatePostState(state.post, message: "Image Added");
@@ -88,10 +88,10 @@ class PostDetailCubit extends Cubit<PostDetailState>
   @override
   Future handleVote(PostModel model, {required bool isUpVote}) async {
     /// List of all up-votes on post
-    final upVotes = model.upVotes ?? <String>[];
+    final upVotes = model.upVotes.getAbsoluteOrEmpty;
 
     /// List of all down-votes on post
-    final downVotes = model.downVotes ?? <String>[];
+    final downVotes = model.downVotes.getAbsoluteOrEmpty;
 
     final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
@@ -208,8 +208,8 @@ class PostDetailCubit extends Cubit<PostDetailState>
       model = model.copyWith.call(id: snapshot.docChanges.first.doc.id);
       onCommentDelete(model);
     } else if (snapshot.docChanges.first.type == DocumentChangeType.modified) {
-      final model = PostModel.fromJson(map!);
-      model.copyWith.call(id: snapshot.docChanges.first.doc.id);
+      var model = PostModel.fromJson(map!);
+      model = model.copyWith(id: snapshot.docChanges.first.doc.id);
       onPostUpdate(model);
     }
   }
@@ -223,13 +223,13 @@ class PostDetailCubit extends Cubit<PostDetailState>
   }
 
   void onCommentAdd(PostModel model) {
-    final list = state.comments ?? <PostModel>[];
+    final list = state.comments.getAbsoluteOrEmpty;
     list.insert(0, model);
     updatePostState(state.post, comments: list);
   }
 
   void onCommentUpdate(PostModel model) {
-    final list = state.comments ?? <PostModel>[];
+    final list = state.comments.getAbsoluteOrEmpty;
     if (!list.any((element) => element.id == model.id)) {
       return;
     }
@@ -268,11 +268,12 @@ class PostDetailCubit extends Cubit<PostDetailState>
 
     final imagePath = await _uploadImages(context);
     final model = PostModel(
-        description: commentController.text,
-        createdBy: myUser.id,
-        createdAt: DateTime.now().toUtc().toIso8601String(),
-        images: imagePath,
-        parentPostId: state.post!.id);
+      description: commentController.text,
+      createdBy: myUser.id,
+      createdAt: DateTime.now().toUtc().toIso8601String(),
+      images: imagePath,
+      parentPostId: state.post!.id,
+    );
 
     updatePostState(state.post, estate: EPostDetailState.savingComment);
 
@@ -346,15 +347,20 @@ class PostDetailCubit extends Cubit<PostDetailState>
     );
   }
 
-  void updatePostState(PostModel? model,
-      {String? message,
-      EPostDetailState estate = EPostDetailState.loaded,
-      List<PostModel>? comments}) {
-    emit(PostDetailState.response(
+  void updatePostState(
+    PostModel? model, {
+    String? message,
+    EPostDetailState estate = EPostDetailState.loaded,
+    List<PostModel>? comments,
+  }) {
+    emit(
+      PostDetailState.response(
         estate: estate,
         message: Utility.encodeStateMessage(message ?? ""),
         post: model ?? state.post!,
-        comments: comments ?? state.comments));
+        comments: comments ?? state.comments,
+      ),
+    );
   }
 
   @override

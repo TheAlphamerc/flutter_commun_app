@@ -80,18 +80,18 @@ class _HomePageState extends State<HomePage> {
   Widget _getPage(int index) {
     switch (index) {
       case 0:
-        return const Feedpage();
+        return const FeedPage();
       case 1:
         return const CommunityFeed();
       default:
-        return const Feedpage();
+        return const FeedPage();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.theme.backgroundColor,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70), child: _appBar()),
       bottomNavigationBar: const BottomNavigationMenu(),

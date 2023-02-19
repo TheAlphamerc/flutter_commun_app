@@ -38,7 +38,7 @@ class AppCubit extends Cubit<AppState> {
       user = r;
       await getIt<Session>().saveUserProfile(r);
       emit(const AppState.response(
-          estate: EAppState.loggedIn, message: "Autologin Sucess"));
+          estate: EAppState.loggedIn, message: "Auto Login Success"));
     });
   }
 

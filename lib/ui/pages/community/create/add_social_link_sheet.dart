@@ -46,7 +46,7 @@ class AddSocialLinkSheet extends StatelessWidget {
                 CircleAvatar(
                   radius: 15,
                   foregroundColor: context.theme.iconTheme.color,
-                  backgroundColor: context.theme.backgroundColor,
+                  backgroundColor: context.theme.scaffoldBackgroundColor,
                   child: const Icon(Icons.close),
                 ).ripple(() {
                   context.read<CreateCommunityCubit>().removeLink(index);
@@ -88,7 +88,7 @@ class AddSocialLinkSheet extends StatelessWidget {
         .currentState!
         .validate();
     if (!isValid) {
-      /// Returns if any of the provided social is invlid
+      /// Returns if any of the provided social is invalid
       return;
     }
     context.read<CreateCommunityCubit>().createCommunity(context);

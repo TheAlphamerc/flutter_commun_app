@@ -34,9 +34,6 @@ class CommunityProfilePage extends StatelessWidget {
   }
 
   Widget _communityBanner(BuildContext context, CommunityModel community) {
-    // return const SliverToBoxAdapter(
-    //   child: Text("dsf sfskdf ksjfjfdkjfekrf"),
-    // );
     return SliverAppBar(
       expandedHeight: context.height * .23,
       flexibleSpace: FlexibleSpaceBar(
@@ -98,7 +95,7 @@ class CommunityProfilePage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: context.theme.backgroundColor,
+        backgroundColor: context.theme.scaffoldBackgroundColor,
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [

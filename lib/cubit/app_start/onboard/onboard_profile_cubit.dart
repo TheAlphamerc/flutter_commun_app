@@ -56,12 +56,13 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
       },
     );
     final model = profile.copyWith.call(
-        name: name.text,
-        username: username.text,
-        bio: bio.text,
-        photoURL: profileURL ?? profile.photoURL,
-        website: website.text,
-        bannerURL: bannerURL);
+      name: name.text,
+      username: username.text,
+      bio: bio.text,
+      photoURL: profileURL ?? profile.photoURL,
+      website: website.text,
+      bannerURL: bannerURL,
+    );
 
     /// Display loader
     loader.showLoader(context, message: context.locale.updating_profile);
@@ -80,10 +81,14 @@ class OnboardProfileCubit extends Cubit<OnboardProfileState>
       /// Upload profile picture to firebase
 
       /// Profile is saved to database
-      emit(OnboardProfileState.response(
+      emit(
+        OnboardProfileState.response(
           EOnboardProfileState.Updated,
           Utility.encodeStateMessage(
-              context.locale.profile_updated_successfully)));
+            context.locale.profile_updated_successfully,
+          ),
+        ),
+      );
     });
   }
 

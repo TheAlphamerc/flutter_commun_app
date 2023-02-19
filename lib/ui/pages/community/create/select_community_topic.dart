@@ -35,7 +35,7 @@ class SelectCommunityTopicSheet extends StatelessWidget {
         CircleAvatar(
           radius: 15,
           foregroundColor: context.theme.iconTheme.color,
-          backgroundColor: context.theme.backgroundColor,
+          backgroundColor: context.theme.scaffoldBackgroundColor,
           child: const Icon(Icons.close),
         ).ripple(() {
           context.read<CreateCommunityCubit>().removeTopic(index);

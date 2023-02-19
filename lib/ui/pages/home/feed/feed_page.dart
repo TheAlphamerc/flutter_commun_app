@@ -10,8 +10,8 @@ import 'package:flutter_commun_app/ui/theme/theme.dart';
 import 'package:flutter_commun_app/ui/widget/kit/alert.dart';
 import 'package:flutter_commun_app/ui/widget/lazy_load_scrollview.dart';
 
-class Feedpage extends StatelessWidget {
-  const Feedpage({Key? key}) : super(key: key);
+class FeedPage extends StatelessWidget {
+  const FeedPage({Key? key}) : super(key: key);
 
   Widget _postList(BuildContext context, List<PostModel> list) {
     return SliverList(

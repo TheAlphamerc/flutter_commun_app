@@ -111,7 +111,7 @@ class CommunityFeed extends StatelessWidget {
                           ),
                           context
                               .watch<CommunityFeedCubit>()
-                              .otheCommunity
+                              .otherCommunity
                               .value
                               .fold(
                                 () =>

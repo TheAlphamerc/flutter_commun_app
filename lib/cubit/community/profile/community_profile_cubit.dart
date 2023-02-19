@@ -68,9 +68,9 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
       (l) => updateState(EcommunityProfileState.loaded, posts: []),
       (r) {
         pageInfo = pageInfo!.copyWith(lastSnapshot: r.value2);
-        var postList = state.posts;
+        var postList = state.posts.getAbsoluteOrEmpty;
         if (postList.notNullAndEmpty) {
-          postList!.addAll(r.value1);
+          postList.addAll(r.value1);
         } else {
           postList = r.value1;
         }
@@ -89,14 +89,14 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
     if (model.communityId != state.community!.id) {
       return;
     }
-    final list = state.posts ?? <PostModel>[];
+    final list = state.posts.getAbsoluteOrEmpty;
     list.insert(0, model);
     updateState(EcommunityProfileState.loaded, posts: list);
   }
 
   /// Trigger when some posts deleted
   void _onPostDelete(PostModel model) {
-    final list = List<PostModel>.from(state.posts!);
+    final list = state.posts.getAbsoluteOrEmpty;
     if (list.any((element) => element.id == model.id)) {
       list.removeWhere((element) => element.id == model.id);
       updateState(EcommunityProfileState.loaded, posts: list);
@@ -104,11 +104,11 @@ class CommunityProfileCubit extends Cubit<CommunityProfileState>
   }
 
   void updatePost(PostModel model) {
-    final list = state.posts;
+    final list = state.posts.getAbsoluteOrEmpty;
     if (state.posts!.any((element) => element.id == model.id)) {
       final index =
           state.posts!.indexWhere((element) => element.id == model.id);
-      list![index] = model;
+      list[index] = model;
       updateState(EcommunityProfileState.loaded, posts: list);
     }
   }
@@ -143,7 +143,7 @@ class PostOperationMixin implements PostBaseActions {
   late void Function(PostModel model) onPostDeleted;
   late void Function(PostModel model) onPostAdded;
 
-  /// Initilise mixin parameters
+  /// Initialize mixin parameters
   void initPostMixin({
     required PostRepo postRepo,
     required Function(PostModel model) onPostUpdated,
@@ -165,7 +165,7 @@ class PostOperationMixin implements PostBaseActions {
   @override
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> postSubscription;
 
-  /// Loggedin user's profile
+  /// LoggedIn user's profile
   @override
   ProfileModel get myUser => getIt<Session>().user!;
 
@@ -182,17 +182,17 @@ class PostOperationMixin implements PostBaseActions {
 
   @override
   Future handleVote(PostModel model, {required bool isUpVote}) async {
-    /// List of all upvotes on post
-    final upVotes = model.upVotes ?? <String>[];
+    /// List of all upVotes on post
+    final upVotes = model.upVotes.getAbsoluteOrEmpty;
 
     /// List of all downvotes on post
-    final downVotes = model.downVotes ?? <String>[];
+    final downVotes = model.downVotes.getAbsoluteOrEmpty;
 
     final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
-          /// If user has already cast his downvote and now he wants to change to upvote
+          /// If user has already cast his downvote and now he wants to change to upVote
           if (isUpVote) {
             downVotes.removeWhere((element) => element == myUserId);
             upVotes.add(myUserId);
@@ -207,14 +207,14 @@ class PostOperationMixin implements PostBaseActions {
         break;
       case PostVoteStatus.upVote:
         {
-          /// If user has already cast his upvote and now he wants to change to downvote
+          /// If user has already cast his upVote and now he wants to change to downvote
           if (!isUpVote) {
             upVotes.removeWhere((element) => element == myUserId);
 
             downVotes.add(myUserId);
           }
 
-          /// If user wants to undo his upvote
+          /// If user wants to undo his upVote
           else {
             upVotes.removeWhere((element) => element == myUserId);
           }
@@ -224,7 +224,7 @@ class PostOperationMixin implements PostBaseActions {
       case PostVoteStatus.noVote:
         {
           if (isUpVote) {
-            /// If user wants to cast upvote
+            /// If user wants to cast upVote
             upVotes.add(myUserId);
           } else {
             /// If user wants to cast downvote
@@ -242,7 +242,7 @@ class PostOperationMixin implements PostBaseActions {
       Utility.cprint(l);
     }, (r) {
       onPostUpdate(model);
-      Utility.cprint("Voted Sucess");
+      Utility.cprint("Voted Success");
     });
   }
 
@@ -251,7 +251,7 @@ class PostOperationMixin implements PostBaseActions {
     // TODO: implement reportPost
   }
 
-  /// Listen to channge in posts collection
+  /// Listen to change in posts collection
   @override
   void postChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot) {
     if (snapshot.docChanges.isEmpty) {

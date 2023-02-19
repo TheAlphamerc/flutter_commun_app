@@ -46,7 +46,7 @@ extension PaddingHelper on Widget {
   Padding get vP4 =>
       Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: this);
 
-  ///Horrizontal Padding for Title
+  ///Horizontal Padding for Title
   Padding get hP30 => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0), child: this);
 
@@ -160,7 +160,7 @@ extension ThemeHelper on BuildContext {
   Color get primaryColor => Theme.of(this).primaryColor;
   Color get onPrimary => Theme.of(this).colorScheme.onPrimary;
   TextTheme get textTheme => Theme.of(this).textTheme;
-  Color get bodyTextColor => Theme.of(this).textTheme.bodyText1!.color!;
+  Color get bodyTextColor => Theme.of(this).textTheme.bodyLarge!.color!;
   Color get disabledColor => Theme.of(this).disabledColor;
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
   ThemeType get themeType => Theme.of(this).brightness == Brightness.light
@@ -177,6 +177,6 @@ extension SizeHelper on BuildContext {
   double get height => MediaQuery.of(this).size.height;
 }
 
-extension ApplocalisationHelper on BuildContext {
+extension AppLocalizationHelper on BuildContext {
   AppLocalizations get locale => AppLocalizations.of(this)!;
 }

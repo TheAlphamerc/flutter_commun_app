@@ -33,7 +33,7 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
   }
 
   /// Communities which is not joined by user
-  List<CommunityModel>? get otheCommunity {
+  List<CommunityModel>? get otherCommunity {
     if (state.list.notNullAndEmpty) {
       if (state.list!
           .any((element) => element.myRole == MemberRole.notDefine.encode())) {
@@ -55,13 +55,13 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
           message:
               Utility.encodeStateMessage("Error file fetching communities")),
       (r) =>
-          updateState(ECommunityFeedState.loaded, list: r, message: "sucess"),
+          updateState(ECommunityFeedState.loaded, list: r, message: "success"),
     );
 
     Utility.cprint(" Communities fetching complete", enableLogger: true);
   }
 
-  /// Jpin community
+  /// Join community
   Future joinCommunity(String communityId) async {
     final response = await communRepo.joinCommunity(
         communityId: communityId, userId: user.id!, role: MemberRole.user);
@@ -73,7 +73,7 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
       var model =
           state.list!.firstWhere((element) => element.id == communityId);
       model = model.copyWith.call(myRole: MemberRole.user.encode());
-      onCommunityupdate(model);
+      onCommunityUpdate(model);
     });
   }
 
@@ -89,32 +89,40 @@ class CommunityFeedCubit extends Cubit<CommunityFeedState> {
         var model =
             state.list!.firstWhere((element) => element.id == communityId);
         model = model.copyWith.call(myRole: MemberRole.notDefine.encode());
-        onCommunityupdate(model);
+        onCommunityUpdate(model);
       },
     );
   }
 
   void onCommunityCreated(CommunityModel model) {
-    final list = state.list ?? [];
+    final list = state.list.getAbsoluteOrEmpty;
     list.insert(0, model);
-    updateState(ECommunityFeedState.loaded,
-        list: list, message: "New Community Added");
+    updateState(
+      ECommunityFeedState.loaded,
+      list: list,
+      message: "New Community Added",
+    );
   }
 
-  void onCommunityupdate(CommunityModel model) {
-    final list = state.list ?? [];
+  void onCommunityUpdate(CommunityModel model) {
+    final list = state.list.getAbsoluteOrEmpty;
     final index = list.indexWhere((element) => element.id == model.id);
     list[index] = model;
-    updateState(ECommunityFeedState.loaded,
-        list: list, message: "New Community Added");
+    updateState(
+      ECommunityFeedState.loaded,
+      list: list,
+      message: "New Community Added",
+    );
   }
 
   void updateState(ECommunityFeedState estate,
       {String? message, List<CommunityModel>? list}) {
     emit(
-      CommunityFeedState.response(estate,
-          message: Utility.encodeStateMessage(message ?? ""),
-          list: list ?? state.list),
+      CommunityFeedState.response(
+        estate,
+        message: Utility.encodeStateMessage(message ?? ""),
+        list: list ?? state.list,
+      ),
     );
   }
 }

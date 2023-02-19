@@ -5,5 +5,4 @@ export 'route/fade_route.dart';
 export 'route/slide_left_route.dart';
 export 'utility/file_utility.dart';
 export 'utility/type_extention.dart';
-export 'utility/type_extention.dart';
 export 'utility/utility.dart';

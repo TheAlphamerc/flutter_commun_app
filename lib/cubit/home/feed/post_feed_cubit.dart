@@ -16,10 +16,10 @@ part 'e_post_feed_state.dart';
 part 'post_feed_cubit.freezed.dart';
 
 class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
-  final PostRepo postrepo;
-  PostFeedCubit(this.postrepo)
+  final PostRepo postRepo;
+  PostFeedCubit(this.postRepo)
       : super(const PostFeedState.response(estate: EPostFeedState.initial)) {
-    listenPostToChange = postrepo.listenToPostChange();
+    listenPostToChange = postRepo.listenToPostChange();
     postSubscription = listenPostToChange.listen(postChangeListener);
   }
 
@@ -32,7 +32,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   @override
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> postSubscription;
 
-  /// Loggedin user's profile
+  /// LoggedIn user's profile
   @override
   ProfileModel get myUser => getIt<Session>().user!;
 
@@ -45,14 +45,14 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   /// Fetch posts from firebase firestore
   Future getPosts() async {
-    final response = await postrepo.getPostLists("", pageInfo!);
+    final response = await postRepo.getPostLists("", pageInfo!);
     response.fold(
         (l) => updatePostState(null,
             error: "Post not available", estate: EPostFeedState.error), (r) {
-      var postList = state.list;
+      var postList = state.list.getAbsoluteOrNull;
       pageInfo = pageInfo!.copyWith(lastSnapshot: r.value2);
       if (postList == null) {
-        /// Initilised post list for the first time
+        /// Initialized post list for the first time
         postList = r.value1;
       } else {
         /// Add posts in existing post list
@@ -71,7 +71,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   /// Delete posts from firestore
   @override
   Future deletePost(PostModel model) async {
-    final response = await postrepo.deletePost(model);
+    final response = await postRepo.deletePost(model);
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
@@ -81,17 +81,17 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   @override
   Future handleVote(PostModel model, {required bool isUpVote}) async {
-    /// List of all upvotes on post
-    final upVotes = model.upVotes ?? <String>[];
+    /// List of all upVotes on post
+    final upVotes = model.upVotes.getAbsoluteOrEmpty;
 
     /// List of all downvotes on post
-    final downVotes = model.downVotes ?? <String>[];
+    final downVotes = model.downVotes.getAbsoluteOrEmpty;
 
     final String myUserId = myUser.id!;
     switch (model.myVoteStatus(myUserId)) {
       case PostVoteStatus.downVote:
         {
-          /// If user has already cast his downvote and now he wants to change to upvote
+          /// If user has already cast his downvote and now he wants to change to upVote
           if (isUpVote) {
             downVotes.removeWhere((element) => element == myUserId);
             upVotes.add(myUserId);
@@ -106,14 +106,14 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
         break;
       case PostVoteStatus.upVote:
         {
-          /// If user has already cast his upvote and now he wants to change to downvote
+          /// If user has already cast his upVote and now he wants to change to downvote
           if (!isUpVote) {
             upVotes.removeWhere((element) => element == myUserId);
 
             downVotes.add(myUserId);
           }
 
-          /// If user wants to undo his upvote
+          /// If user wants to undo his upVote
           else {
             upVotes.removeWhere((element) => element == myUserId);
           }
@@ -123,7 +123,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
       case PostVoteStatus.noVote:
         {
           if (isUpVote) {
-            /// If user wants to cast upvote
+            /// If user wants to cast upVote
             upVotes.add(myUserId);
           } else {
             /// If user wants to cast downvote
@@ -136,12 +136,12 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     }
     // ignore: parameter_assignments
     model = model.copyWith.call(downVotes: downVotes, upVotes: upVotes);
-    final response = await postrepo.handleVote(model);
+    final response = await postRepo.handleVote(model);
     response.fold((l) {
       Utility.cprint(l);
     }, (r) {
       updatePost(model);
-      Utility.cprint("Voted Sucess");
+      Utility.cprint("Voted Success");
     });
   }
 
@@ -150,7 +150,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     // TODO: implement reportPost
   }
 
-  /// Listen to channge in posts collection
+  /// Listen to change in posts collection
   @override
   void postChangeListener(QuerySnapshot<Map<String, dynamic>> snapshot) {
     if (snapshot.docChanges.isEmpty) {
@@ -175,7 +175,7 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
 
   /// Trigger when some post added to firestore
   void onPostAdded(PostModel model) {
-    final list = state.list ?? <PostModel>[];
+    final list = state.list.getAbsoluteOrEmpty;
     list.insert(0, model);
     updatePostState(list);
   }
@@ -190,9 +190,10 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
     final oldModel = list.firstWhere((element) => element.id == model.id);
     // ignore: parameter_assignments
     model = model.copyWith.call(
-        upVotes: oldModel.upVotes,
-        downVotes: oldModel.downVotes,
-        shareList: oldModel.shareList);
+      upVotes: oldModel.upVotes,
+      downVotes: oldModel.downVotes,
+      shareList: oldModel.shareList,
+    );
     updatePost(model);
   }
 
@@ -207,10 +208,10 @@ class PostFeedCubit extends Cubit<PostFeedState> implements PostBaseActions {
   }
 
   void updatePost(PostModel model) {
-    final list = state.list;
+    final list = state.list.getAbsoluteOrEmpty;
     if (state.list!.any((element) => element.id == model.id)) {
       final index = state.list!.indexWhere((element) => element.id == model.id);
-      list![index] = model;
+      list[index] = model;
       updatePostState(list);
     }
   }

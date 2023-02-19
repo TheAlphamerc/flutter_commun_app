@@ -10,7 +10,7 @@ class SignupTermsOfServiceWidget extends StatelessWidget {
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyles.bodyText14(context)
-            .copyWith(color: context.theme.primaryTextTheme.subtitle1!.color),
+            .copyWith(color: context.theme.primaryTextTheme.bodySmall!.color),
         children: [
           TextSpan(text: context.locale.sign_up_description),
           TextSpan(
